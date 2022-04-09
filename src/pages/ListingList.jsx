@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import urlcat from "urlcat";
-import { BACKEND } from "../utils/utils"
+import { BACKEND } from "../utils/utils";
+import { Link } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
+
+
 
 function ListingList() {
     const [listings,setListings]= useState([])
-
 
     useEffect(() => {
         fetch(urlcat(BACKEND, "/api/listings/"))
@@ -12,26 +15,26 @@ function ListingList() {
           .then((data) => setListings(data));
       }, []);
 
-      const handleDelete = (id) => () => {
-        const url = urlcat(BACKEND, `/api/listings/${id}`);
-        fetch(url, { method: "DELETE" })
-          .then((response) => response.json())
-          .then((data) => console.log(data));
-      };
-      const handleUpdate = (listing) => () => {
-        const url = urlcat(BACKEND, `/api/listings/${listing._id}`);
+      // const handleDelete = (id) => () => {
+      //   const url = urlcat(BACKEND, `/api/listings/${id}`);
+      //   fetch(url, { method: "DELETE" })
+      //     .then((response) => response.json())
+      //     .then((data) => console.log(data));
+      // };
+      // const handleUpdate = (listing) => () => {
+      //   const url = urlcat(BACKEND, `/api/listings/${listing._id}`);
         // const newListing = { ...listing, likes: holiday.likes + 10 }
         
-        fetch(url, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            // body: JSON.stringify(newListing),
-          })
-          .then((response) => response.json())
-          .then((data) => console.log(data));
-      };
+      //   fetch(url, {
+      //       method: "PUT",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       // body: JSON.stringify(newListing),
+      //     })
+      //     .then((response) => response.json())
+      //     .then((data) => console.log(data));
+      // };
 
     return (
         <>
@@ -48,10 +51,16 @@ function ListingList() {
             Bedrooms: {listing.no_of_bedrooms}<br/>
             Bathrooms: {listing.no_of_bathrooms}<br/>
             Description: {listing.description}<br/>
+            <Link to={`/listings/${listing._id}}`}>
+                <button>
+                  <span>View Listing</span>
+                </button>
+            </Link>
                     </li>
                 ))}           
             </ul>
-            </div>
+            <Outlet context={[listings, setListings]} / >            
+          </div>
         </>
     )
 }
