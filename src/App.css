@@ -28,8 +28,14 @@
   color: #61dafb;
 }
 
-.listingList {
+.listing {
   display: inline-block;
+}
+
+.individualListing {
+  margin-bottom: 10%;
+  text-align: center;
+  
 }
 
 ul {
