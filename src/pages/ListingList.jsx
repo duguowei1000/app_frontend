@@ -1,14 +1,64 @@
 
+import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { useOutletContext } from "react-router-dom";
+import Search from "../components/Search";
 
 
 function ListingList() {
     const [listings, setListings] = useOutletContext();
-    console.log(listings)
+    // const [filteredListings ,setFilteredListings] = useState([])
+    const [Value_Min, setValue_Min] = useState()
+    const [Value_Max, setValue_Max] = useState()
+    const [toggle, setToggle] = useState(false);
+    const [show, setShow] = useState(false);
+
+        //   useEffect(() => {
+    //     // const reducedArray = fullList.splice(0,30)
+    //     // setList(reducedArray)
+    //     if (Value_Max.length) {
+    //         const searchArray = listings.filter(element => {
+    //             const lowercase = element.name.toLowerCase()
+    //             const submitted = Value.toLowerCase()
+    //             return lowercase.includes(submitted)
+    //         });
+    //         console.log('search>>>', searchArray)
+    //         console.log('list', list)
+    //         if (searchArray.length) {
+    //             setList(searchArray)
+    //     } else setList(fullList)
+    //         // setSearchStatus(true)
+    //     }
+
+    // }
+    //     , [])
+
+    const handleToggle = () => {
+      setToggle(!toggle);
+  };
+    const search = (searchValue_min, searchValue_max) => {
+      setShow(true)
+      handleToggle()
+      console.log(searchValue_min)
+      console.log(searchValue_max)
+      setValue_Min(searchValue_min)
+      setValue_Max(searchValue_max)
+      // setList([...fullList])
+      console.log(Value_Min)
+      console.log(Value_Max)
+      
+  }
 
     return (
         <>
+            <form action="#">
+
+      Price Range
+      <div><Search search={search} toggle={handleToggle} /></div>
+
+      
+      <input type="submit" value="Submit" />
+</form>
         <div className="listingList">
             <ul>
                 {listings.map((listing) =>(
