@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import urlcat from "urlcat";
 import { BACKEND } from "../utils/utils"
+import Search from "../components/Search";
 
 function ListingList() {
     const [listings,setListings]= useState([])
+    const [filteredListings ,setFilteredListings] = useState([])
+    const [Value, setValue] = useState([])
+    const [toggle, setToggle] = useState(false);
+    const [show, setShow] = useState(false);
 
 
     useEffect(() => {
         fetch(urlcat(BACKEND, "/api/listings/"))
           .then((response) => response.json())
           .then((data) => setListings(data));
-      }, []);
+      }, [toggle]);
 
       const handleDelete = (id) => () => {
         const url = urlcat(BACKEND, `/api/listings/${id}`);
@@ -33,10 +38,40 @@ function ListingList() {
           .then((data) => console.log(data));
       };
 
+    //   useEffect(() => {
+    //     // const reducedArray = fullList.splice(0,30)
+    //     // setList(reducedArray)
+    //     if (Value.length) {
+    //         const searchArray = fullList.filter(element => {
+    //             const lowercase = element.name.toLowerCase()
+    //             const submitted = Value.toLowerCase()
+    //             return lowercase.includes(submitted)
+    //         });
+    //         console.log('search>>>', searchArray)
+    //         console.log('list', list)
+    //         if (searchArray.length) {
+    //             setList(searchArray)
+    //     } else setList(fullList)
+    //         // setSearchStatus(true)
+    //     }
+
+    // }
+    //     , [])
+    const handleToggle = () => {
+      setToggle(!toggle);
+  };
+    const search = (searchValue) => {
+      setShow(true)
+      handleToggle()
+      setValue(searchValue)
+      // setList([...fullList])
+      
+  }
+
     return (
         <>
     <form action="#">
-      <label for="Property Type">Property Type</label>
+      {/* <label for="Property Type">Property Type</label>
       <select name="HDBorPrivate" id="HDBorPrivate">
       <option value="Any">Any</option>
         <option value="HDB">HDB</option>
@@ -59,13 +94,14 @@ function ListingList() {
         <option value="3 Bathroom">3 Bathroom</option>
         <option value="4 Bathroom">4 Bathroom</option>
         <option value="More than 4 Bathroom">More than 4 Bathroom</option>
-      </select>
+      </select> */}
       Price Range
-      <input type="text" placeholder="min price" id="input-box"/>
-      <input type="text" placeholder="max price" id="input-box"/>
-      Size Range
+      <div><Search search={search} toggle={handleToggle} /></div>
+      {/* <input type="text" placeholder="min price" id="input-box"/>
+      <input type="text" placeholder="max price" id="input-box"/> */}
+      {/* Size Range
       <input type="text" placeholder="min Size" id="input-box"/>
-      <input type="text" placeholder="max Size" id="input-box"/>
+      <input type="text" placeholder="max Size" id="input-box"/> */}
       
       <input type="submit" value="Submit" />
 </form>
