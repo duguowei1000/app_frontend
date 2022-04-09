@@ -29,12 +29,20 @@
 }
 
 .listingList {
-  display: inline-block;
+  text-align: center;
+}
+
+
+.individualListing {
+  margin-bottom: 10%;
+  text-align: center;
 }
 
 ul {
   list-style: none;
+  align-items: center;
 }
+
 li {
   margin: 5%;
 }
