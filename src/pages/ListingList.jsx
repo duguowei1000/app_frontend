@@ -18,13 +18,13 @@ function ListingList() {
                         {<img src={listing.image} height="300px" width="400px"/>} 
                       </div>
                       <div className="listingInfo">   
-                        Address: {listing.address} <br/>
+                        <b>{listing.address}</b> <br/>
                         District: {listing.district} <br/>
                         {/* <span onClick={handleUpdate(listing)}>{listing.price}</span> */}
                         Size: {listing.size} sqft<br/>
                         Price: ${listing.price}<br/>
-                        Bedrooms: {listing.no_of_bedrooms}<br/>
-                        Bathrooms: {listing.no_of_bathrooms}<br/>
+                        {listing.no_of_bedrooms}   <img src="http://cdn.onlinewebfonts.com/svg/img_391908.png" height="20x" width="20px" /><br/>
+                        {listing.no_of_bathrooms}   <img src="https://cdn-icons-png.flaticon.com/512/637/637270.png" height="20x" width="20px" /><br/>
                         <Link to={`/listings/${listing._id}`}>
                             <button className="viewListing">
                               <span>View Listing</span>

@@ -28,19 +28,21 @@
   color: #61dafb;
 }
 
-.listing {
-  display: inline-block;
+.listingList {
+  text-align: center;
 }
+
 
 .individualListing {
   margin-bottom: 10%;
   text-align: center;
-  
 }
 
 ul {
   list-style: none;
+  align-items: center;
 }
+
 li {
   margin: 5%;
 }
