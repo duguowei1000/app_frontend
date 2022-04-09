@@ -1,5 +1,5 @@
 {
-  "name": "app_frontend",
+  "name": "frontend_1",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,6 +9,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-scripts": "5.0.0",
+    "urlcat": "^2.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
