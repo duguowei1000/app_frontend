@@ -35,6 +35,41 @@ function ListingList() {
 
     return (
         <>
+    <form action="#">
+      <label for="Property Type">Property Type</label>
+      <select name="HDBorPrivate" id="HDBorPrivate">
+      <option value="Any">Any</option>
+        <option value="HDB">HDB</option>
+        <option value="Private">Private</option>
+      </select>
+      <label for="RoomsToRent">Rooms</label>
+      <select name="RoomsToRent" id="RoomsToRent">
+      <option value="Any">Any</option>
+        <option value="1 room">1 room</option>
+        <option value="2 room">2 room</option>
+        <option value="3 room">3 room</option>
+        <option value="4 room">4 room</option>
+        <option value="More than 4 rooms">More than 4 rooms</option>
+      </select>
+      <label for="RoomsToRent">Bathrooms</label>
+      <select name="Bathrooms" id="Bathrooms">
+      <option value="Any">Any</option>
+      <option value="1 Bathroom">1 Bathroom</option>
+        <option value="2 Bathroom">2 Bathroom</option>
+        <option value="3 Bathroom">3 Bathroom</option>
+        <option value="4 Bathroom">4 Bathroom</option>
+        <option value="More than 4 Bathroom">More than 4 Bathroom</option>
+      </select>
+      Price Range
+      <input type="text" placeholder="min price" id="input-box"/>
+      <input type="text" placeholder="max price" id="input-box"/>
+      Size Range
+      <input type="text" placeholder="min Size" id="input-box"/>
+      <input type="text" placeholder="max Size" id="input-box"/>
+      
+      <input type="submit" value="Submit" />
+</form>
+
         <div className="listingList">
             <ul>
                 {listings.map((listing) =>(
@@ -52,6 +87,8 @@ function ListingList() {
                 ))}           
             </ul>
             </div>
+
+
         </>
     )
 }
