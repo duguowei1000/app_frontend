@@ -5,8 +5,10 @@ import Search from "../components/Search";
 
 function ListingList() {
     const [listings,setListings]= useState([])
+    // const [fullList, setFulllist] = useState([])
     const [filteredListings ,setFilteredListings] = useState([])
-    const [Value, setValue] = useState([])
+    const [Value_Min, setValue_Min] = useState()
+    const [Value_Max, setValue_Max] = useState()
     const [toggle, setToggle] = useState(false);
     const [show, setShow] = useState(false);
 
@@ -41,8 +43,8 @@ function ListingList() {
     //   useEffect(() => {
     //     // const reducedArray = fullList.splice(0,30)
     //     // setList(reducedArray)
-    //     if (Value.length) {
-    //         const searchArray = fullList.filter(element => {
+    //     if (Value_Max.length) {
+    //         const searchArray = listings.filter(element => {
     //             const lowercase = element.name.toLowerCase()
     //             const submitted = Value.toLowerCase()
     //             return lowercase.includes(submitted)
@@ -57,14 +59,20 @@ function ListingList() {
 
     // }
     //     , [])
+
     const handleToggle = () => {
       setToggle(!toggle);
   };
-    const search = (searchValue) => {
+    const search = (searchValue_min, searchValue_max) => {
       setShow(true)
       handleToggle()
-      setValue(searchValue)
+      console.log(searchValue_min)
+      console.log(searchValue_max)
+      setValue_Min(searchValue_min)
+      setValue_Max(searchValue_max)
       // setList([...fullList])
+      console.log(Value_Min)
+      console.log(Value_Max)
       
   }
 

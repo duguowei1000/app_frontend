@@ -18,8 +18,7 @@ const [searchValue_max, setSearchValue_max] = useState("");
 
   const callSearchFunction = (e) => {
     e.preventDefault();
-    props.search(searchValue_min); //passing back as props
-    props.search(searchValue_max); //passing back as props
+    props.search(searchValue_min, searchValue_max); //passing back as props
     props.toggle()
     setSearchValue_min(""); //adding this to automatically clear input field
     setSearchValue_max(""); //adding this to automatically clear input field
