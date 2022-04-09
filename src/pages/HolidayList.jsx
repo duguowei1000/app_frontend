@@ -2,32 +2,32 @@ import { useEffect, useState } from "react";
 import urlcat from "urlcat";
 import { BACKEND } from "../utils/utils"
 
-function HolidayList() {
-    const [holidays,setHolidays]= useState([])
+function ListingList() {
+    const [listings,setListings]= useState([])
 
 
     useEffect(() => {
-        fetch(urlcat(BACKEND, "/api/holidays/"))
+        fetch(urlcat(BACKEND, "/api/listings/"))
           .then((response) => response.json())
-          .then((data) => setHolidays(data));
+          .then((data) => setListings(data));
       }, []);
 
       const handleDelete = (id) => () => {
-        const url = urlcat(BACKEND, `/api/holidays/${id}`);
+        const url = urlcat(BACKEND, `/api/listings/${id}`);
         fetch(url, { method: "DELETE" })
           .then((response) => response.json())
           .then((data) => console.log(data));
       };
-      const handleUpdate = (holiday) => () => {
-        const url = urlcat(BACKEND, `/api/holidays/${holiday._id}`);
-        const newHoliday = { ...holiday, likes: holiday.likes + 10 }
+      const handleUpdate = (listing) => () => {
+        const url = urlcat(BACKEND, `/api/listings/${listing._id}`);
+        // const newListing = { ...listing, likes: holiday.likes + 10 }
         
         fetch(url, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(newHoliday),
+            // body: JSON.stringify(newListing),
           })
           .then((response) => response.json())
           .then((data) => console.log(data));
@@ -35,21 +35,25 @@ function HolidayList() {
 
     return (
         <>
+        <div className="listingList">
             <ul>
-                {holidays.map((holiday) =>(
-                    <li key = {holiday._id}>
-            {holiday.name} --{" "}
-            <span onClick={handleUpdate(holiday)}>{holiday.likes}</span>
-            --
-                    <a href="/">{holiday.name}</a>{ " -- "}
-                    <span onClick={handleDelete(holiday._id)}>Delete</span>
+                {listings.map((listing) =>(
+                    <li key = {listing._id}>
+                      {<img src={listing.image} height="150px" width="200px"/>} <br/>
+            Address: {listing.address} <br/>
+            District: {listing.district} <br/>
+            {/* <span onClick={handleUpdate(listing)}>{listing.price}</span> */}
+            Size: {listing.size} sqft<br/>
+            Price: ${listing.price}<br/>
+            Bedrooms: {listing.no_of_bedrooms}<br/>
+            Bathrooms: {listing.no_of_bathrooms}<br/>
+            Description: {listing.description}<br/>
                     </li>
-
-                ))}
-                
+                ))}           
             </ul>
+            </div>
         </>
     )
 }
 
-export default HolidayList;
+export default ListingList;
