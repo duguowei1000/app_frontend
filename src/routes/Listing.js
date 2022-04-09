@@ -5,11 +5,13 @@ function Listing() {
 
     const { id } = useParams();
     const [listings, setListings] = useOutletContext();
-    console.log(listings);
+
+    const selectedListing = listings.filter(listing => listing._id === id)
+    console.log(selectedListing)
 
   return (
     <div className="ListingList">
-        Welcome! {id}
+        id is: {selectedListing.address} ;
     </div>
   );
 }

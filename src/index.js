@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import Listings from "./routes/Listings.js";
 import Listing from "./routes/Listing.js";
+import ListingList from './pages/ListingList';
 
 
 import App from './App';
@@ -18,11 +19,11 @@ ReactDOM.render(
   <BrowserRouter basename="">
     <Routes>
       
-      <Route path="/listings" element={<Listings />}/>
-      <Route path="/listings/:id" element={<Listing />}/>
-
-        {/* <Route index element ={<CoinsHome />}/>
-        <Route path="/Watchlist" element={<Watchlist />}></Route> */}
+      <Route path="/listings" element={<Listings />}>
+        <Route path="/listings/all" element={<ListingList />}/>
+        <Route path="/listings/:id" element={<Listing />}/>
+      </Route>
+       
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
