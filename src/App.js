@@ -1,12 +1,12 @@
 import Create from "./pages/Create";
 import Seed from "./pages/Seed";
-import ListingList from "./pages/ListingList";
+import HolidayList from "./pages/ListingList";
 
 function App() {
   return (
     <div className="App">
       {/* <Create />  */}
-      <ListingList/>
+      <HolidayList/>
       {/* <Seed />  */}
     </div>
   );
