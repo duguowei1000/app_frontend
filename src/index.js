@@ -3,27 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Listings from './routes/Listings.js';
-import Dashboard from './routes/Dashboard';
-import Listing from './routes/Listing.js';
-import ListingList from './pages/ListingList';
-import Create from './routes/Create';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-	<BrowserRouter basename=''>
-		<Routes>
-			<Route path='/listings' element={<Listings />}>
-				<Route path='/listings/all' element={<ListingList />} />
-				<Route path='/listings/:id' element={<Listing />} />
-			</Route>
-
-			<Route path='/dashboard' element={<Dashboard />}>
-				<Route path='/dashboard/create' element={<Create />}></Route>
-			</Route>
-		</Routes>
+	<BrowserRouter>
+		<App />
 	</BrowserRouter>,
 	document.getElementById('root')
 );
