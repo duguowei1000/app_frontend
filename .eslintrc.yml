@@ -15,3 +15,6 @@ parserOptions:
 settings:
   react:
     version: detect
+rules:
+  no-unused-vars: warn
+  react/prop-types: off
