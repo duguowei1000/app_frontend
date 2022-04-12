@@ -1,13 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import './App.css';
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
+import Listings from "./routes/Listings.js";
+import Listing from "./routes/Listing.js";
+import ListingList from './pages/ListingList';
+
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <BrowserRouter basename="">
+    <Routes>
+      
+      <Route path="/listings" element={<Listings />}>
+        <Route path="/listings/all" element={<ListingList />}/>
+        <Route path="/listings/:id" element={<Listing />}/>
+      </Route>
+       
+    </Routes>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
