@@ -42,9 +42,49 @@ const [searchValue_max, setSearchValue_max] = useState("");
       />
       <input className="searchunits" onClick={callSearchFunction} type="submit" value="SEARCH" />
 
-      {/* <input type="text" placeholder="min price" id="input-box"/>
-      <input type="text" placeholder="max price" id="input-box"/> */}
-      {/* <button className="searchunits" onClick= {props.handleClick}> Back to List </button> */}
+{/* <label for="Property Type">Property Type</label>
+      <select name="HDBorPrivate" id="HDBorPrivate">
+      <option value="Any">Any</option>
+        <option value="HDB">HDB</option>
+        <option value="Private">Private</option>
+      </select>
+      <label for="RoomsToRent">Rooms</label>
+      <select name="RoomsToRent" id="RoomsToRent">
+      <option value="Any">Any</option>
+        <option value="1 room">1 room</option>
+        <option value="2 room">2 room</option>
+        <option value="3 room">3 room</option>
+        <option value="4 room">4 room</option>
+        <option value="More than 4 rooms">More than 4 rooms</option>
+      </select>
+      <label for="RoomsToRent">Bathrooms</label>
+      <select name="Bathrooms" id="Bathrooms">
+      <option value="Any">Any</option>
+      <option value="1 Bathroom">1 Bathroom</option>
+        <option value="2 Bathroom">2 Bathroom</option>
+        <option value="3 Bathroom">3 Bathroom</option>
+        <option value="4 Bathroom">4 Bathroom</option>
+        <option value="More than 4 Bathroom">More than 4 Bathroom</option>
+      </select> 
+  */}
+
+
+  {/* <input type="text" placeholder="min price" id="input-box"/>
+      <input type="text" placeholder="max price" id="input-box"/> 
+  */}
+  {/* <button className="searchunits" onClick= {props.handleClick}> Back to List </button> 
+  */}
+
+
+
+  {/* <input type="text" placeholder="min price" id="input-box"/>
+      <input type="text" placeholder="max price" id="input-box"/> 
+  */}
+  {/* Size Range
+      <input type="text" placeholder="min Size" id="input-box"/>
+      <input type="text" placeholder="max Size" id="input-box"/> 
+  */}
+
 
     </form>
   );
