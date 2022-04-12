@@ -41,7 +41,8 @@ const [searchValue_max, setSearchValue_max] = useState("");
         placeholder="max price"
       />
       <input className="searchunits" onClick={callSearchFunction} type="submit" value="SEARCH" />
-            {/* <label for="Property Type">Property Type</label>
+
+{/* <label for="Property Type">Property Type</label>
       <select name="HDBorPrivate" id="HDBorPrivate">
       <option value="Any">Any</option>
         <option value="HDB">HDB</option>
@@ -64,18 +65,26 @@ const [searchValue_max, setSearchValue_max] = useState("");
         <option value="3 Bathroom">3 Bathroom</option>
         <option value="4 Bathroom">4 Bathroom</option>
         <option value="More than 4 Bathroom">More than 4 Bathroom</option>
-      </select> */}
-
-      {/* <input type="text" placeholder="min price" id="input-box"/>
-      <input type="text" placeholder="max price" id="input-box"/> */}
-      {/* <button className="searchunits" onClick= {props.handleClick}> Back to List </button> */}
+      </select> 
+  */}
 
 
-            {/* <input type="text" placeholder="min price" id="input-box"/>
-      <input type="text" placeholder="max price" id="input-box"/> */}
-      {/* Size Range
+  {/* <input type="text" placeholder="min price" id="input-box"/>
+      <input type="text" placeholder="max price" id="input-box"/> 
+  */}
+  {/* <button className="searchunits" onClick= {props.handleClick}> Back to List </button> 
+  */}
+
+
+
+  {/* <input type="text" placeholder="min price" id="input-box"/>
+      <input type="text" placeholder="max price" id="input-box"/> 
+  */}
+  {/* Size Range
       <input type="text" placeholder="min Size" id="input-box"/>
-      <input type="text" placeholder="max Size" id="input-box"/> */}
+      <input type="text" placeholder="max Size" id="input-box"/> 
+  */}
+
 
     </form>
   );
