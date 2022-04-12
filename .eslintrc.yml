@@ -17,3 +17,4 @@ settings:
     version: detect
 rules:
   no-unused-vars: off
+  react/prop-types: off
