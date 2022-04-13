@@ -11,15 +11,16 @@ const Search = (props) => {
 		propertyTypeSearch();
 		priceSearch();
 	};
+
 	const priceSearch = () => {
-		props.search(searchValue_min, searchValue_max); //passing back as props
+		props.priceSearch(searchValue_min, searchValue_max); //passing back as props
 		setSearchValue_min(''); //adding this to automatically clear input field
 		setSearchValue_max(''); //adding this to automatically clear input field
 		console.log(`min: ${searchValue_min} max: ${searchValue_max} `);
 	};
 	const propertyTypeSearch = () => {
-		props.search(searchValue_HDBorPrivate); //passing back as props
-		setSearchValue_HDBorPrivate(''); //adding this to automatically clear input field
+		props.propertyTypeSearch(searchValue_HDBorPrivate); //passing back as props
+		//setSearchValue_HDBorPrivate(''); //adding this to automatically clear input field
 		console.log(`HDBorPrivate: ${searchValue_HDBorPrivate} `);
 	};
 
@@ -49,7 +50,7 @@ const Search = (props) => {
 				name='HDBorPrivate'
 				id='HDBorPrivate'
 				value={searchValue_HDBorPrivate}
-				onChange={(event) => setSearchValue_min(event.target.value)}
+				onChange={(event) => setSearchValue_HDBorPrivate(event.target.value)}
 				type='text'
 			>
 				<option value='Any'>Any</option>
