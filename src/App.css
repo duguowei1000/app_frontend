@@ -38,16 +38,46 @@
   text-align: center;
 }
 
+
 ul {
-  list-style: none;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
   align-items: center;
+  overflow: hidden;
 }
 
 li {
-  margin: 5%;
+  display: inline-block;
+  float: center;
 }
 
+li a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 10px;
+  text-decoration: none;
+}
 
+li a:hover {
+  text-decoration: underline;
+  text-decoration: bold;
+  color: red;
+}
+
+li {
+  margin: 2%;
+}
+
+.listingList {
+  align-items: center;
+  text-align: center;
+}
+
+.listing {
+background-color: seashell;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
