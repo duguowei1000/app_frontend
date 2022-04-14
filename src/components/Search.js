@@ -4,7 +4,8 @@ const Search = (props) => {
 	//   const [searchValue, setSearchValue] = useState("");
 	const [searchValue_min, setSearchValue_min] = useState(null);
 	const [searchValue_max, setSearchValue_max] = useState(null);
-	const [searchValue_HDBorPrivate, setSearchValue_HDBorPrivate] = useState('');
+	const [searchValue_HDBorPrivate, setSearchValue_HDBorPrivate] =
+		useState('Any');
 
 	const callSearchFunction = (e) => {
 		e.preventDefault();
