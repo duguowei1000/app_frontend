@@ -1,5 +1,5 @@
 import { useState } from 'react';
-const backend = 'http://localhost:3001';
+const backend = 'http://localhost:2000';
 const Input = ({ name, label, error, ...rest }) => {
 	return (
 		<div className='form-group'>
@@ -27,15 +27,32 @@ export default function Auth() {
 		}));
 	};
 
-	const submitInput = (e) => {
+	// const ad
+	// const authHeader = `Authorisation: Bearer ${ad}`
+
+	const submitInput = async (e) => {
 		e.preventDefault();
 		console.log(details);
-		fetch(`${backend}/auth/login`, {
+		const res = await fetch(`${backend}/auth/login`, {
+			credentials: 'include',
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(details),
+		});
+		const data = await res.json();
+		console.log(data);
+		console.log('first', JSON.stringify([res.status, data]));
+	};
+
+	const testAuth = (e) => {
+		fetch(`${backend}/auth/test`, {
+			credentials: 'include',
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
 		})
 			.then((res) => res.json())
 			.then((data) => {
@@ -72,6 +89,7 @@ export default function Auth() {
 					onChange={handleChange}
 				/>
 				<button onClick={submitInput}>Login</button>
+				<button onClick={testAuth}>Auth</button>
 			</form>
 		</>
 	);
