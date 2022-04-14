@@ -5,18 +5,22 @@ import Listings from './routes/Listings.js';
 import Dashboard from './routes/Dashboard';
 import Listing from './routes/Listing.js';
 import Create from './routes/Create';
+import Nav from './components/Nav.js';
 
 function App() {
 	return (
-		<Routes>
-			<Route path='listings' element={<Listings />}>
-				<Route path='all' element={<ListingList />} />
-				<Route path=':id' element={<Listing />} />
-			</Route>
+		<div>
+			<Nav />
+			<Routes>
+				<Route path='listings' element={<Listings />}>
+					<Route path='all' element={<ListingList />} />
+					<Route path=':id' element={<Listing />} />
+				</Route>
 
-			<Route path='dashboard' element={<Dashboard />} />
-			<Route path='create' element={<Create />} />
-		</Routes>
+				<Route path='dashboard' element={<Dashboard />} />
+				<Route path='create' element={<Create />} />
+			</Routes>
+		</div>
 	);
 }
 

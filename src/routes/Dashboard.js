@@ -11,13 +11,14 @@ function Listings() {
 		fetch(urlcat(BACKEND, '/api/listings/'))
 			.then((response) => response.json())
 			.then((data) => setListings(data));
-	}, []);
+	}, [listings]);
 
 	const handleDelete = (id) => () => {
 		const url = urlcat(BACKEND, `/api/listings/${id}`);
 		fetch(url, { method: 'DELETE' })
 			.then((response) => response.json())
 			.then((data) => console.log(data));
+		alert('listing deleted');
 	};
 
 	return (
@@ -56,7 +57,6 @@ function Listings() {
 										<span>Edit Listing</span>
 									</button>
 								</Link>
-								<br />
 								<button className='deleteListing'>
 									<span onClick={handleDelete(listing._id)}>Delete</span>
 								</button>
