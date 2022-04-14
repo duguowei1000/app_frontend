@@ -1,18 +1,18 @@
 {
-	"name": "app_frontend",
-	"version": "0.1.0",
-	"private": true,
-	"dependencies": {
-		"@testing-library/jest-dom": "^5.16.3",
-		"@testing-library/react": "^12.1.4",
-		"@testing-library/user-event": "^13.5.0",
-		"react": "^18.0.0",
-		"react-dom": "^18.0.0",
+  "name": "app_frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.16.3",
+    "@testing-library/react": "^12.1.4",
+    "@testing-library/user-event": "^13.5.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0",
-		"react-scripts": "5.0.0",
+    "react-scripts": "5.0.0",
     "urlcat": "^2.0.4",
-		"web-vitals": "^2.1.4"
-	},
+    "web-vitals": "^2.1.4"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -20,12 +20,12 @@
     "eject": "react-scripts eject",
     "prepare": "husky install"
   },
-	"lint-staged": {
-		"**/*.{js,jsx,ts,tsx}": [
-			"npx prettier --write",
-			"npx eslint --fix"
-		]
-	},
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "npx prettier --write",
+      "npx eslint --fix"
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -44,13 +44,12 @@
       "last 1 safari version"
     ]
   },
-	"devDependencies": {
-		"@commitlint/cli": "^16.2.3",
-		"@commitlint/config-conventional": "^16.2.1",
-		"eslint-config-prettier": "^8.5.0",
-		"husky": "^7.0.0",
-		"lint-staged": "^12.3.7",
-		"prettier": "^2.6.2"
-	}
-
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
+    "eslint-config-prettier": "^8.5.0",
+    "husky": "^7.0.0",
+    "lint-staged": "^12.3.7",
+    "prettier": "^2.6.2"
+  }
 }
