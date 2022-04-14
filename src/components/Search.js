@@ -1,54 +1,64 @@
-
-   
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const Search = (props) => {
-//   const [searchValue, setSearchValue] = useState("");
-const [searchValue_min, setSearchValue_min] = useState("");
-const [searchValue_max, setSearchValue_max] = useState("");
+	//   const [searchValue, setSearchValue] = useState("");
+	const [searchValue_min, setSearchValue_min] = useState(null);
+	const [searchValue_max, setSearchValue_max] = useState(null);
+	const [searchValue_HDBorPrivate, setSearchValue_HDBorPrivate] =
+		useState('Any');
 
-  const handleSearchInputChanges_min = (e) => {
-    //searchValue is set here
-    setSearchValue_min(e.target.value); //stores search term in searchValue state
-  };
-  const handleSearchInputChanges_max = (e) => {
-    //searchValue is set here
-    setSearchValue_max(e.target.value); //stores search term in searchValue state
-  };
+	const callSearchFunction = (e) => {
+		e.preventDefault();
+		propertyTypeSearch();
+		priceSearch();
+	};
 
-  const callSearchFunction = (e) => {
-    e.preventDefault();
-    props.search(searchValue_min, searchValue_max); //passing back as props
-    props.toggle()
-    setSearchValue_min(""); //adding this to automatically clear input field
-    setSearchValue_max(""); //adding this to automatically clear input field
-    console.log(`min: ${searchValue_min} max: ${searchValue_max} `)
+	const priceSearch = () => {
+		props.priceSearch(searchValue_min, searchValue_max); //passing back as props
+		setSearchValue_min(''); //adding this to automatically clear input field
+		setSearchValue_max(''); //adding this to automatically clear input field
+		console.log(`min: ${searchValue_min} max: ${searchValue_max} `);
+	};
+	const propertyTypeSearch = () => {
+		props.propertyTypeSearch(searchValue_HDBorPrivate); //passing back as props
+		//setSearchValue_HDBorPrivate(''); //adding this to automatically clear input field
+		console.log(`HDBorPrivate: ${searchValue_HDBorPrivate} `);
+	};
 
-  };
+	return (
+		<form className='Searchbar'>
+			<input
+				value={searchValue_min}
+				onChange={(event) => setSearchValue_min(event.target.value)}
+				type='number'
+				placeholder='min price'
+			/>
+			<input
+				value={searchValue_max}
+				onChange={(event) => setSearchValue_max(event.target.value)}
+				type='number'
+				placeholder='max price'
+			/>
+			<input
+				onClick={callSearchFunction}
+				className='searchunits'
+				type='submit'
+				value='SEARCH'
+			/>
 
-  return (
-    <form className="search">
-      <input
-        value={searchValue_min}
-        onChange={handleSearchInputChanges_min}
-        type="text"
-        placeholder="min price"
-      />
-      <input
-        value={searchValue_max}
-        onChange={handleSearchInputChanges_max}
-        type="text"
-        placeholder="max price"
-      />
-      <input className="searchunits" onClick={callSearchFunction} type="submit" value="SEARCH" />
-
-{/* <label for="Property Type">Property Type</label>
-      <select name="HDBorPrivate" id="HDBorPrivate">
-      <option value="Any">Any</option>
-        <option value="HDB">HDB</option>
-        <option value="Private">Private</option>
-      </select>
-      <label for="RoomsToRent">Rooms</label>
+			<label>Property Type</label>
+			<select
+				name='HDBorPrivate'
+				id='HDBorPrivate'
+				value={searchValue_HDBorPrivate}
+				onChange={(event) => setSearchValue_HDBorPrivate(event.target.value)}
+				type='text'
+			>
+				<option value='Any'>Any</option>
+				<option value='HDB'>HDB</option>
+				<option value='Private'>Private</option>
+			</select>
+			{/* <label >Rooms</label>
       <select name="RoomsToRent" id="RoomsToRent">
       <option value="Any">Any</option>
         <option value="1 room">1 room</option>
@@ -57,7 +67,7 @@ const [searchValue_max, setSearchValue_max] = useState("");
         <option value="4 room">4 room</option>
         <option value="More than 4 rooms">More than 4 rooms</option>
       </select>
-      <label for="RoomsToRent">Bathrooms</label>
+      <label >Bathrooms</label>
       <select name="Bathrooms" id="Bathrooms">
       <option value="Any">Any</option>
       <option value="1 Bathroom">1 Bathroom</option>
@@ -65,29 +75,39 @@ const [searchValue_max, setSearchValue_max] = useState("");
         <option value="3 Bathroom">3 Bathroom</option>
         <option value="4 Bathroom">4 Bathroom</option>
         <option value="More than 4 Bathroom">More than 4 Bathroom</option>
-      </select> 
-  */}
+      </select>  */}
 
-
-  {/* <input type="text" placeholder="min price" id="input-box"/>
+			{/* <input type="text" placeholder="min price" id="input-box"/>
       <input type="text" placeholder="max price" id="input-box"/> 
   */}
-  {/* <button className="searchunits" onClick= {props.handleClick}> Back to List </button> 
-  */}
+			{/* <button  onClick= {props.handleFullList()}> Back to List </button>  */}
 
-
-
-  {/* <input type="text" placeholder="min price" id="input-box"/>
+			{/* <input type="text" placeholder="min price" id="input-box"/>
       <input type="text" placeholder="max price" id="input-box"/> 
   */}
-  {/* Size Range
+			{/* Size Range
       <input type="text" placeholder="min Size" id="input-box"/>
       <input type="text" placeholder="max Size" id="input-box"/> 
   */}
-
-
-    </form>
-  );
+		</form>
+	);
 };
 
 export default Search;
+
+{
+	/* <form onSubmit={handleSubmit}>
+Name:
+<input
+  type="text"
+  name="name"
+  value={name}
+  onChange={(event) => setName(event.target.value)}
+/>
+<br />
+Likes:
+<input type="number" name="likes" value={likes} onChange={(event) => setLikes(event.target.value)}/> <br />
+<p>{error}</p>
+<button>Create</button>
+</form> */
+}
