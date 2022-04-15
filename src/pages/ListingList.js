@@ -14,6 +14,8 @@ function ListingList() {
 	const [price_Min_S, setPrice_Min_S] = useState();
 	const [price_Max_S, setPrice_Max_S] = useState();
 	const [hdbOrPrivate_S, setHDBorPrivate_S] = useState('');
+	const [rooms_S, setRooms_S] = useState('');
+	// const [bathRooms_S, setBathrooms_S] = useState('');
 
 	const fetchDetails = () => {
 		fetch(urlcat(BACKEND, '/api/listings/'))
@@ -33,6 +35,7 @@ function ListingList() {
 	useEffect(() => {
 		console.log('fullListings>>', fullListings);
 		console.log('Listings>>', listings);
+		console.log(rooms_S);
 
 		let hdbPrivateFiltered;
 		if (hdbOrPrivate_S === 'Any') {
@@ -47,10 +50,27 @@ function ListingList() {
 				}
 			});
 		}
+		let roomsFiltered;
+		if (rooms_S === 'Any') {
+			roomsFiltered = listings;
+		} else {
+			roomsFiltered = listings.filter((element) => {
+				const bedRooms = element.no_of_bedrooms;
+				if (rooms_S === '1 room') {
+					return bedRooms === 1;
+				} else if (rooms_S === '2 room') {
+					console.log(bedRooms);
+					return bedRooms === 2;
+				} else if (rooms_S === '3 room') {
+					return bedRooms === 3;
+				} else if (rooms_S === 'More than 4 rooms') {
+					return bedRooms > 3;
+				}
+			});
+		}
 
 		let priceFiltered = listings.filter((element) => {
 			if (element.price > price_Min_S && element.price < price_Max_S) {
-				console.log(element.price);
 				return true;
 			}
 		});
@@ -61,15 +81,23 @@ function ListingList() {
 		//     return true
 		//   }
 		// })
-		let finalFiltered = hdbPrivateFiltered.filter((e) =>
+		let firstFiltered = hdbPrivateFiltered.filter((e) =>
 			priceFiltered.includes(e)
 		);
+		let secondFiltered = firstFiltered.filter((e) => roomsFiltered.includes(e));
+		console.log('roomfilterd:', roomsFiltered);
+		console.log('firstfilterd:', firstFiltered);
+		console.log('secondfilterd:', secondFiltered);
+		console.log('min', price_Min_S);
+		console.log('max', price_Max_S);
 
 		//set filter
-		if (finalFiltered.length) {
-			setListings(finalFiltered);
-			finalFiltered = []; //initialise to 0
+		if (secondFiltered.length) {
+			setListings(secondFiltered);
+			firstFiltered = [];
+			secondFiltered = []; //initialise to 0
 			hdbPrivateFiltered = [];
+			roomsFiltered = [];
 			setPrice_Min_S(0);
 			setPrice_Max_S(9999);
 			setShow(false);
@@ -77,7 +105,7 @@ function ListingList() {
 			setListings([]);
 			setShow(true);
 		} //no entries
-
+		console.log('roomsfiltered', roomsFiltered);
 		console.log('fullListings>>', fullListings);
 		console.log('Listings>>', listings);
 	}, [toggle]);
@@ -102,6 +130,10 @@ function ListingList() {
 		handleToggle();
 		setHDBorPrivate_S(searchValue_HDBorPrivate);
 	};
+	const roomSearch = (searchValue_Rooms) => {
+		handleToggle();
+		setRooms_S(searchValue_Rooms);
+	};
 
 	return (
 		<>
@@ -111,6 +143,7 @@ function ListingList() {
 					<Search
 						priceSearch={search}
 						propertyTypeSearch={propertyTypeSearch}
+						roomSearch={roomSearch}
 						toggle={handleToggle}
 					/>
 				</div>

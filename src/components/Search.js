@@ -6,11 +6,14 @@ const Search = (props) => {
 	const [searchValue_max, setSearchValue_max] = useState(null);
 	const [searchValue_HDBorPrivate, setSearchValue_HDBorPrivate] =
 		useState('Any');
+	const [searchValue_Rooms, setSearchValue_Rooms] = useState('Any');
+	// const [searchValue_Bathrooms, setSearchValue_Bathrooms] = useState('Any');
 
 	const callSearchFunction = (e) => {
 		e.preventDefault();
 		propertyTypeSearch();
 		priceSearch();
+		roomSearch();
 	};
 
 	const priceSearch = () => {
@@ -24,17 +27,22 @@ const Search = (props) => {
 		//setSearchValue_HDBorPrivate(''); //adding this to automatically clear input field
 		console.log(`HDBorPrivate: ${searchValue_HDBorPrivate} `);
 	};
+	const roomSearch = () => {
+		props.roomSearch(searchValue_Rooms); //passing back as props
+		//setSearchValue_HDBorPrivate(''); //adding this to automatically clear input field
+		console.log(`rooms: ${searchValue_Rooms} `);
+	};
 
 	return (
 		<form className='Searchbar'>
 			<input
-				value={searchValue_min}
+				//value={searchValue_min}
 				onChange={(event) => setSearchValue_min(event.target.value)}
 				type='number'
 				placeholder='min price'
 			/>
 			<input
-				value={searchValue_max}
+				//value={searchValue_max}
 				onChange={(event) => setSearchValue_max(event.target.value)}
 				type='number'
 				placeholder='max price'
@@ -58,24 +66,35 @@ const Search = (props) => {
 				<option value='HDB'>HDB</option>
 				<option value='Private'>Private</option>
 			</select>
-			{/* <label >Rooms</label>
-      <select name="RoomsToRent" id="RoomsToRent">
-      <option value="Any">Any</option>
-        <option value="1 room">1 room</option>
-        <option value="2 room">2 room</option>
-        <option value="3 room">3 room</option>
-        <option value="4 room">4 room</option>
-        <option value="More than 4 rooms">More than 4 rooms</option>
-      </select>
-      <label >Bathrooms</label>
-      <select name="Bathrooms" id="Bathrooms">
-      <option value="Any">Any</option>
-      <option value="1 Bathroom">1 Bathroom</option>
-        <option value="2 Bathroom">2 Bathroom</option>
-        <option value="3 Bathroom">3 Bathroom</option>
-        <option value="4 Bathroom">4 Bathroom</option>
-        <option value="More than 4 Bathroom">More than 4 Bathroom</option>
-      </select>  */}
+			<label>Rooms</label>
+			<select
+				name='RoomsToRent'
+				id='RoomsToRent'
+				value={searchValue_Rooms}
+				onChange={(event) => setSearchValue_Rooms(event.target.value)}
+				type='text'
+			>
+				<option value='Any'>Any</option>
+				<option value='1 room'>1 room</option>
+				<option value='2 room'>2 room</option>
+				<option value='3 room'>3 room</option>
+				<option value='4 room'>4 room</option>
+				<option value='More than 4 rooms'>More than 4 rooms</option>
+			</select>
+			{/* <label >Bathrooms</label>
+			<select
+				name="Bathrooms"
+				id="Bathrooms"
+				value={searchValue_Bathrooms}
+				onChange={(event) => setSearchValue_Bathrooms(event.target.value)}
+				type='text'>
+				<option value="Any">Any</option>
+				<option value="1 Bathroom">1 Bathroom</option>
+				<option value="2 Bathroom">2 Bathroom</option>
+				<option value="3 Bathroom">3 Bathroom</option>
+				<option value="4 Bathroom">4 Bathroom</option>
+				<option value="More than 4 Bathroom">More than 4 Bathroom</option>
+			</select> */}
 
 			{/* <input type="text" placeholder="min price" id="input-box"/>
       <input type="text" placeholder="max price" id="input-box"/> 
