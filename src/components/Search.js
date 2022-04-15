@@ -2,35 +2,36 @@ import React, { useState } from 'react';
 
 const Search = (props) => {
 	//   const [searchValue, setSearchValue] = useState("");
-	const [searchValue_min, setSearchValue_min] = useState(null);
-	const [searchValue_max, setSearchValue_max] = useState(null);
+	const [searchValue_min, setSearchValue_min] = useState();
+	const [searchValue_max, setSearchValue_max] = useState();
 	const [searchValue_HDBorPrivate, setSearchValue_HDBorPrivate] =
 		useState('Any');
 	const [searchValue_Rooms, setSearchValue_Rooms] = useState('Any');
-	// const [searchValue_Bathrooms, setSearchValue_Bathrooms] = useState('Any');
+	const [searchValue_Bathrooms, setSearchValue_Bathrooms] = useState('Any');
 
 	const callSearchFunction = (e) => {
 		e.preventDefault();
 		propertyTypeSearch();
 		priceSearch();
-		roomSearch();
+		bedroomSearch();
+		bathroomSearch();
 	};
 
 	const priceSearch = () => {
 		props.priceSearch(searchValue_min, searchValue_max); //passing back as props
-		setSearchValue_min(''); //adding this to automatically clear input field
-		setSearchValue_max(''); //adding this to automatically clear input field
-		console.log(`min: ${searchValue_min} max: ${searchValue_max} `);
+		// console.log(`min: ${searchValue_min} max: ${searchValue_max} `);
 	};
 	const propertyTypeSearch = () => {
 		props.propertyTypeSearch(searchValue_HDBorPrivate); //passing back as props
-		//setSearchValue_HDBorPrivate(''); //adding this to automatically clear input field
-		console.log(`HDBorPrivate: ${searchValue_HDBorPrivate} `);
+		// console.log(`HDBorPrivate: ${searchValue_HDBorPrivate} `);
 	};
-	const roomSearch = () => {
-		props.roomSearch(searchValue_Rooms); //passing back as props
-		//setSearchValue_HDBorPrivate(''); //adding this to automatically clear input field
-		console.log(`rooms: ${searchValue_Rooms} `);
+	const bedroomSearch = () => {
+		props.bedroomSearch(searchValue_Rooms); //passing back as props
+		// console.log(`rooms: ${searchValue_Rooms} `);
+	};
+	const bathroomSearch = () => {
+		props.bathroomSearch(searchValue_Bathrooms); //passing back as props
+		// console.log(`rooms: ${searchValue_Rooms} `);
 	};
 
 	return (
@@ -47,13 +48,6 @@ const Search = (props) => {
 				type='number'
 				placeholder='max price'
 			/>
-			<input
-				onClick={callSearchFunction}
-				className='searchunits'
-				type='submit'
-				value='SEARCH'
-			/>
-
 			<label>Property Type</label>
 			<select
 				name='HDBorPrivate'
@@ -81,33 +75,27 @@ const Search = (props) => {
 				<option value='4 room'>4 room</option>
 				<option value='More than 4 rooms'>More than 4 rooms</option>
 			</select>
-			{/* <label >Bathrooms</label>
+			<label>Bathrooms</label>
 			<select
-				name="Bathrooms"
-				id="Bathrooms"
+				name='Bathrooms'
+				id='Bathrooms'
 				value={searchValue_Bathrooms}
 				onChange={(event) => setSearchValue_Bathrooms(event.target.value)}
-				type='text'>
-				<option value="Any">Any</option>
-				<option value="1 Bathroom">1 Bathroom</option>
-				<option value="2 Bathroom">2 Bathroom</option>
-				<option value="3 Bathroom">3 Bathroom</option>
-				<option value="4 Bathroom">4 Bathroom</option>
-				<option value="More than 4 Bathroom">More than 4 Bathroom</option>
-			</select> */}
-
-			{/* <input type="text" placeholder="min price" id="input-box"/>
-      <input type="text" placeholder="max price" id="input-box"/> 
-  */}
-			{/* <button  onClick= {props.handleFullList()}> Back to List </button>  */}
-
-			{/* <input type="text" placeholder="min price" id="input-box"/>
-      <input type="text" placeholder="max price" id="input-box"/> 
-  */}
-			{/* Size Range
-      <input type="text" placeholder="min Size" id="input-box"/>
-      <input type="text" placeholder="max Size" id="input-box"/> 
-  */}
+				type='text'
+			>
+				<option value='Any'>Any</option>
+				<option value='1 Bathroom'>1 Bathroom</option>
+				<option value='2 Bathroom'>2 Bathroom</option>
+				<option value='3 Bathroom'>3 Bathroom</option>
+				<option value='4 Bathroom'>4 Bathroom</option>
+				<option value='More than 4 Bathroom'>More than 4 Bathroom</option>
+			</select>
+			<input
+				onClick={callSearchFunction}
+				className='searchunits'
+				type='submit'
+				value='SEARCH'
+			/>
 		</form>
 	);
 };

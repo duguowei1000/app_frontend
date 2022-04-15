@@ -14,8 +14,8 @@ function ListingList() {
 	const [price_Min_S, setPrice_Min_S] = useState();
 	const [price_Max_S, setPrice_Max_S] = useState();
 	const [hdbOrPrivate_S, setHDBorPrivate_S] = useState('');
-	const [rooms_S, setRooms_S] = useState('');
-	// const [bathRooms_S, setBathrooms_S] = useState('');
+	const [bedrooms_S, setBedRooms_S] = useState('');
+	const [bathRooms_S, setBathrooms_S] = useState('');
 
 	const fetchDetails = () => {
 		fetch(urlcat(BACKEND, '/api/listings/'))
@@ -33,10 +33,10 @@ function ListingList() {
 	}, []);
 
 	useEffect(() => {
-		console.log('fullListings>>', fullListings);
-		console.log('Listings>>', listings);
-		console.log(rooms_S);
+		// console.log('fullListings>>', fullListings);
+		// console.log('Listings>>', listings);
 
+		//propType Search
 		let hdbPrivateFiltered;
 		if (hdbOrPrivate_S === 'Any') {
 			hdbPrivateFiltered = listings;
@@ -50,64 +50,91 @@ function ListingList() {
 				}
 			});
 		}
-		let roomsFiltered;
-		if (rooms_S === 'Any') {
-			roomsFiltered = listings;
+		//Bedroom Search
+		let bedroomsFiltered;
+		if (bedrooms_S === 'Any') {
+			bedroomsFiltered = listings;
 		} else {
-			roomsFiltered = listings.filter((element) => {
+			bedroomsFiltered = listings.filter((element) => {
 				const bedRooms = element.no_of_bedrooms;
-				if (rooms_S === '1 room') {
+				if (bedrooms_S === '1 room') {
 					return bedRooms === 1;
-				} else if (rooms_S === '2 room') {
-					console.log(bedRooms);
+				} else if (bedrooms_S === '2 room') {
 					return bedRooms === 2;
-				} else if (rooms_S === '3 room') {
+				} else if (bedrooms_S === '3 room') {
 					return bedRooms === 3;
-				} else if (rooms_S === 'More than 4 rooms') {
-					return bedRooms > 3;
+				} else if (bedrooms_S === '4 room') {
+					return bedRooms === 4;
+				} else if (bedrooms_S === 'More than 4 rooms') {
+					return bedRooms > 4;
 				}
 			});
 		}
-
+		//Bathroom Search
+		let bathroomsFiltered;
+		if (bathRooms_S === 'Any') {
+			bathroomsFiltered = listings;
+		} else {
+			bathroomsFiltered = listings.filter((element) => {
+				const bathRooms = element.no_of_bathrooms;
+				if (bathRooms_S === '1 Bathroom') {
+					return bathRooms === 1;
+				} else if (bathRooms_S === '2 Bathroom') {
+					console.log(bathRooms_S);
+					return bathRooms === 2;
+				} else if (bathRooms_S === '3 Bathroom') {
+					return bathRooms === 3;
+				} else if (bathRooms_S === '4 Bathroom') {
+					return bathRooms === 4;
+				} else if (bathRooms_S === 'More than 4 Bathroom') {
+					return bathRooms > 4;
+				}
+			});
+		}
+		//Price Search
 		let priceFiltered = listings.filter((element) => {
-			if (element.price > price_Min_S && element.price < price_Max_S) {
+			if (
+				element.price > (price_Min_S || 0) &&
+				element.price < (price_Max_S || 9999)
+			) {
 				return true;
 			}
 		});
 
-		// let finalFiltered = listings.filter(element => {
-		//   if ((element.price > price_Min_S) && (element.price < price_Max_S)) {
-		//     console.log(element.price)
-		//     return true
-		//   }
-		// })
 		let firstFiltered = hdbPrivateFiltered.filter((e) =>
 			priceFiltered.includes(e)
 		);
-		let secondFiltered = firstFiltered.filter((e) => roomsFiltered.includes(e));
-		console.log('roomfilterd:', roomsFiltered);
+		let secondFiltered = bathroomsFiltered.filter((e) =>
+			bedroomsFiltered.includes(e)
+		);
+		let thirdFiltered = secondFiltered.filter((e) => firstFiltered.includes(e));
+		console.log('bathroomfilterd:', bathroomsFiltered);
+		console.log('roomfilterd:', bedroomsFiltered);
 		console.log('firstfilterd:', firstFiltered);
 		console.log('secondfilterd:', secondFiltered);
+		console.log('thirdfilterd:', thirdFiltered);
 		console.log('min', price_Min_S);
 		console.log('max', price_Max_S);
 
 		//set filter
-		if (secondFiltered.length) {
-			setListings(secondFiltered);
+		if (thirdFiltered.length) {
+			setListings(thirdFiltered);
 			firstFiltered = [];
 			secondFiltered = []; //initialise to 0
+			thirdFiltered = [];
 			hdbPrivateFiltered = [];
-			roomsFiltered = [];
-			setPrice_Min_S(0);
-			setPrice_Max_S(9999);
+			bedroomsFiltered = [];
+			bathroomsFiltered = [];
+			// setPrice_Min_S(0);
+			// setPrice_Max_S(9999);
 			setShow(false);
 		} else {
 			setListings([]);
 			setShow(true);
 		} //no entries
-		console.log('roomsfiltered', roomsFiltered);
-		console.log('fullListings>>', fullListings);
-		console.log('Listings>>', listings);
+		// console.log('roomsfiltered', bedroomsFiltered);
+		// console.log('fullListings>>', fullListings);
+		// console.log('Listings>>', listings);
 	}, [toggle]);
 
 	const handleToggle = () => {
@@ -123,16 +150,21 @@ function ListingList() {
 	const search = (searchValue_min, searchValue_max) => {
 		handleToggle();
 		setPrice_Min_S(searchValue_min);
-		setPrice_Max_S(searchValue_max || 9999); //to set upper limit
+		setPrice_Max_S(searchValue_max); // || 9999); //to set upper limit
 	};
 
 	const propertyTypeSearch = (searchValue_HDBorPrivate) => {
 		handleToggle();
 		setHDBorPrivate_S(searchValue_HDBorPrivate);
 	};
-	const roomSearch = (searchValue_Rooms) => {
+	const bedroomSearch = (searchValue_Rooms) => {
 		handleToggle();
-		setRooms_S(searchValue_Rooms);
+		setBedRooms_S(searchValue_Rooms);
+	};
+
+	const bathroomSearch = (searchValue_Rooms) => {
+		handleToggle();
+		setBathrooms_S(searchValue_Rooms);
 	};
 
 	return (
@@ -143,7 +175,8 @@ function ListingList() {
 					<Search
 						priceSearch={search}
 						propertyTypeSearch={propertyTypeSearch}
-						roomSearch={roomSearch}
+						bedroomSearch={bedroomSearch}
+						bathroomSearch={bathroomSearch}
 						toggle={handleToggle}
 					/>
 				</div>
