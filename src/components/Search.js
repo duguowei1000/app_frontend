@@ -36,6 +36,7 @@ const Search = (props) => {
 
 	return (
 		<form className='Searchbar'>
+			<label>Price Range</label>
 			<input
 				//value={searchValue_min}
 				onChange={(event) => setSearchValue_min(event.target.value)}
