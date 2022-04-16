@@ -1,5 +1,6 @@
 import { useState } from 'react';
-const backend = 'http://localhost:2000';
+import BACKEND from '../utils/utils';
+const backend = BACKEND;
 const Input = ({ name, label, error, ...rest }) => {
 	return (
 		<div className='form-group'>
