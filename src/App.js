@@ -1,9 +1,10 @@
 import Seed from './pages/Seed';
 import ListingList from './pages/ListingList';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Nav from './components/Nav';
 import { Listings, Dashboard, Listing, Create, Auth, Edit } from './routes';
 
-import Nav from './components/Nav.js';
 
 function App() {
 	return (
