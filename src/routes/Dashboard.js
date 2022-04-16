@@ -52,7 +52,12 @@ function Listings() {
 									width='20px'
 								/>
 								<br />
-								<Link to={`/dashboard/${listing._id}/edit`}>
+								<Link to={`/listings/${listing._id}`}>
+									<button className='viewListing'>
+										<span>View Listing</span>
+									</button>
+								</Link>
+								<Link to={`/listings/${listing._id}/edit`}>
 									<button className='viewListing'>
 										<span>Edit Listing</span>
 									</button>

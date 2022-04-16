@@ -68,9 +68,20 @@ function ListingList() {
 	return (
 		<>
 			<form>
-				Price Range
 				<div>
-					<Search search={search} toggle={handleToggle} />
+
+					<Search
+						priceSearch={search}
+						propertyTypeSearch={propertyTypeSearch}
+						bedroomSearch={bedroomSearch}
+						bathroomSearch={bathroomSearch}
+						toggle={handleToggle}
+					/>
+				</div>
+				<input onClick={handleFullList} type='submit' value='Reset Filters' />
+				<div style={{ visibility: show ? 'visible' : 'hidden' }}>
+					Sorry! No Listings Found
+
 				</div>
 				{/* <div style={{ visibility: show ? "visible" : "hidden" }}> */}
 				<input onClick={handleToggle} type='submit' value='Back to list' />

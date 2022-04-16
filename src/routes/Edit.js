@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 
-const url = urlcat(BACKEND, '/api/listings/');
+function Edit() {
+	const { id } = useParams();
+	const url = urlcat(BACKEND, `/api/listings/${id}`);
 
-function Create() {
 	const [postal, setPostal] = useState('');
 	const [district, setDistrict] = useState(0);
 	const [address, setAddress] = useState(0);
@@ -18,20 +21,17 @@ function Create() {
 
 	const [error, setError] = useState('');
 
-	const createListing = (listing) => {
+	const updateListing = (listing) => {
 		fetch(url, {
-			method: 'POST',
+			credentials: 'include',
+			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(listing),
 		})
 			.then((response) => response.json())
-			.then((data) => {
-				if (data.error) {
-					setError(data.error);
-				}
-			})
+			.then((data) => data)
 			.catch((error) => console.log(error));
 	};
 
@@ -49,8 +49,8 @@ function Create() {
 			no_of_bathrooms,
 			description,
 		};
-		createListing(listing);
-		alert('listing created');
+		updateListing(listing);
+		alert('listing updated');
 	};
 
 	return (
@@ -145,10 +145,10 @@ function Create() {
 				/>
 				<br />
 				<p>{error}</p>
-				<button type='submit'>Create</button>
+				<button type='submit'>Edit</button>
 			</form>
 		</>
 	);
 }
 
-export default Create;
+export default Edit;
