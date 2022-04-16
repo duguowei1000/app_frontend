@@ -11,7 +11,7 @@ function Listings() {
 		fetch(urlcat(BACKEND, '/api/listings/'))
 			.then((response) => response.json())
 			.then((data) => setListings(data));
-	}, [listings]);
+	}, []);
 
 	const handleDelete = (id) => () => {
 		const url = urlcat(BACKEND, `/api/listings/${id}`);
@@ -52,6 +52,11 @@ function Listings() {
 									width='20px'
 								/>
 								<br />
+								<Link to={`/listings/${listing._id}`}>
+									<button className='viewListing'>
+										<span>View Listing</span>
+									</button>
+								</Link>
 								<Link to={`/dashboard/${listing._id}/edit`}>
 									<button className='viewListing'>
 										<span>Edit Listing</span>

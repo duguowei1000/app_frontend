@@ -170,7 +170,6 @@ function ListingList() {
 	return (
 		<>
 			<form>
-				Price Range
 				<div>
 					<Search
 						priceSearch={search}
@@ -180,7 +179,7 @@ function ListingList() {
 						toggle={handleToggle}
 					/>
 				</div>
-				<input onClick={handleFullList} type='submit' value='Back to list' />
+				<input onClick={handleFullList} type='submit' value='Reset Filters' />
 				<div style={{ visibility: show ? 'visible' : 'hidden' }}>
 					Sorry! No Listings Found
 				</div>
