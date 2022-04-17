@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import BACKEND from '../utils/utils';
+import { BACKEND } from '../utils/utils';
 const backend = BACKEND;
 const Input = ({ name, label, error, ...rest }) => {
 	return (
