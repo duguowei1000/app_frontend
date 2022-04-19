@@ -1,6 +1,11 @@
-export const BACKEND = 'http://localhost:2000' ?? process.env.REACT_APP_BACKEND;
-// process.env.NODE_ENV === 'production'
-// 	? process.env.REACT_APP_BACKEND
-// 	: 'http://localhost:2000'; // process.env.REACT_APP_BACKEND
+const isProduction = process.env.NODE_ENV === 'production';
 
-// export default BACKEND;
+const BACKEND = isProduction
+	? process.env.REACT_APP_BACKEND
+	: 'http://localhost:2000';
+
+const FRONTEND = isProduction
+	? process.env.REACT_APP_BACKEND
+	: 'http://localhost:3000';
+
+export { BACKEND, FRONTEND };

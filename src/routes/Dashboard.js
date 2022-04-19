@@ -11,7 +11,7 @@ function Listings() {
 		fetch(urlcat(BACKEND, '/api/listings/'))
 			.then((response) => response.json())
 			.then((data) => setListings(data));
-	}, [listings]);
+	}, []);
 
 	const handleDelete = (id) => () => {
 		const url = urlcat(BACKEND, `/api/listings/${id}`);

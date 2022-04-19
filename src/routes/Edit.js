@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import urlcat from 'urlcat';
-import { BACKEND } from '../utils/utils';
+import { BACKEND, FRONTEND } from '../utils/utils';
 
 function Edit() {
 	const { id } = useParams();
@@ -55,7 +55,7 @@ function Edit() {
 
 	return (
 		<>
-			<form action='http://localhost:3000/dashboard/' onSubmit={handleSubmit}>
+			<form action={urlcat(FRONTEND, 'dashboard')} onSubmit={handleSubmit}>
 				Postal:
 				<input
 					type='text'
