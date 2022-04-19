@@ -1,10 +1,13 @@
-import ListingList from '../pages/ListingList';
 import { useEffect, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import { Link } from 'react-router-dom';
 
-function Listings() {
+//Grab Tenant's Id
+//Populate Tenant's Liked Listings based on id  //
+//Routing should be based on Id
+
+function TenantDashboard() {
 	const [listings, setListings] = useState([]);
 
 	useEffect(() => {
@@ -74,4 +77,4 @@ function Listings() {
 	);
 }
 
-export default Listings;
+export default TenantDashboard;
