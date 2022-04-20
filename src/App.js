@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Nav from './components/Nav';
 import { Listings, Dashboard, Listing, Create, Auth, Edit } from './routes';
 
+import TenantListingList from './tenant/TenantListingList';
+import TenantWatchList from './tenant/TenantWatchList';
 
 function App() {
 	return (
@@ -21,6 +23,9 @@ function App() {
 				<Route path='listings/:id/edit' element={<Edit />} />
 
 				<Route path='auth' element={<Auth />} />
+
+				<Route path='tenantlistings/all' element={<TenantListingList />} />
+				<Route path='tenantwatchlist' element={<TenantWatchList />} />
 			</Routes>
 		</div>
 	);
