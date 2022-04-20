@@ -170,7 +170,7 @@ function TenantListingList() {
 	////Handle add to Tenant dashboard
 	const handleEditlist = () => {
 		const url = urlcat(BACKEND, `/api/tenant/listings`);
-		const newList = { likes: 10 };
+		const newList = { fav: '625d4b8db4773b4ae40a79ea' };
 
 		fetch(url, {
 			method: 'PUT',
