@@ -20,7 +20,13 @@ const Nav = () => {
 						<Link to='/auth'>Auth</Link>
 					</li>
 					<li>
-						<AuthStatusIndicator />
+						<Link to='/tenantlistings/all'>Tenant Listings</Link>
+					</li>
+					<li>
+						<Link to='/tenantwatchlist'>Tenant Watchlist</Link>
+					</li>
+          <li>
+            <AuthStatusIndicator />
 					</li>
 				</ul>
 			</nav>
