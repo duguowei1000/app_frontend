@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"isolatedModules": true,
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"jsx": "preserve",
+		"module": "ESNext",
+		"lib": ["DOM", "ESNext"],
+		"target": "ESNext",
+		"rootDir": "src",
+		"noEmit": false,
+		"skipDefaultLibCheck": true,
+		"skipLibCheck": true,
+		"watch": true
+	},
+	"typeAcquisition": {
+		"enable": true,
+		"enableAutoDiscovery": true
+	},
+	"include": ["src", "src/**/*.ts", "src/**/*.tsx"],
+	"exclude": ["node_modules", "**/node_modules"]
+}
