@@ -1,79 +1,55 @@
-const tokenName = 'jwtToken';
-
-const sampleToken =
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-
-const decodeJwtToken = (token) => {
-	const base64payload = token.split('.')[1];
-	return JSON.parse(window.atob(base64payload));
+import { fetcher } from './fetcher';
+import { BACKEND } from './utils';
+const getHeaders = () => {
+	const jwt = getJwt();
+	const authHeader = { Authorization: `Bearer ${jwt}` };
+	const defaults = {
+		'Content-Type': 'application/json',
+	};
+	return { ...defaults, ...authHeader };
 };
-
-// const
-
-// decodeJwtToken(sampleToken); //?
-
-const getJwtToken = () => sessionStorage.getItem(tokenName);
-const setJwtToken = (token) => sessionStorage.setItem(tokenName, token);
-
-const auth = {
-	getToken: () => {
-		return sessionStorage.getItem('jwt');
-	},
-	setToken: (token) => {
-		sessionStorage.setItem('jwt', token);
-	},
-	isAuthenticated: () => {
-		const token = auth.getToken();
-		if (token) {
-			const payload = JSON.parse(atob(token.split('.')[1]));
-			return payload.exp > Date.now() / 1000;
-		} else {
-			return false;
-		}
-	},
-	getUser: () => {
-		if (auth.isAuthenticated()) {
-			const token = auth.getToken();
-			const payload = JSON.parse(atob(token.split('.')[1]));
-			return payload.user;
-		}
-	},
-	/*
-	// getUserId: () => {
-	// 	if (auth.isAuthenticated()) {
-	// 		const token = auth.getToken();
-	// 		const payload = JSON.parse(atob(token.split('.')[1]));
-	// 		return payload.user._id;
-	// 	}
-	// },
-	// getUserName: () => {
-	// 	if (auth.isAuthenticated()) {
-	// 		const token = auth.getToken();
-	// 		const payload = JSON.parse(atob(token.split('.')[1]));
-	// 		return payload.user.name;
-	// 	}
-	// },
-	// getUserEmail: () => {
-	// 	if (auth.isAuthenticated()) {
-	// 		const token = auth.getToken();
-	// 		const payload = JSON.parse(atob(token.split('.')[1]));
-	// 		return payload.user.email;
-	// 	}
-	// },
-	// getUserRole: () => {
-	// 	if (auth.isAuthenticated()) {
-	// 		const token = auth.getToken();
-	// 		const payload = JSON.parse(atob(token.split('.')[1]));
-	// 		return payload.user.role;
-	// 	}
-	// },
-	// getUserImage: () => {
-	// 	if (auth.isAuthenticated()) {
-	// 		const token = auth.getToken();
-	// 		const payload = JSON.parse(atob(token.split('.')[1]));
-	// 		return payload.user.image;
-	// 	}
-	// },
-
-    */
+function getToken(token) {
+	return sessionStorage.getItem(token);
+}
+function setToken(token, value) {
+	sessionStorage.setItem(token, value);
+}
+function jwtDecode(token) {
+	return JSON.parse(atob(token.split('.')[1]));
+}
+const getJwt = () => getToken('jwt');
+const setJwt = (token) => setToken('jwt', token);
+const getRefreshToken = () => getToken('refreshToken');
+const setRefreshToken = (token) => setToken('refreshToken', token);
+export const saveTokens = (tokens) => {
+	setJwt(tokens.token);
+	setRefreshToken(tokens.refreshToken);
 };
+export const storageListener = (event) => {
+	if (event.key == 'getSessionStorage') {
+		// Some tab asked for the sessionStorage -> send it
+		localStorage.setItem('sessionStorage', JSON.stringify(sessionStorage));
+		localStorage.removeItem('sessionStorage');
+	} else if (event.key == 'sessionStorage' && sessionStorage.length === 0) {
+		// sessionStorage is empty -> fill it
+		const data = JSON.parse(event.newValue);
+		for (const key in data) {
+			sessionStorage.setItem(key, data[key]);
+		}
+	}
+};
+export async function login({ username, password }) {
+	const response = await fetcher(`${BACKEND}/auth/login`, {
+		method: 'POST',
+		body: JSON.stringify({ username, password }),
+	});
+	console.log(response);
+	if (!response.ok) {
+		throw new Error(response.statusText);
+	}
+	const { token, refreshToken } = await response.json();
+	setJwt(token);
+	setRefreshToken(refreshToken);
+	return response;
+}
+export const isAuthenticated = () => !!getJwt();
