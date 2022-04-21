@@ -18,6 +18,12 @@ const Nav = () => {
 					<li>
 						<Link to='/auth'>Auth</Link>
 					</li>
+					<li>
+						<Link to='/tenantlistings/all'>Tenant Listings</Link>
+					</li>
+					<li>
+						<Link to='/tenantwatchlist'>Tenant Watchlist</Link>
+					</li>
 				</ul>
 			</nav>
 		</header>
