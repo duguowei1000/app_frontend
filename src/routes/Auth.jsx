@@ -1,24 +1,44 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable no-unused-vars */
+
 import { useState } from 'react';
+import { login, saveTokens } from '../utils/auth';
 import { BACKEND } from '../utils/utils';
 const backend = BACKEND;
-const Input = ({ name, label, error, ...rest }) => {
+/**  @param {{name:string}} */
+const Input = ({ name, value, ...rest }) => {
+	const capitaliseName = () => {
+		const [first, ...rest] = [...name];
+		return `${first.toUpperCase()}${rest.join('')}`;
+	};
+	const label = capitaliseName();
+	const error =
+		value.trim().length === 0
+			? `${label} is required`
+			: value.trim().length < 3
+			? 'Username must be at least 3 characters'
+			: '';
+
 	return (
 		<div className='form-group'>
 			<label htmlFor={name}>{label}</label>
-			<input
-				{...rest}
-				name={name}
-				id={name}
-				className='form-control'
-				autoFocus
-			/>
+			<input {...rest} name={name} id={name} className='form-control' />
 			{error && <div className='alert alert-danger'>{error}</div>}
 		</div>
 	);
 };
 
+function Test() {
+	return (
+		<div>
+			<h1>Test</h1>
+		</div>
+	);
+}
+
 export default function Auth() {
 	const [details, setDetails] = useState({ username: '', password: '' });
+	const [isAuthorised, setIsAuthorised] = useState(false);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -28,13 +48,9 @@ export default function Auth() {
 		}));
 	};
 
-	// const ad
-	// const authHeader = `Authorisation: Bearer ${ad}`
-
-	const submitInput = async (e) => {
+	const handleLogin = async (e) => {
 		e.preventDefault();
-		console.log(details);
-		const res = await fetch(`${backend}/auth/login`, {
+		const response = await fetch(`${backend}/auth/login`, {
 			credentials: 'include',
 			method: 'POST',
 			headers: {
@@ -42,55 +58,56 @@ export default function Auth() {
 			},
 			body: JSON.stringify(details),
 		});
-		const data = await res.json();
-		console.log(data);
-		console.log('first', JSON.stringify([res.status, data]));
+		if (!response.status === 200) return alert('Invalid username or password');
+		const data = await response.json();
+		saveTokens(data);
+		setIsAuthorised(true);
 	};
 
-	const testAuth = (e) => {
-		fetch(`${backend}/auth/test`, {
+	const handleSignup = async (e) => {
+		e.preventDefault();
+		const response = await fetch(`${backend}/auth/signup`, {
 			credentials: 'include',
-			method: 'GET',
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				console.log(data);
-			});
+			body: JSON.stringify(details),
+		});
+		if (!response.status === 200) alert('Signup Failed');
+		const data = await response.json();
+		saveTokens(data);
+		setIsAuthorised(true);
 	};
 
 	return (
 		<>
 			<h1>Auth</h1>
+
 			<form>
-				{' '}
-				{/* action='' method='get'> */}
-				<Input
-					name='username'
-					label='Username'
-					error={
-						details.username.length < 3
-							? 'Username must be at least 3 characters'
-							: null
-					}
-					value={details.username}
-					onChange={handleChange}
-				/>
-				<Input
-					name='password'
-					label='Password'
-					error={
-						details.password.length < 3
-							? 'Password must be at least 3 characters'
-							: null
-					}
-					value={details.password}
-					onChange={handleChange}
-				/>
-				<button onClick={submitInput}>Login</button>
-				<button onClick={testAuth}>Auth</button>
+				{/* show an icon if user is logged in */}
+				{!isAuthorised ? (
+					<>
+						<Input
+							name='username'
+							value={details.username}
+							onChange={handleChange}
+						/>
+						<Input
+							name='password'
+							value={details.password}
+							onChange={handleChange}
+						/>
+						<button onClick={handleLogin} className='btn btn-primary'>
+							Login
+						</button>
+						<button onClick={handleSignup} className='btn btn-primary'>
+							Signup
+						</button>
+					</>
+				) : (
+					<p>Youre logged in</p>
+				)}
 			</form>
 		</>
 	);

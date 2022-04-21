@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import AuthStatusIndicator from './AuthStatusIndicator';
 
 const Nav = () => {
 	return (
@@ -17,6 +18,9 @@ const Nav = () => {
 					</li>
 					<li>
 						<Link to='/auth'>Auth</Link>
+					</li>
+					<li>
+						<AuthStatusIndicator />
 					</li>
 				</ul>
 			</nav>
