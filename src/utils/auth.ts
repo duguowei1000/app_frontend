@@ -19,7 +19,7 @@ function setToken(token, value) {
 }
 
 function jwtDecode(token) {
-	return JSON.parse(atob(token.split('.')[1]));
+	return JSON.parse(window.atob(token.split('.')[1]));
 }
 
 const getJwt = () => getToken('jwt');
@@ -28,8 +28,10 @@ const getRefreshToken = () => getToken('refreshToken');
 const setRefreshToken = (token) => setToken('refreshToken', token);
 
 export const saveTokens = (tokens) => {
-	setJwt(tokens.token);
-	setRefreshToken(tokens.refreshToken);
+	console.log('tokens', tokens);
+	const { accessToken, refreshToken } = tokens;
+	setJwt(accessToken);
+	setRefreshToken(refreshToken);
 };
 
 export const storageListener = (event: StorageEvent) => {
