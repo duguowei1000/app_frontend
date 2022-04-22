@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 //Grab Tenant's Id
 //Populate Tenant's Liked Listings based on id  //
 //Routing should be based on Id
-const tenantID = '626256bdbd0702716c26976c';
 
 function TenantWatchList() {
 	const [tenantDetails, setTenantDetails] = useState([]);
@@ -30,7 +29,7 @@ function TenantWatchList() {
 			});
 	};
 	const fetchTenantDetails = () => {
-		fetch(urlcat(BACKEND, '/api/tenant'))
+		fetch(urlcat(BACKEND, '/api/tenant/'))
 			.then((response) => response.json())
 			.then((data) => {
 				setTenantDetails(data);
@@ -42,6 +41,7 @@ function TenantWatchList() {
 			});
 	};
 
+	const tenantID = '6262c905f7d19a73f07ede29'; //**** */
 	const setupWatchList = () => {
 		// const tenantFavs = []
 		console.log(tenantDetails[0]);
@@ -93,13 +93,37 @@ function TenantWatchList() {
 		return <div>No watchList</div>;
 	}
 
-	const handleDelete = (id) => () => {
-		const url = urlcat(BACKEND, `/api/listings/${id}`);
-		fetch(url, { method: 'DELETE' })
-			.then((response) => response.json())
-			.then((data) => console.log(data));
-		alert('listing deleted');
-	};
+	// const handleDelete = (id) => () => {
+	// 	const url = urlcat(BACKEND, `/api/listings/${id}`);
+	// 	fetch(url, { method: 'PUT' })
+	// 		.then((response) => response.json())
+	// 		.then((data) => console.log(data));
+	// 	alert('listing deleted');
+	// };
+
+	const tenantloginID = '6262c905f7d19a73f07ede29';
+	// const handleDelete = (listID) => {
+	// 	const url = urlcat(BACKEND, `/api/tenant/${tenantloginID}`);
+	// 	const deleteListing = { fav: `${listID}` };
+	// 	console.log(deleteListing);
+	// 	fetch(url, {
+	// 		method: 'PUT',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify(
+	// 			deleteListing
+	// 			//addtolist._id
+	// 		),
+	// 	})
+	// 		.then((response) => response.json())
+	// 		.then((data) => {
+	// 			console.log(data);
+	// 			if (data.error) {
+	// 				console.log(data.error);
+	// 			}
+	// 		});
+	// };
 
 	return (
 		<>
@@ -108,46 +132,47 @@ function TenantWatchList() {
 			{canList && (
 				<div className='listingList'>
 					<ul>
-						{watchlist.map((listing) => (
-							<li key={listing._id}>
+						{watchlist.map((tenantListing) => (
+							<li key={tenantListing._id}>
 								<div className='listing'>
 									<div className='listingImage'>
-										{<img src={listing.image} height='300px' width='400px' />}
+										{
+											<img
+												src={tenantListing.image}
+												height='300px'
+												width='400px'
+											/>
+										}
 									</div>
 									<div className='listingInfo'>
-										<b>{listing.address}</b> <br />
-										District: {listing.district} <br />
+										<b>{tenantListing.address}</b> <br />
+										District: {tenantListing.district} <br />
 										{/* <span onClick={handleUpdate(listing)}>{listing.price}</span> */}
-										Size: {listing.size} sqft
+										Size: {tenantListing.size} sqft
 										<br />
-										Price: ${listing.price}
+										Price: ${tenantListing.price}
 										<br />
-										{listing.no_of_bedrooms}{' '}
+										{tenantListing.no_of_bedrooms}{' '}
 										<img
 											src='http://cdn.onlinewebfonts.com/svg/img_391908.png'
 											height='20x'
 											width='20px'
 										/>
 										<br />
-										{listing.no_of_bathrooms}{' '}
+										{tenantListing.no_of_bathrooms}{' '}
 										<img
 											src='https://cdn-icons-png.flaticon.com/512/637/637270.png'
 											height='20x'
 											width='20px'
 										/>
 										<br />
-										<Link to={`/listings/${listing._id}`}>
+										<Link to={`/listings/${tenantListing._id}`}>
 											<button className='viewListing'>
 												<span>View Listing</span>
 											</button>
 										</Link>
-										<Link to={`/listings/${listing._id}/edit`}>
-											<button className='viewListing'>
-												<span>Edit Listing</span>
-											</button>
-										</Link>
 										<button className='deleteListing'>
-											<span onClick={handleDelete(listing._id)}>Delete</span>
+											{/* <span onClick={handleDelete(tenantListing._id)}>Delete</span> */}
 										</button>
 									</div>
 								</div>

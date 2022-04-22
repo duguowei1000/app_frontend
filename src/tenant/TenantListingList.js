@@ -168,8 +168,9 @@ function TenantListingList() {
 		setBathrooms_S(searchValue_Rooms);
 	};
 	////Handle add to Tenant dashboard
+	const tenantloginID = `6262c905f7d19a73f07ede29`;
 	const handleEditlist = (AddtoList) => {
-		const url = urlcat(BACKEND, `/api/tenant/listings`);
+		const url = urlcat(BACKEND, `/api/tenant/${tenantloginID}`);
 		const addListing = { fav: `${AddtoList}` };
 		console.log(addListing);
 		fetch(url, {
