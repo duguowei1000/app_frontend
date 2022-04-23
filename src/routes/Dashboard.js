@@ -1,4 +1,3 @@
-import ListingList from '../pages/ListingList';
 import { useEffect, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
