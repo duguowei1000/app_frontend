@@ -4,6 +4,7 @@ import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Search from '../components/Search';
 import TenantEdit from './TenantEdit';
+import Nav from '../components/Nav';
 
 function TenantListingList() {
 	const [listings, setListings] = useState([]);
@@ -202,6 +203,7 @@ function TenantListingList() {
 
 	return (
 		<>
+			<Nav />
 			<form>
 				Price Range
 				<div>

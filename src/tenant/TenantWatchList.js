@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import { Link } from 'react-router-dom';
+import Nav from '../components/Nav';
 
 //Grab Tenant's Id
 //Populate Tenant's Liked Listings based on id  //
@@ -95,6 +96,7 @@ function TenantWatchList() {
 
 	return (
 		<>
+			<Nav />
 			{/* {console.log(status)}
 			{status === "No Watchlist" ? <div>no watchList</div> :<div>watchlist</div> }
 			{canList&& */}

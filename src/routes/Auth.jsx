@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { login, saveTokens } from '../utils/auth';
 import { BACKEND } from '../utils/utils';
+import Nav from '../components/Nav';
+
 const backend = BACKEND;
 /**  @param {{name:string}} */
 const Input = ({ name, value, ...rest }) => {
@@ -81,6 +83,7 @@ export default function Auth() {
 
 	return (
 		<>
+			<Nav />
 			<h1>Auth</h1>
 
 			<form>
