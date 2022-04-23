@@ -190,3 +190,15 @@ li:last-child {
 	height: 100px;
 	width: 200%;
 }
+
+.inputBox1 {
+	height: 50px;
+	width: 100%;
+	align-items: top;
+}
+
+.inputBox2 {
+	height: 200px;
+	width: 100%;
+	align-items: top;
+}

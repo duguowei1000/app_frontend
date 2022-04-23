@@ -75,7 +75,8 @@ function Create() {
 				/>
 				<br />
 				Address:
-				<input
+				<textarea
+					className='inputBox1'
 					type='text'
 					name='address'
 					value={address}
@@ -115,7 +116,8 @@ function Create() {
 				/>
 				<br />
 				Image Link:
-				<input
+				<textarea
+					className='inputBox1'
 					type='text'
 					name='image'
 					value={image}
@@ -139,7 +141,8 @@ function Create() {
 				/>
 				<br />
 				Description:
-				<input
+				<textarea
+					className='inputBox2'
 					type='text'
 					name='description'
 					value={description}
