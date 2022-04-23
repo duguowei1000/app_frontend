@@ -8,7 +8,7 @@ function Edit() {
 	const { id } = useParams();
 	const url = urlcat(BACKEND, `/api/listings/${id}`);
 
-	const [postal, setPostal] = useState('');
+	const [postal, setPostal] = useState();
 	const [district, setDistrict] = useState(0);
 	const [address, setAddress] = useState(0);
 	const [property_type, setPropertyType] = useState('HDB');
@@ -20,6 +20,28 @@ function Edit() {
 	const [description, setDescription] = useState('');
 
 	const [error, setError] = useState('');
+	const [selectedListing, setSelectedListing] = useState([]);
+
+	useEffect(() => {
+		fetch(urlcat(BACKEND, '/api/listings/'))
+			.then((response) => response.json())
+
+			.then((data) => {
+				const selectedListing = data.filter((listing) => listing._id === id);
+				console.log('selectedListing', selectedListing);
+				setSelectedListing(selectedListing[0]);
+			});
+		setPostal(`${selectedListing.postal}`);
+		setDistrict(`${selectedListing.district}`);
+		setAddress(`${selectedListing.address}`);
+		setPropertyType(`${selectedListing.property_type}`);
+		setSize(`${selectedListing.size}`);
+		setPrice(`${selectedListing.price}`);
+		setImage(`${selectedListing.image}`);
+		setBedrooms(`${selectedListing.no_of_bedrooms}`);
+		setBathrooms(`${selectedListing.no_of_bathrooms}`);
+		setDescription(`${selectedListing.description}`);
+	}, [selectedListing.postal]);
 
 	const updateListing = (listing) => {
 		fetch(url, {
@@ -73,7 +95,8 @@ function Edit() {
 				/>
 				<br />
 				Address:
-				<input
+				<textarea
+					className='inputBox1'
 					type='text'
 					name='address'
 					value={address}
@@ -113,7 +136,8 @@ function Edit() {
 				/>
 				<br />
 				Image Link:
-				<input
+				<textarea
+					className='inputBox1'
 					type='text'
 					name='image'
 					value={image}
@@ -137,7 +161,8 @@ function Edit() {
 				/>
 				<br />
 				Description:
-				<input
+				<textarea
+					className='inputBox2'
 					type='text'
 					name='description'
 					value={description}
