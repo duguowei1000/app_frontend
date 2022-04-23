@@ -25,8 +25,8 @@ const Nav = () => {
 					<li>
 						<Link to='/tenantwatchlist'>Tenant Watchlist</Link>
 					</li>
-          <li>
-            <AuthStatusIndicator />
+					<li>
+						<AuthStatusIndicator />
 					</li>
 				</ul>
 			</nav>

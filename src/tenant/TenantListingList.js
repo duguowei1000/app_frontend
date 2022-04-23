@@ -4,6 +4,7 @@ import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Search from '../components/Search';
 import TenantEdit from './TenantEdit';
+import Nav2 from '../components/Nav2';
 
 function TenantListingList() {
 	const [listings, setListings] = useState([]);
@@ -203,32 +204,37 @@ function TenantListingList() {
 
 	return (
 		<>
-			<form>
-				Price Range
-				<div>
-					<Search
-						priceSearch={search}
-						propertyTypeSearch={propertyTypeSearch}
-						bedroomSearch={bedroomSearch}
-						bathroomSearch={bathroomSearch}
-						toggle={handleToggle}
-					/>
-				</div>
-				<input onClick={handleFullList} type='submit' value='Back to list' />
-				<div style={{ visibility: show ? 'visible' : 'hidden' }}>
-					Sorry! No Listings Found
-				</div>
-			</form>
+			<Nav2 />
 
+			<div>
+				<Search
+					priceSearch={search}
+					propertyTypeSearch={propertyTypeSearch}
+					bedroomSearch={bedroomSearch}
+					bathroomSearch={bathroomSearch}
+					toggle={handleToggle}
+				/>
+			</div>
+			<input onClick={handleFullList} type='submit' value='Clear All Filters' />
+			<div>
+				Displaying a total of <b>{listings.length} listings</b> based on the
+				filter(s) you have selected.
+			</div>
 			<div className='listingList'>
 				<ul>
 					{listings.map((listing) => (
 						<li key={listing._id}>
-							<div className='listing'>
-								<div className='listingImage'>
-									{<img src={listing.image} height='300px' width='400px' />}
+							<div className='tenantListing'>
+								<div class='bg-indigo-300 ...'>
+									{
+										<img
+											class='object-cover h-60 w-96 ...'
+											src={listing.image}
+										/>
+									}
 								</div>
 								<div className='listingInfo'>
+									<br />
 									<b>{listing.address}</b> <br />
 									District: {listing.district} <br />
 									{/* <span onClick={handleUpdate(listing)}>{listing.price}</span> */}
@@ -236,24 +242,18 @@ function TenantListingList() {
 									<br />
 									Price: ${listing.price}
 									<br />
-									{listing.no_of_bedrooms}{' '}
-									<img
-										src='http://cdn.onlinewebfonts.com/svg/img_391908.png'
-										height='20x'
-										width='20px'
-									/>
+									{listing.no_of_bedrooms}
+									{' Bedrooms'}
 									<br />
-									{listing.no_of_bathrooms}{' '}
-									<img
-										src='https://cdn-icons-png.flaticon.com/512/637/637270.png'
-										height='20x'
-										width='20px'
-									/>
+									{listing.no_of_bathrooms}
+									{' Bathrooms'}
+									<br />
 									<br />
 									{/* <TenantEdit
 										url={url}
 										handleUpdate={handleEditlist}
 										id={listing._id}
+
 									/> */}
 									<button
 										className='addTolist'
@@ -262,6 +262,7 @@ function TenantListingList() {
 										<span>Add to list</span>
 									</button>
 									<Link to={`/listings/${listing._id}`}>
+
 										<button className='viewListing'>
 											<span>View Listing</span>
 										</button>

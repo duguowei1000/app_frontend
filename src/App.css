@@ -37,6 +37,11 @@
 	text-align: center;
 }
 
+.indivDescription {
+	margin-left: 20%;
+	margin-right: 20%;
+}
+
 ul {
 	list-style-type: none;
 	margin: 0;
@@ -73,9 +78,6 @@ li {
 	text-align: center;
 }
 
-.listing {
-	background-color: seashell;
-}
 @keyframes App-logo-spin {
 	from {
 		transform: rotate(0deg);
@@ -129,4 +131,62 @@ li:last-child {
 	--pixels: 32px;
 	width: var(--pixels);
 	height: var(--pixels);
+}
+
+.homePage {
+	margin-top: 10%;
+	text-align: center;
+	align-items: center;
+}
+.homeScreen {
+	text-align: center;
+	display: inline-flex;
+	margin: 10px;
+}
+
+.login {
+	margin: 15px;
+}
+
+.signup {
+	margin: 15px;
+}
+
+.listing {
+	height: 480px;
+	width: 380px;
+	text-align: center;
+	align-items: center;
+	background-color: seashell;
+}
+
+.dashboardListing {
+	background-color: seashell;
+	height: 580px;
+	width: 380px;
+	text-align: center;
+	align-items: center;
+}
+.tenantListing {
+	background-color: seashell;
+	height: 520px;
+	width: 380px;
+	text-align: center;
+	align-items: center;
+}
+
+.individualImage {
+	align-items: center;
+	text-align: center;
+}
+
+.Searchbar {
+	display: inline-block;
+	height: 100%;
+	width: 100%;
+}
+
+.searchbar {
+	height: 100px;
+	width: 200%;
 }

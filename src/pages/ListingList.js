@@ -4,6 +4,7 @@ import { useOutletContext } from 'react-router-dom';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Search from '../components/Search';
+import Nav2 from '../components/Nav2';
 
 function ListingList() {
 	const [listings, setListings] = useState([]);
@@ -18,7 +19,13 @@ function ListingList() {
 	const [bathRooms_S, setBathrooms_S] = useState('');
 
 	const fetchDetails = () => {
-		fetch(urlcat(BACKEND, '/api/listings/'))
+		fetch(urlcat(BACKEND, '/api/listings/'), {
+			credentials: 'include',
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
 			.then((response) => response.json())
 			.then((data) => {
 				setListings(data);
@@ -169,32 +176,37 @@ function ListingList() {
 
 	return (
 		<>
-			<form>
-				Price Range
-				<div>
-					<Search
-						priceSearch={search}
-						propertyTypeSearch={propertyTypeSearch}
-						bedroomSearch={bedroomSearch}
-						bathroomSearch={bathroomSearch}
-						toggle={handleToggle}
-					/>
-				</div>
-				<input onClick={handleFullList} type='submit' value='Back to list' />
-				<div style={{ visibility: show ? 'visible' : 'hidden' }}>
-					Sorry! No Listings Found
-				</div>
-			</form>
+			<Nav2 />
+			<div className='searchBar'>
+				<Search
+					priceSearch={search}
+					propertyTypeSearch={propertyTypeSearch}
+					bedroomSearch={bedroomSearch}
+					bathroomSearch={bathroomSearch}
+					toggle={handleToggle}
+				/>
+			</div>
+			<input onClick={handleFullList} type='submit' value='Clear All Filters' />
+			<div>
+				Displaying a total of <b>{listings.length} listings</b> based on the
+				filter(s) you have selected.
+			</div>
 
 			<div className='listingList'>
 				<ul>
 					{listings.map((listing) => (
 						<li key={listing._id}>
 							<div className='listing'>
-								<div className='listingImage'>
-									{<img src={listing.image} height='300px' width='400px' />}
+								<div class='bg-indigo-300 ...'>
+									{
+										<img
+											class='object-cover h-60 w-96 ...'
+											src={listing.image}
+										/>
+									}
 								</div>
 								<div className='listingInfo'>
+									<br />
 									<b>{listing.address}</b> <br />
 									District: {listing.district} <br />
 									{/* <span onClick={handleUpdate(listing)}>{listing.price}</span> */}
@@ -202,21 +214,17 @@ function ListingList() {
 									<br />
 									Price: ${listing.price}
 									<br />
-									{listing.no_of_bedrooms}{' '}
-									<img
-										src='http://cdn.onlinewebfonts.com/svg/img_391908.png'
-										height='20x'
-										width='20px'
-									/>
+									{listing.no_of_bedrooms}
+									{' Bedrooms'}
 									<br />
-									{listing.no_of_bathrooms}{' '}
-									<img
-										src='https://cdn-icons-png.flaticon.com/512/637/637270.png'
-										height='20x'
-										width='20px'
-									/>
+									{listing.no_of_bathrooms}
+									{' Bathrooms'}
 									<br />
-									<Link to={`/listings/${listing._id}`}>
+									<Link
+										to={`/listings/${listing._id}`}
+										target='_blank'
+										rel='noopener noreferrer'
+									>
 										<button className='viewListing'>
 											<span>View Listing</span>
 										</button>
