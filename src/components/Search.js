@@ -91,11 +91,12 @@ const Search = (props) => {
 				<option value='4 Bathroom'>4 Bathroom</option>
 				<option value='More than 4 Bathroom'>More than 4 Bathroom</option>
 			</select>
+			<br />
 			<input
 				onClick={callSearchFunction}
 				className='searchunits'
 				type='submit'
-				value='SEARCH'
+				value='Search'
 			/>
 		</form>
 	);

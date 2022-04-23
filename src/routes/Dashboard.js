@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import { Link } from 'react-router-dom';
-import Nav from '../components/Nav';
+import Nav2 from '../components/Nav2';
 
 function Listings() {
 	const [listings, setListings] = useState([]);
@@ -23,16 +23,22 @@ function Listings() {
 
 	return (
 		<div>
-			<Nav />
+			<Nav2 />
 			<div className='listingList'>
 				<ul>
 					{listings.map((listing) => (
 						<li key={listing._id}>
-							<div className='listing'>
-								<div className='listingImage'>
-									{<img src={listing.image} height='300px' width='400px' />}
+							<div className='dashboardListing'>
+								<div class='bg-indigo-300 ...'>
+									{
+										<img
+											class='object-cover h-60 w-96 ...'
+											src={listing.image}
+										/>
+									}
 								</div>
 								<div className='listingInfo'>
+									<br />
 									<b>{listing.address}</b> <br />
 									District: {listing.district} <br />
 									{/* <span onClick={handleUpdate(listing)}>{listing.price}</span> */}
@@ -40,33 +46,36 @@ function Listings() {
 									<br />
 									Price: ${listing.price}
 									<br />
-									{listing.no_of_bedrooms}{' '}
-									<img
-										src='http://cdn.onlinewebfonts.com/svg/img_391908.png'
-										height='20x'
-										width='20px'
-									/>
+									{listing.no_of_bedrooms}
+									{' Bedrooms'}
 									<br />
-									{listing.no_of_bathrooms}{' '}
-									<img
-										src='https://cdn-icons-png.flaticon.com/512/637/637270.png'
-										height='20x'
-										width='20px'
-									/>
+									{listing.no_of_bathrooms}
+									{' Bathrooms'}
 									<br />
-									<Link to={`/listings/${listing._id}`}>
-										<button className='viewListing'>
-											<span>View Listing</span>
+									<div className='dashboardButtons'>
+										<Link
+											to={`/listings/${listing._id}`}
+											target='_blank'
+											rel='noopener noreferrer'
+										>
+											<button className='viewListing'>
+												<span>View Listing</span>
+											</button>
+										</Link>
+										<Link
+											to={`/listings/${listing._id}/edit`}
+											target='_blank'
+											rel='noopener noreferrer'
+										>
+											<button className='viewListing'>
+												<span>Edit Listing</span>
+											</button>
+										</Link>
+										<br />
+										<button className='deleteListing'>
+											<span onClick={handleDelete(listing._id)}>Delete</span>
 										</button>
-									</Link>
-									<Link to={`/listings/${listing._id}/edit`}>
-										<button className='viewListing'>
-											<span>Edit Listing</span>
-										</button>
-									</Link>
-									<button className='deleteListing'>
-										<span onClick={handleDelete(listing._id)}>Delete</span>
-									</button>
+									</div>
 								</div>
 							</div>
 						</li>
