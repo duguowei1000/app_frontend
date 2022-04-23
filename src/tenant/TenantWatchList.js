@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import { Link } from 'react-router-dom';
-import Nav from '../components/Nav';
+import Nav2 from '../components/Nav2';
 
 //Grab Tenant's Id
 //Populate Tenant's Liked Listings based on id  //
@@ -128,7 +128,7 @@ function TenantWatchList() {
 
 	return (
 		<>
-			<Nav />
+			<Nav2 />
 			{/* {console.log(status)}
 			{status === "No Watchlist" ? <div>no watchList</div> :<div>watchlist</div> } */}
 			{canList && (
@@ -168,7 +168,11 @@ function TenantWatchList() {
 											width='20px'
 										/>
 										<br />
-										<Link to={`/listings/${tenantListing._id}`}>
+										<Link
+											to={`/listings/${tenantListing._id}`}
+											target='_blank'
+											rel='noopener noreferrer'
+										>
 											<button className='viewListing'>
 												<span>View Listing</span>
 											</button>

@@ -30,7 +30,7 @@ function App() {
 				<Route path='create' element={<Create />} />
 				<Route path='listings/:id/edit' element={<Edit />} />
 
-				<Route path='auth' element={<Auth />} />
+				<Route path='' element={<Home />} />
 
 				<Route path='tenantlistings/all' element={<TenantListingList />} />
 				<Route path='tenantwatchlist' element={<TenantWatchList />} />
