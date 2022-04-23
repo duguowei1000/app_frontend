@@ -16,6 +16,11 @@ function TenantWatchList() {
 	const [TenantDetailStatus, setTenantDetailStatus] = useState(false);
 	const [status, setStatus] = useState(null);
 	const [canList, setCanList] = useState(null);
+	const [toggle, setToggle] = useState(false);
+	const [currentFavs, setCurrentFavs] = useState([]);
+
+	// const tenantID = '626392fcb50b3aadbfbbad8f'; //**** */
+	const tenantloginID = '626392fcb50b3aadbfbbad8f';
 
 	const fetchFullList = () => {
 		fetch(urlcat(BACKEND, '/api/listings'))
@@ -42,18 +47,27 @@ function TenantWatchList() {
 			});
 	};
 
-	const tenantID = '6262c905f7d19a73f07ede29'; //**** */
+	const handleToggle = (tenantListing) => {
+		// handleFullList();
+		// console.log(toggle)
+		// setTenantDetailStatus(false)
+		// fetchTenantDetails();
+		// setToggle(!toggle);
+		feDeletelisting(tenantListing);
+	};
+
 	const setupWatchList = () => {
 		// const tenantFavs = []
 		console.log(tenantDetails[0]);
 		console.log('tenantDetails1' + tenantDetails[0]);
 
 		const specificTenant = tenantDetails.filter((e) => {
-			if (e._id === tenantID) {
+			if (e._id === tenantloginID) {
 				return true;
 			} else console.log('wrong tenant id');
 		});
 		const tenantFavs = specificTenant[0].favourites;
+		setCurrentFavs(tenantFavs);
 		//console.log(`tenantFavs,${tenantFavs}`)
 		//console.log('>>>>setupwatchlist',tenantDetails);
 		if (tenantFavs.length) {
@@ -64,6 +78,21 @@ function TenantWatchList() {
 			//console.log("matchedlist",matchedListing);
 			setWatchList(matchedListing);
 		}
+	};
+
+	const feDeletelisting = (deletedlistId) => {
+		console.log('currentFavs', currentFavs);
+		console.log('deletedId', deletedlistId);
+		const updatedTenantFavs = currentFavs.filter((e) => {
+			return e !== deletedlistId;
+		});
+
+		console.log('>>>updatedTenantFavs', updatedTenantFavs);
+		const updatedFElist = watchlist.filter((e) => {
+			return updatedTenantFavs.includes(e._id);
+		});
+		console.log('felist', updatedFElist);
+		setWatchList(updatedFElist);
 	};
 
 	useEffect(() => {
@@ -79,7 +108,9 @@ function TenantWatchList() {
 			`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
 		);
 		if (ListStatus && TenantDetailStatus) {
-			// console.log(`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`)
+			console.log(
+				`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
+			);
 			//console.log('tenant details', tenantDetails); //check tenant ID to be sure
 			setupWatchList();
 			setStatus('success');
@@ -102,29 +133,30 @@ function TenantWatchList() {
 	// 	alert('listing deleted');
 	// };
 
-	const tenantloginID = '6262c905f7d19a73f07ede29';
-	// const handleDelete = (listID) => {
-	// 	const url = urlcat(BACKEND, `/api/tenant/${tenantloginID}`);
-	// 	const deleteListing = { fav: `${listID}` };
-	// 	console.log(deleteListing);
-	// 	fetch(url, {
-	// 		method: 'PUT',
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 		},
-	// 		body: JSON.stringify(
-	// 			deleteListing
-	// 			//addtolist._id
-	// 		),
-	// 	})
-	// 		.then((response) => response.json())
-	// 		.then((data) => {
-	// 			console.log(data);
-	// 			if (data.error) {
-	// 				console.log(data.error);
-	// 			}
-	// 		});
-	// };
+	const handleDelete = (listID) => {
+		console.log('delete Click');
+		const url = urlcat(BACKEND, `/api/tenant/watchlist/${tenantloginID}`);
+		const deleteListing = { fav: `${listID}` };
+		console.log('FE-Deletelisting', deleteListing);
+		fetch(url, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(
+				deleteListing
+				// `deleteListing`
+			),
+		})
+			.then((response) => response.json())
+
+			.then((data) => {
+				console.log(data);
+				if (data.error) {
+					console.log(data.error);
+				}
+			});
+	};
 
 	return (
 		<>
@@ -177,8 +209,13 @@ function TenantWatchList() {
 												<span>View Listing</span>
 											</button>
 										</Link>
-										<button className='deleteListing'>
-											{/* <span onClick={handleDelete(tenantListing._id)}>Delete</span> */}
+										<button
+											onClick={() => {
+												handleDelete(tenantListing._id);
+												handleToggle(tenantListing._id);
+											}}
+										>
+											Delete
 										</button>
 									</div>
 								</div>

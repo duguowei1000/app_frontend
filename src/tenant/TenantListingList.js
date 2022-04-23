@@ -169,12 +169,12 @@ function TenantListingList() {
 		setBathrooms_S(searchValue_Rooms);
 	};
 	////Handle add to Tenant dashboard
-	const tenantloginID = `6262c905f7d19a73f07ede29`;
-	const handleEditlist = (AddtoList) => {
+	const tenantloginID = `626392fcb50b3aadbfbbad8f`;
+	const handleEditlist = async (AddtoList) => {
 		const url = urlcat(BACKEND, `/api/tenant/${tenantloginID}`);
 		const addListing = { fav: `${AddtoList}` };
-		console.log(addListing);
-		fetch(url, {
+		console.log('addtolist', addListing);
+		await fetch(url, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
@@ -249,16 +249,20 @@ function TenantListingList() {
 									{' Bathrooms'}
 									<br />
 									<br />
-									<TenantEdit
+									{/* <TenantEdit
 										url={url}
 										handleUpdate={handleEditlist}
 										id={listing._id}
-									/>
-									<Link
-										to={`/listings/${listing._id}`}
-										target='_blank'
-										rel='noopener noreferrer'
+
+									/> */}
+									<button
+										className='addTolist'
+										onClick={() => handleEditlist(listing._id)}
 									>
+										<span>Add to list</span>
+									</button>
+									<Link to={`/listings/${listing._id}`}>
+
 										<button className='viewListing'>
 											<span>View Listing</span>
 										</button>
