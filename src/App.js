@@ -3,7 +3,15 @@ import ListingList from './pages/ListingList';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Nav from './components/Nav';
-import { Listings, Dashboard, Listing, Create, Auth, Edit } from './routes';
+import {
+	Listings,
+	Dashboard,
+	Listing,
+	Create,
+	Auth,
+	Edit,
+	Home,
+} from './routes';
 
 import TenantListingList from './tenant/TenantListingList';
 import TenantWatchList from './tenant/TenantWatchList';
@@ -11,8 +19,8 @@ import TenantWatchList from './tenant/TenantWatchList';
 function App() {
 	return (
 		<div>
-			<Nav />
 			<Routes>
+				<Route path='' element={<Home />}></Route>
 				<Route path='listings' element={<Listings />}>
 					<Route path='all' element={<ListingList />} />
 					<Route path=':id' element={<Listing />} />
@@ -22,7 +30,7 @@ function App() {
 				<Route path='create' element={<Create />} />
 				<Route path='listings/:id/edit' element={<Edit />} />
 
-				<Route path='auth' element={<Auth />} />
+				<Route path='' element={<Home />} />
 
 				<Route path='tenantlistings/all' element={<TenantListingList />} />
 				<Route path='tenantwatchlist' element={<TenantWatchList />} />

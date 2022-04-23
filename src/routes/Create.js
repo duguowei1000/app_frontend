@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND, FRONTEND } from '../utils/utils';
+import Nav2 from '../components/Nav2';
 
 const url = urlcat(BACKEND, '/api/listings/');
 
@@ -55,6 +56,7 @@ function Create() {
 
 	return (
 		<>
+			<Nav2 />
 			<form action={urlcat(FRONTEND, 'dashboard')} onSubmit={handleSubmit}>
 				Postal:
 				<input
@@ -73,7 +75,8 @@ function Create() {
 				/>
 				<br />
 				Address:
-				<input
+				<textarea
+					className='inputBox1'
 					type='text'
 					name='address'
 					value={address}
@@ -113,7 +116,8 @@ function Create() {
 				/>
 				<br />
 				Image Link:
-				<input
+				<textarea
+					className='inputBox1'
 					type='text'
 					name='image'
 					value={image}
@@ -137,7 +141,8 @@ function Create() {
 				/>
 				<br />
 				Description:
-				<input
+				<textarea
+					className='inputBox2'
 					type='text'
 					name='description'
 					value={description}
