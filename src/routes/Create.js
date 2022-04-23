@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND, FRONTEND } from '../utils/utils';
+import Nav from '../components/Nav';
 
 const url = urlcat(BACKEND, '/api/listings/');
 
@@ -55,6 +56,7 @@ function Create() {
 
 	return (
 		<>
+			<Nav />
 			<form action={urlcat(FRONTEND, 'dashboard')} onSubmit={handleSubmit}>
 				Postal:
 				<input

@@ -4,6 +4,7 @@ import { useOutletContext } from 'react-router-dom';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Search from '../components/Search';
+import Nav from '../components/Nav';
 
 function ListingList() {
 	const [listings, setListings] = useState([]);
@@ -169,22 +170,20 @@ function ListingList() {
 
 	return (
 		<>
-			<form>
-				Price Range
-				<div>
-					<Search
-						priceSearch={search}
-						propertyTypeSearch={propertyTypeSearch}
-						bedroomSearch={bedroomSearch}
-						bathroomSearch={bathroomSearch}
-						toggle={handleToggle}
-					/>
-				</div>
-				<input onClick={handleFullList} type='submit' value='Back to list' />
-				<div style={{ visibility: show ? 'visible' : 'hidden' }}>
-					Sorry! No Listings Found
-				</div>
-			</form>
+			<Nav />
+			<div>
+				<Search
+					priceSearch={search}
+					propertyTypeSearch={propertyTypeSearch}
+					bedroomSearch={bedroomSearch}
+					bathroomSearch={bathroomSearch}
+					toggle={handleToggle}
+				/>
+			</div>
+			<input onClick={handleFullList} type='submit' value='Back to list' />
+			<div style={{ visibility: show ? 'visible' : 'hidden' }}>
+				Sorry! No Listings Found
+			</div>
 
 			<div className='listingList'>
 				<ul>

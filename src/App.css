@@ -130,3 +130,21 @@ li:last-child {
 	width: var(--pixels);
 	height: var(--pixels);
 }
+
+.homePage {
+	text-align: center;
+	align-items: center;
+}
+.homeScreen {
+	text-align: center;
+	display: inline-flex;
+	margin: 10px;
+}
+
+.login {
+	margin: 15px;
+}
+
+.signup {
+	margin: 15px;
+}
