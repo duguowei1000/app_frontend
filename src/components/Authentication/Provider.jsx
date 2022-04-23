@@ -1,5 +1,5 @@
 const { useEffect, useReducer, createContext, useContext } = React;
-export const storageListener = (event) => {
+const storageListener = (event) => {
 	if (event.key == 'getSessionStorage') {
 		// Some tab asked for the sessionStorage -> send it
 		localStorage.setItem('sessionStorage', JSON.stringify(sessionStorage));
@@ -45,7 +45,7 @@ const reducer = (state, action) => {
 	}
 };
 export const AuthContext = createContext([]);
-export default Provider = ({ children }) => {
+const Provider = ({ children }) => {
 	const [state, dispatch] = useReducer(reducer, initialState);
 	useSessionListener();
 	return (
@@ -54,7 +54,7 @@ export default Provider = ({ children }) => {
 		</AuthContext.Provider>
 	);
 };
-export const TestAuthConsumer = () => {
+export const AuthConsumer = () => {
 	const [state] = useContext(AuthContext);
 	return <div>{JSON.stringify(state)}</div>;
 };
@@ -75,11 +75,12 @@ export const AuthToggler = () => {
 		</div>
 	);
 };
+export default Provider;
 // export default function App() {
-// 	return (
-// 		<AuthProvider>
-// 			<TestAuthConsumer />
-// 			<AuthToggler />
-// 		</AuthProvider>
-// 	);
+//   return (
+//     <Provider>
+//       <AuthConsumer />
+//       <AuthToggler />
+//     </Provider>
+//   );
 // }
