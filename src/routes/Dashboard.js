@@ -16,7 +16,7 @@ function Listings() {
 
 	useEffect(() => {
 		fetchList();
-	}, [toggle]);
+	}, []);
 
 	const handleToggle = (deleteListing) => {
 		setToggle(!toggle);
@@ -51,6 +51,7 @@ function Listings() {
 			.then((response) => response.json())
 			.then((data) => console.log(data));
 		alert('listing deleted');
+		console.log('hey delete');
 	};
 
 	return (
