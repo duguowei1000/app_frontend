@@ -3,14 +3,21 @@ import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import { Link } from 'react-router-dom';
 import Nav2 from '../components/Nav2';
+
+import TENANTUSERID from '../utils/loginDetails';
+
 import {
 	AuthContext,
 	AuthToggler,
 } from '../components/Authentication/Provider';
 
+
 //Grab Tenant's Id
 //Populate Tenant's Liked Listings based on id  //
 //Routing should be based on Id
+
+const tenantloginID = TENANTUSERID;
+console.log(tenantloginID);
 
 function TenantWatchList() {
 	const [tenantDetails, setTenantDetails] = useState([]);
@@ -23,9 +30,9 @@ function TenantWatchList() {
 	const [toggle, setToggle] = useState(false);
 	const [currentFavs, setCurrentFavs] = useState([]);
 
-	const [loginState, r] = useContext(AuthContext);
 
-	// const tenantID = '626392fcb50b3aadbfbbad8f'; //**** */
+
+	const [loginState, r] = useContext(AuthContext);
 	const testid = loginState.user;
 	const testingID = {
 		user: {
@@ -34,7 +41,7 @@ function TenantWatchList() {
 	};
 	console.log('testid', testingID.user.name);
 
-	const tenantloginID = '626392fcb50b3aadbfbbad8f';
+
 
 	const fetchFullList = () => {
 		fetch(urlcat(BACKEND, '/api/listings'))
@@ -62,16 +69,10 @@ function TenantWatchList() {
 	};
 
 	const handleToggle = (tenantListing) => {
-		// handleFullList();
-		// console.log(toggle)
-		// setTenantDetailStatus(false)
-		// fetchTenantDetails();
-		// setToggle(!toggle);
 		feDeletelisting(tenantListing);
 	};
 
 	const setupWatchList = () => {
-		// const tenantFavs = []
 		console.log(tenantDetails[0]);
 		console.log('tenantDetails1' + tenantDetails[0]);
 
@@ -82,14 +83,12 @@ function TenantWatchList() {
 		});
 		const tenantFavs = specificTenant[0].favourites;
 		setCurrentFavs(tenantFavs);
-		//console.log(`tenantFavs,${tenantFavs}`)
-		//console.log('>>>>setupwatchlist',tenantDetails);
+
 		if (tenantFavs.length) {
 			let matchedListing = fullListings.filter((e) => {
 				return tenantFavs.includes(e._id);
 			});
 
-			//console.log("matchedlist",matchedListing);
 			setWatchList(matchedListing);
 		}
 	};
@@ -139,28 +138,15 @@ function TenantWatchList() {
 		return <div>No watchList</div>;
 	}
 
-	// const handleDelete = (id) => () => {
-	// 	const url = urlcat(BACKEND, `/api/listings/${id}`);
-	// 	fetch(url, { method: 'PUT' })
-	// 		.then((response) => response.json())
-	// 		.then((data) => console.log(data));
-	// 	alert('listing deleted');
-	// };
-
 	const handleDelete = (listID) => {
-		console.log('delete Click');
 		const url = urlcat(BACKEND, `/api/tenant/watchlist/${tenantloginID}`);
 		const deleteListing = { fav: `${listID}` };
-		console.log('FE-Deletelisting', deleteListing);
 		fetch(url, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(
-				deleteListing
-				// `deleteListing`
-			),
+			body: JSON.stringify(deleteListing),
 		})
 			.then((response) => response.json())
 			.then((data) => {
