@@ -1,4 +1,4 @@
-const { useEffect, useReducer, createContext, useContext } = React;
+import { useEffect, useReducer, createContext, useContext } from 'react';
 const storageListener = (event) => {
 	if (event.key == 'getSessionStorage') {
 		// Some tab asked for the sessionStorage -> send it
