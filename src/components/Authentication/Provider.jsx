@@ -1,4 +1,7 @@
 import { useEffect, useReducer, createContext, useContext } from 'react';
+import { LISTERUSERID, TENANTUSERID } from '../../utils/loginDetails';
+// import  from '../utils/loginDetails';
+
 const storageListener = (event) => {
 	if (event.key == 'getSessionStorage') {
 		// Some tab asked for the sessionStorage -> send it
@@ -62,7 +65,21 @@ export const AuthToggler = () => {
 	const [state, dispatch] = useContext(AuthContext);
 	const { isLoggedIn, user } = state;
 	const login = () => {
-		dispatch({ type: 'LOGIN', payload: { name: 'test' } });
+		dispatch({
+			type: 'LOGIN',
+			payload: {
+				listerLogin: {
+					name: 'LISTER',
+					accountType: 'lister',
+					userId: LISTERUSERID,
+				},
+				tenantLogin: {
+					name: 'TENANT',
+					accountType: 'renter',
+					userId: TENANTUSERID,
+				},
+			},
+		});
 	};
 	const logout = () => {
 		dispatch({ type: 'LOGOUT' });

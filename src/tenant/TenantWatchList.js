@@ -4,13 +4,12 @@ import { BACKEND } from '../utils/utils';
 import { Link } from 'react-router-dom';
 import Nav2 from '../components/Nav2';
 
-import TENANTUSERID from '../utils/loginDetails';
+import { TENANTUSERID } from '../utils/loginDetails';
 
 import {
 	AuthContext,
 	AuthToggler,
 } from '../components/Authentication/Provider';
-
 
 //Grab Tenant's Id
 //Populate Tenant's Liked Listings based on id  //
@@ -30,8 +29,6 @@ function TenantWatchList() {
 	const [toggle, setToggle] = useState(false);
 	const [currentFavs, setCurrentFavs] = useState([]);
 
-
-
 	const [loginState, r] = useContext(AuthContext);
 	const testid = loginState.user;
 	const testingID = {
@@ -40,8 +37,6 @@ function TenantWatchList() {
 		},
 	};
 	console.log('testid', testingID.user.name);
-
-
 
 	const fetchFullList = () => {
 		fetch(urlcat(BACKEND, '/api/listings'))
@@ -171,17 +166,17 @@ function TenantWatchList() {
 					<ul>
 						{watchlist.map((tenantListing) => (
 							<li key={tenantListing._id}>
-								<div className='listing'>
-									<div className='listingImage'>
+								<div className='tenantListing'>
+									<div class='bg-indigo-300 ...'>
 										{
 											<img
+												class='object-cover h-60 w-96 ...'
 												src={tenantListing.image}
-												height='300px'
-												width='400px'
 											/>
 										}
 									</div>
 									<div className='listingInfo'>
+										<br />
 										<b>{tenantListing.address}</b> <br />
 										District: {tenantListing.district} <br />
 										{/* <span onClick={handleUpdate(listing)}>{listing.price}</span> */}
@@ -189,19 +184,12 @@ function TenantWatchList() {
 										<br />
 										Price: ${tenantListing.price}
 										<br />
-										{tenantListing.no_of_bedrooms}{' '}
-										<img
-											src='http://cdn.onlinewebfonts.com/svg/img_391908.png'
-											height='20x'
-											width='20px'
-										/>
+										{tenantListing.no_of_bedrooms}
+										{' Bedrooms'}
 										<br />
-										{tenantListing.no_of_bathrooms}{' '}
-										<img
-											src='https://cdn-icons-png.flaticon.com/512/637/637270.png'
-											height='20x'
-											width='20px'
-										/>
+										{tenantListing.no_of_bathrooms}
+										{' Bathrooms'}
+										<br />
 										<br />
 										<Link
 											to={`/listings/${tenantListing._id}`}

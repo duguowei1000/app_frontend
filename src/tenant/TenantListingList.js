@@ -4,7 +4,7 @@ import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Search from '../components/Search';
 import Nav2 from '../components/Nav2';
-import TENANTUSERID from '../utils/loginDetails';
+import { TENANTUSERID } from '../utils/loginDetails';
 
 const tenantloginID = TENANTUSERID;
 console.log(tenantloginID);
@@ -242,12 +242,6 @@ function TenantListingList() {
 									{' Bathrooms'}
 									<br />
 									<br />
-									{/* <TenantEdit
-										url={url}
-										handleUpdate={handleEditlist}
-										id={listing._id}
-
-									/> */}
 									<button
 										className='addTolist'
 										onClick={() => handleEditlist(listing._id)}
