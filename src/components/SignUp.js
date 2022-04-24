@@ -1,7 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+
+import {
+	AuthContext,
+	AuthToggler,
+} from '../components/Authentication/Provider';
 
 const SignUp = () => {
+	const [loginState, r] = useContext(AuthContext);
+
+	const ListerName = 'LISTER';
+	const TenantName = 'TENANT';
+	const formInput = TenantName;
+
 	return (
 		<div class='min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
 			<div class='max-w-md w-full space-y-8'>
@@ -106,6 +118,8 @@ const SignUp = () => {
 						</Link>{' '}
 					</div>
 				</form>
+				<p>{JSON.stringify(loginState)}</p>
+				<AuthToggler type={formInput} />
 			</div>
 		</div>
 	);

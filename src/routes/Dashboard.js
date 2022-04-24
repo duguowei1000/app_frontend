@@ -6,19 +6,61 @@ import Nav2 from '../components/Nav2';
 
 function Listings() {
 	const [listings, setListings] = useState([]);
+	const [toggle, setToggle] = useState(false);
 
-	useEffect(() => {
+	const fetchList = () => {
 		fetch(urlcat(BACKEND, '/api/listings/'))
 			.then((response) => response.json())
 			.then((data) => setListings(data));
-	}, [listings]);
+	};
+
+	useEffect(() => {
+		fetchList();
+	}, []);
+
+	const handleToggle = (deleteListing) => {
+		setToggle(!toggle);
+		feDeletelisting(deleteListing);
+	};
+
+	const feDeletelisting = (deletedlistId) => {
+		console.log(listings);
+		console.log('deletelistid', deletedlistId);
+		const updatedList = listings.filter((e) => {
+			return e._id !== deletedlistId;
+		});
+
+		console.log('updated', updatedList);
+
+		// console.log('>>>updatedTenantFavs', updatedTenantFavs);
+		// const updatedFElist = listings.filter((e) => {
+		// 	return updatedTenantFavs.includes(e._id);
+		// });
+		// console.log('felist', updatedFElist);
+		setListings(updatedList);
+	};
 
 	const handleDelete = (id) => () => {
+		console.log(id);
 		const url = urlcat(BACKEND, `/api/listings/${id}`);
-		fetch(url, { method: 'DELETE' })
+		fetch(url, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
 			.then((response) => response.json())
 			.then((data) => console.log(data));
-		alert('listing deleted');
+		// alert('listing deleted');
+		console.log('hey delete');
+
+		handleToggle(id);
+	};
+
+	const clickFn = (listingid) => {
+		// handleToggle(listingid)
+		// handleDelete(listingid)
+		// handleToggle(listingid)
 	};
 
 	return (
@@ -72,9 +114,14 @@ function Listings() {
 											</button>
 										</Link>
 										<br />
-										<button className='deleteListing'>
-											<span onClick={handleDelete(listing._id)}>Delete</span>
+										{/* <button className='deleteListing'> */}
+										<button
+											className='deleteListing'
+											onClick={handleDelete(listing._id)}
+										>
+											Delete
 										</button>
+										{/* </button> */}
 									</div>
 								</div>
 							</div>

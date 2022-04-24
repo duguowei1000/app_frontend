@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Search from '../components/Search';
-import TenantEdit from './TenantEdit';
 import Nav2 from '../components/Nav2';
+import { TENANTUSERID } from '../utils/loginDetails';
+
+const tenantloginID = TENANTUSERID;
+console.log(tenantloginID);
 
 function TenantListingList() {
 	const [listings, setListings] = useState([]);
@@ -169,7 +172,6 @@ function TenantListingList() {
 		setBathrooms_S(searchValue_Rooms);
 	};
 	////Handle add to Tenant dashboard
-	const tenantloginID = `626392fcb50b3aadbfbbad8f`;
 	const handleEditlist = async (AddtoList) => {
 		const url = urlcat(BACKEND, `/api/tenant/${tenantloginID}`);
 		const addListing = { fav: `${AddtoList}` };
@@ -192,15 +194,6 @@ function TenantListingList() {
 				}
 			});
 	};
-
-	// const handleUpdate = (event) => {
-	// 	event.preventDefault();
-	// 	const listing = {
-
-	// 	};
-	// 	handleEditlist(listing);
-	// 	alert('listing updated');
-	// };
 
 	return (
 		<>
@@ -249,12 +242,6 @@ function TenantListingList() {
 									{' Bathrooms'}
 									<br />
 									<br />
-									{/* <TenantEdit
-										url={url}
-										handleUpdate={handleEditlist}
-										id={listing._id}
-
-									/> */}
 									<button
 										className='addTolist'
 										onClick={() => handleEditlist(listing._id)}
@@ -262,7 +249,6 @@ function TenantListingList() {
 										<span>Add to list</span>
 									</button>
 									<Link to={`/listings/${listing._id}`}>
-
 										<button className='viewListing'>
 											<span>View Listing</span>
 										</button>
