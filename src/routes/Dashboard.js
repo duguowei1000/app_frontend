@@ -25,6 +25,7 @@ function Listings() {
 
 	const feDeletelisting = (deletedlistId) => {
 		console.log(listings);
+		console.log('deletelistid', deletedlistId);
 		const updatedList = listings.filter((e) => {
 			return e._id !== deletedlistId;
 		});
@@ -50,8 +51,16 @@ function Listings() {
 		})
 			.then((response) => response.json())
 			.then((data) => console.log(data));
-		alert('listing deleted');
+		// alert('listing deleted');
 		console.log('hey delete');
+
+		handleToggle(id);
+	};
+
+	const clickFn = (listingid) => {
+		// handleToggle(listingid)
+		// handleDelete(listingid)
+		// handleToggle(listingid)
 	};
 
 	return (
@@ -108,10 +117,7 @@ function Listings() {
 										{/* <button className='deleteListing'> */}
 										<button
 											className='deleteListing'
-											onClick={() => {
-												handleDelete(listing._id);
-												handleToggle(listing._id);
-											}}
+											onClick={handleDelete(listing._id)}
 										>
 											Delete
 										</button>
