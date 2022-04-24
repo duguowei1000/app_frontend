@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from './Authentication/Provider';
 import AuthStatusIndicator from './AuthStatusIndicator';
 
 const Nav2 = () => {
+	const [loginState, _] = useContext(AuthContext);
+	const { isLoggedIn } = loginState;
+
 	return (
 		<nav class='bg-gray-800'>
 			<div class='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
@@ -58,7 +62,9 @@ const Nav2 = () => {
 									</div>
 
 									<div class='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
+										{/* {isLoggedIn &&  */}
 										<Link to='/dashboard'>Dashboard</Link>
+										{/* } */}
 									</div>
 
 									<div class='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>

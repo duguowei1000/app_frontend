@@ -1,9 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import { Link } from 'react-router-dom';
 import Nav2 from '../components/Nav2';
+
 import TENANTUSERID from '../utils/loginDetails';
+
+import {
+	AuthContext,
+	AuthToggler,
+} from '../components/Authentication/Provider';
+
 
 //Grab Tenant's Id
 //Populate Tenant's Liked Listings based on id  //
@@ -22,6 +29,19 @@ function TenantWatchList() {
 	const [canList, setCanList] = useState(null);
 	const [toggle, setToggle] = useState(false);
 	const [currentFavs, setCurrentFavs] = useState([]);
+
+
+
+	const [loginState, r] = useContext(AuthContext);
+	const testid = loginState.user;
+	const testingID = {
+		user: {
+			name: '626392fcb50b3aadbfbbad8f',
+		},
+	};
+	console.log('testid', testingID.user.name);
+
+
 
 	const fetchFullList = () => {
 		fetch(urlcat(BACKEND, '/api/listings'))
@@ -129,7 +149,6 @@ function TenantWatchList() {
 			body: JSON.stringify(deleteListing),
 		})
 			.then((response) => response.json())
-
 			.then((data) => {
 				console.log(data);
 				if (data.error) {
@@ -143,6 +162,10 @@ function TenantWatchList() {
 			<Nav2 />
 			{/* {console.log(status)}
 			{status === "No Watchlist" ? <div>no watchList</div> :<div>watchlist</div> } */}
+			<p>{JSON.stringify(loginState)}</p>
+			<AuthToggler />
+
+			{/*  */}
 			{canList && (
 				<div className='listingList'>
 					<ul>

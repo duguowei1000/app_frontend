@@ -1,6 +1,7 @@
 import Seed from './pages/Seed';
 import ListingList from './pages/ListingList';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Provider from './components/Authentication/Provider';
 
 import Nav from './components/Nav';
 import {
@@ -18,7 +19,7 @@ import TenantWatchList from './tenant/TenantWatchList';
 
 function App() {
 	return (
-		<div>
+		<Provider>
 			<Routes>
 				<Route path='' element={<Home />}></Route>
 				<Route path='listings' element={<Listings />}>
@@ -35,7 +36,7 @@ function App() {
 				<Route path='tenantlistings/all' element={<TenantListingList />} />
 				<Route path='tenantwatchlist' element={<TenantWatchList />} />
 			</Routes>
-		</div>
+		</Provider>
 	);
 }
 
