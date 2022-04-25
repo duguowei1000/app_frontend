@@ -11,12 +11,13 @@ import {
 	AuthToggler,
 } from '../components/Authentication/Provider';
 
+///api/testusers
 //Grab Tenant's Id
 //Populate Tenant's Liked Listings based on id  //
 //Routing should be based on Id
 
-const tenantloginID = TENANTUSERID;
-console.log(tenantloginID);
+// const tenantloginID = TENANTUSERID;
+// console.log(tenantloginID);
 
 function TenantWatchList() {
 	const [tenantDetails, setTenantDetails] = useState([]);
@@ -29,32 +30,28 @@ function TenantWatchList() {
 	const [toggle, setToggle] = useState(false);
 	const [currentFavs, setCurrentFavs] = useState([]);
 
+	const [userData, setUserData] = useState();
+	const [userID, setUserID] = useState();
+	const [verifyStatus, setVerifyStatus] = useState(false);
+
 	const [loginState, r] = useContext(AuthContext);
 	// const testid = loginState.user;
-	// const testingID = {
-	// 	user: {
-	// 		name: '626392fcb50b3aadbfbbad8f',
-	// 	},
-	// };
-	// console.log('testid', testingID.user.name);
 
-	const fetchVerify = async (jwtToken) => {
+	const fetchVerify = async () => {
 		const url = urlcat(BACKEND, `/api/testusers/verify`);
-		const theCookieJWT = { token: `${jwtToken}` };
-		console.log('cookie', theCookieJWT);
 		await fetch(url, {
+			credentials: 'include',
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(
-				theCookieJWT
-				//addtolist._id
-			),
 		})
 			.then((response) => response.json())
 			.then((data) => {
-				console.log(data);
+				//console.log('decode Userid>>>',data);
+				setUserData(data);
+				setUserID(data.userObjectID);
+				setVerifyStatus(true);
 				if (data.error) {
 					console.log(data.error);
 				}
@@ -74,7 +71,7 @@ function TenantWatchList() {
 			});
 	};
 	const fetchTenantDetails = () => {
-		fetch(urlcat(BACKEND, '/api/tenant/'))
+		fetch(urlcat(BACKEND, '/api/testusers/findList'))
 			.then((response) => response.json())
 			.then((data) => {
 				setTenantDetails(data);
@@ -91,49 +88,53 @@ function TenantWatchList() {
 	};
 
 	const setupWatchList = () => {
-		console.log(tenantDetails[0]);
-		console.log('tenantDetails1' + tenantDetails[0]);
-
-		const specificTenant = tenantDetails.filter((e) => {
-			if (e._id === tenantloginID) {
-				return true;
-			} else console.log('wrong tenant id');
-		});
-		const tenantFavs = specificTenant[0].favourites;
-		setCurrentFavs(tenantFavs);
-
-		if (tenantFavs.length) {
-			let matchedListing = fullListings.filter((e) => {
-				return tenantFavs.includes(e._id);
+		// console.log(tenantDetails[0]);
+		// console.log('tenantDetails1' + tenantDetails[0]);
+		if (userID) {
+			const specificTenant = tenantDetails.filter((e) => {
+				if (e._id === userID) {
+					return true;
+				} else console.log('checked tenant id, cont.');
 			});
+			if (specificTenant.length) {
+				const tenantFavs = specificTenant[0].favourites;
+				setCurrentFavs(tenantFavs);
 
-			setWatchList(matchedListing);
+				if (tenantFavs.length) {
+					let matchedListing = fullListings.filter((e) => {
+						return tenantFavs.includes(e._id);
+					});
+
+					setWatchList(matchedListing);
+				}
+			} else setupWatchList([]);
 		}
 	};
 
 	const feDeletelisting = (deletedlistId) => {
-		console.log('currentFavs', currentFavs);
-		console.log('deletedId', deletedlistId);
 		const updatedTenantFavs = currentFavs.filter((e) => {
 			return e !== deletedlistId;
 		});
-
-		console.log('>>>updatedTenantFavs', updatedTenantFavs);
 		const updatedFElist = watchlist.filter((e) => {
 			return updatedTenantFavs.includes(e._id);
 		});
-		console.log('felist', updatedFElist);
+		//console.log('felist', updatedFElist);
 		setWatchList(updatedFElist);
 	};
 
 	useEffect(() => {
 		fetchVerify();
-		setCanList(false);
-		setStatus('loading');
-		fetchFullList();
-		fetchTenantDetails();
-		//console.log(`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`)
 	}, []);
+
+	useEffect(() => {
+		if (verifyStatus) {
+			setCanList(false);
+			setStatus('loading');
+			fetchFullList();
+			fetchTenantDetails();
+			//console.log(`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`)
+		}
+	}, [verifyStatus]);
 
 	useEffect(() => {
 		// console.log(
@@ -144,6 +145,8 @@ function TenantWatchList() {
 			// 	`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
 			// );
 			//console.log('tenant details', tenantDetails); //check tenant ID to be sure
+			console.log('userID>>>>', userID);
+			console.log('data>>', userData);
 			setupWatchList();
 			setStatus('success');
 			setCanList(true);
@@ -158,7 +161,8 @@ function TenantWatchList() {
 	}
 
 	const handleDelete = (listID) => {
-		const url = urlcat(BACKEND, `/api/tenant/watchlist/${tenantloginID}`);
+		console.log('>>>', userID);
+		const url = urlcat(BACKEND, `/api/testusers/watchlist/${userID}`);
 		const deleteListing = { fav: `${listID}` };
 		fetch(url, {
 			method: 'PUT',
@@ -179,10 +183,21 @@ function TenantWatchList() {
 	return (
 		<>
 			<Nav2 />
-			{/* {console.log(status)}
-			{status === "No Watchlist" ? <div>no watchList</div> :<div>watchlist</div> } */}
-			<p>{JSON.stringify(loginState)}</p>
-			<AuthToggler />
+			{userData ? (
+				<div className='userName'>Welcome {userData.name}</div>
+			) : (
+				<div></div>
+			)}
+			{/* {console.log(status)} */}
+			{userID ? (
+				<div></div>
+			) : (
+				<div className='tenantWatchlist'>
+					Please Login to Access Your WatchList
+				</div>
+			)}
+			{/* <p>{JSON.stringify(loginState)}</p> */}
+			{/* <AuthToggler /> */}
 
 			{/*  */}
 			{canList && (
@@ -240,7 +255,7 @@ function TenantWatchList() {
 				</div>
 			)}
 
-			<div>Suggested Listings</div>
+			{/* <div>Suggested Listings</div> */}
 		</>
 	);
 }

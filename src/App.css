@@ -42,6 +42,18 @@
 	margin-right: 20%;
 }
 
+.userName{
+	font-size: 30px;
+	font-weight: bold;
+	margin-left: 400px;
+
+}
+.tenantWatchlist{
+	font-size: 30px;
+	font-weight: bold;
+	margin-left: 250px;
+}
+
 ul {
 	list-style-type: none;
 	margin: 0;
