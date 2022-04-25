@@ -30,13 +30,36 @@ function TenantWatchList() {
 	const [currentFavs, setCurrentFavs] = useState([]);
 
 	const [loginState, r] = useContext(AuthContext);
-	const testid = loginState.user;
-	const testingID = {
-		user: {
-			name: '626392fcb50b3aadbfbbad8f',
-		},
+	// const testid = loginState.user;
+	// const testingID = {
+	// 	user: {
+	// 		name: '626392fcb50b3aadbfbbad8f',
+	// 	},
+	// };
+	// console.log('testid', testingID.user.name);
+
+	const fetchVerify = async (jwtToken) => {
+		const url = urlcat(BACKEND, `/api/testusers/verify`);
+		const theCookieJWT = { token: `${jwtToken}` };
+		console.log('cookie', theCookieJWT);
+		await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(
+				theCookieJWT
+				//addtolist._id
+			),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				console.log(data);
+				if (data.error) {
+					console.log(data.error);
+				}
+			});
 	};
-	console.log('testid', testingID.user.name);
 
 	const fetchFullList = () => {
 		fetch(urlcat(BACKEND, '/api/listings'))
@@ -104,6 +127,7 @@ function TenantWatchList() {
 	};
 
 	useEffect(() => {
+		fetchVerify();
 		setCanList(false);
 		setStatus('loading');
 		fetchFullList();
@@ -112,13 +136,13 @@ function TenantWatchList() {
 	}, []);
 
 	useEffect(() => {
-		console.log(
-			`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
-		);
+		// console.log(
+		// 	`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
+		// );
 		if (ListStatus && TenantDetailStatus) {
-			console.log(
-				`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
-			);
+			// console.log(
+			// 	`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
+			// );
 			//console.log('tenant details', tenantDetails); //check tenant ID to be sure
 			setupWatchList();
 			setStatus('success');
