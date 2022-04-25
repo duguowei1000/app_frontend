@@ -2,10 +2,29 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from './Authentication/Provider';
 import AuthStatusIndicator from './AuthStatusIndicator';
+import urlcat from 'urlcat';
+import { BACKEND } from '../utils/utils';
 
 const Nav2 = () => {
 	const [loginState, _] = useContext(AuthContext);
 	const { isLoggedIn } = loginState;
+
+	const initiateLogout = async () => {
+		const url = urlcat(BACKEND, `/api/testusers/logout`);
+		await fetch(url, {
+			credentials: 'include',
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.error) {
+					console.log(data.error);
+				}
+			});
+	};
 
 	return (
 		<nav class='bg-gray-800'>
@@ -79,9 +98,17 @@ const Nav2 = () => {
 										<Link to='/tenantwatchlist'>Tenant Watchlist</Link>
 									</div>
 
-									<div class='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
+									<button class='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
 										<Link to='/'>Login</Link>
-									</div>
+									</button>
+									<button
+										onClick={initiateLogout}
+										class='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+									>
+										Logout
+										{/* <Link to='/'>Logout</Link> */}
+										<a href='http://localhost:3000/' class='btn btn-danger'></a>
+									</button>
 								</div>
 							</div>
 						</div>
