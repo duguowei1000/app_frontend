@@ -43,7 +43,6 @@ function Create() {
 	};
 
 	const handleSubmit = (event) => {
-		event.preventDefault();
 		const listing = {
 			postal,
 			district,
@@ -63,7 +62,7 @@ function Create() {
 	return (
 		<>
 			<Nav2 />
-			<form action={urlcat(FRONTEND, 'dashboard')} onSubmit={handleSubmit}>
+			<form action={urlcat(FRONTEND, 'listings/all')} onSubmit={handleSubmit}>
 				Postal:
 				<input
 					type='text'

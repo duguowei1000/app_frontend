@@ -52,6 +52,9 @@ function Listing() {
 						{' Bathrooms'}
 						<br />
 						<br />
+						Lister Contact: 91234567
+						<br />
+						<br />
 					</h3>
 					<u>
 						Property Description:
