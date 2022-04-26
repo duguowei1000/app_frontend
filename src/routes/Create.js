@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND, FRONTEND } from '../utils/utils';
 import Nav2 from '../components/Nav2';
+import { AuthContext } from '../components/Authentication/Provider';
 
 const url = urlcat(BACKEND, '/api/listings/');
 
@@ -17,6 +18,8 @@ function Create() {
 	const [no_of_bathrooms, setBathrooms] = useState(0);
 	const [description, setDescription] = useState('');
 
+	const [loginState, _] = useContext(AuthContext);
+	console.log('loginState', loginState);
 	const [error, setError] = useState('');
 
 	const createListing = (listing) => {
@@ -25,7 +28,10 @@ function Create() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(listing),
+			body: JSON.stringify({
+				...listing,
+				lister: loginState.name,
+			}),
 		})
 			.then((response) => response.json())
 			.then((data) => {

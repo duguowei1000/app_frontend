@@ -3,14 +3,19 @@ import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import { Link } from 'react-router-dom';
 import Nav2 from '../components/Nav2';
+import { AuthContext } from '../components/Authentication/Provider';
 
 function Listings() {
 	const [listings, setListings] = useState([]);
 	const [toggle, setToggle] = useState(false);
 
 	const [userData, setUserData] = useState();
-	const [userID, setUserID] = useState();
+	// const [userID, setUserID] = useState();
 	const [verifyStatus, setVerifyStatus] = useState(false);
+
+	const [loginState, _] = useContext(AuthContext);
+
+	const { userId: userID } = loginState;
 
 	const fetchList = () => {
 		fetch(urlcat(BACKEND, '/api/listings/'))
@@ -48,7 +53,7 @@ function Listings() {
 			fetchList();
 		}
 	}, [verifyStatus]);
-
+	console.log('userData', userData);
 	const handleToggle = (deleteListing) => {
 		setToggle(!toggle);
 		feDeletelisting(deleteListing);

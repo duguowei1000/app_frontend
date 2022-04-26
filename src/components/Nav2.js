@@ -13,7 +13,7 @@ import { BACKEND } from '../utils/utils';
 */
 const Nav2 = () => {
 	const [loginState, dispatch] = useContext(AuthContext);
-	const { isLoggedIn } = loginState;
+	const { isLoggedIn, accountType } = loginState;
 
 	const initiateLogout = async () => {
 		dispatch({ type: 'LOGOUT_REQUEST' });
@@ -72,24 +72,30 @@ const Nav2 = () => {
 									<div className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
 										<Link to='/listings/all'>Listings</Link>{' '}
 									</div>
+									{isLoggedIn && ['admin', 'lister'].includes(accountType) ? (
+										<>
+											<div className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
+												{/* {isLoggedIn &&  */}
+												<Link to='/dashboard'>Dashboard</Link>
+												{/* } */}
+											</div>
 
-									<div className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
-										{/* {isLoggedIn &&  */}
-										<Link to='/dashboard'>Dashboard</Link>
-										{/* } */}
-									</div>
-
-									<div className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
-										<Link to='/create'>Create Listing</Link>
-									</div>
-
-									<div className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
-										<Link to='/tenantlistings/all'>Tenant Listings</Link>
-									</div>
-
-									<div className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
-										<Link to='/tenantwatchlist'>Tenant Watchlist</Link>
-									</div>
+											<div className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
+												<Link to='/create'>Create Listing</Link>
+											</div>
+										</>
+									) : null}
+									{isLoggedIn &&
+									['admin', 'tenant', 'renter'].includes(accountType) ? (
+										<>
+											<div className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
+												<Link to='/tenantlistings/all'>Tenant Listings</Link>
+											</div>
+											<div className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
+												<Link to='/tenantwatchlist'>Tenant Watchlist</Link>
+											</div>
+										</>
+									) : null}
 									{isLoggedIn ? (
 										<button
 											onClick={initiateLogout}

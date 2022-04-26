@@ -2,10 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 
-import {
-	AuthContext,
-	AuthToggler,
-} from '../components/Authentication/Provider';
+import { AuthContext } from '../components/Authentication/Provider';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import { Navigate } from 'react-router-dom';
@@ -46,7 +43,7 @@ const SignUp = () => {
 	//TODO - add sign up switch form
 	const [loginState, dispatch] = useContext(AuthContext);
 	const formRef = useRef();
-
+	console.log('loginState', loginState);
 	const ListerName = 'LISTER';
 	const TenantName = 'TENANT';
 	const formInput = TenantName;
@@ -67,19 +64,29 @@ const SignUp = () => {
 		console.log('data', data);
 	};
 
-	const loginHandler = async (e) => {
+	const clickHandler = async (e) => {
 		e.preventDefault();
-		const { username, password, rememberMe } = formRef.current;
+
+		// const { username, password, rememberMe, accountType } = formRef.current;
+		const postBody = isRegister
+			? {
+					username: formRef.current.username.value,
+					password: formRef.current.password.value,
+					rememberMe: formRef.current.rememberMe.checked,
+					accountType: formRef.current.accountType.value,
+			  }
+			: {
+					username: formRef.current.username.value,
+					password: formRef.current.password.value,
+			  };
+
 		const res = await fetch(urlcat(BACKEND, state.link), {
 			credentials: 'include',
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({
-				username: username.value,
-				password: password.value,
-			}),
+			body: JSON.stringify(postBody),
 		});
 		const data = await res.json();
 		if (data.success) {
@@ -103,6 +110,7 @@ const SignUp = () => {
 				type: 'LOGIN_FAILURE',
 				payload: data.message,
 			});
+			alert(data.message);
 		}
 	};
 
@@ -156,10 +164,33 @@ const SignUp = () => {
 								type='password'
 								autoComplete='current-password'
 								required
-								className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
+								className={
+									isRegister
+										? 'appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
+										: 'appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm rounded-b-md'
+								}
 								placeholder='Password'
 							/>
 						</div>
+						{isRegister ? (
+							<div>
+								<label htmlFor='accountType' className='sr-only'>
+									Account Type
+								</label>
+								<select
+									id='accountType'
+									name='accountType'
+									type='accountType'
+									autoComplete='current-password'
+									required
+									className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
+									placeholder='Password'
+								>
+									<option value='tenant'>tenant</option>
+									<option value='lister'>lister</option>
+								</select>
+							</div>
+						) : null}
 					</div>
 
 					<div className='flex items-center justify-between'>
@@ -194,7 +225,7 @@ const SignUp = () => {
 					<div>
 						<button
 							type='button'
-							onClick={loginHandler}
+							onClick={clickHandler}
 							className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
 						>
 							<span className='absolute left-0 inset-y-0 flex items-center pl-3'>
@@ -219,14 +250,16 @@ const SignUp = () => {
 					<div className='font-medium text-indigo-600 hover:text-indigo-500'>
 						{' '}
 						<Link to={`/listings/all`}>
-							Skip To Browse Listings As Guest
+							{loginState.isLoggedIn
+								? `Welcome to reallistic, ${loginState.name}!`
+								: 'Skip To Browse Listings As Guest'}
 						</Link>{' '}
 					</div>
 				</form>
-				<div>
+				{/* 	<div>
 					<p>{JSON.stringify(loginState)}</p>
 					<button onClick={doTest}>test</button>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);

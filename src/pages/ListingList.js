@@ -197,10 +197,10 @@ function ListingList() {
 					{listings.map((listing) => (
 						<li key={listing._id}>
 							<div className='listing'>
-								<div class='bg-indigo-300 ...'>
+								<div className='bg-indigo-300 ...'>
 									{
 										<img
-											class='object-cover h-60 w-96 ...'
+											className='object-cover h-60 w-96 ...'
 											src={listing.image}
 										/>
 									}
