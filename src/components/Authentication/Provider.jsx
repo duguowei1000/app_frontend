@@ -1,5 +1,7 @@
 import { useEffect, useReducer, createContext, useContext } from 'react';
+import urlcat from 'urlcat';
 import { LISTERUSERID, TENANTUSERID } from '../../utils/loginDetails';
+import { reducer } from './authreducer';
 // import  from '../utils/loginDetails';
 
 const storageListener = (event) => {
@@ -31,24 +33,29 @@ const initialState = {
 };
 // export const reducer<S,A>: React.Reducer<S,A>/* AuthReducer */ = (state, action) => {
 // export const reducer/* AuthReducer */ = (state:AuthState, action) => { switch (action.type) { case "LOGIN": return { ...state, isLoggedIn: true, user: action.payload, }; case "LOGOUT": return { ...state, isLoggedIn: false, user: undefined, }; } };
-const reducer = (state, action) => {
-	switch (action.type) {
-		case 'LOGIN':
-			return {
-				...state,
-				isLoggedIn: true,
-				user: action.payload,
-			};
-		case 'LOGOUT':
-			return {
-				...state,
-				isLoggedIn: false,
-				user: undefined,
-			};
-	}
-};
+
 export const AuthContext = createContext([]);
 const Provider = ({ children }) => {
+	// const token = sessionStorage.getItem('jwt');
+	// if (token) {
+	// 	fetch(urlcat(BACKEND, 'auth/verify'), {
+	// 		credentials: 'include',
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 			Authorization: `jwt ${token}`,
+	// 		},
+	// 	})
+	// 		.then((res) => res.json())
+	// 		.then((data) => {
+	// 			if (data.success) {
+	// 				initialState.user = data.user;
+	// 				initialState.isLoggedIn = true;
+	// 			} else {
+	// 				initialState.user = undefined;
+	// 				initialState.isLoggedIn = false;
+	// 			}
+	// 		});
 	const [state, dispatch] = useReducer(reducer, initialState);
 	useSessionListener();
 	return (
@@ -57,6 +64,7 @@ const Provider = ({ children }) => {
 		</AuthContext.Provider>
 	);
 };
+
 export const AuthConsumer = () => {
 	const [state] = useContext(AuthContext);
 	return <div>{JSON.stringify(state)}</div>;
@@ -64,25 +72,27 @@ export const AuthConsumer = () => {
 export const AuthToggler = () => {
 	const [state, dispatch] = useContext(AuthContext);
 	const { isLoggedIn, user } = state;
-	const login = () => {
+	const login = (e) => {
+		e.preventDefault();
 		dispatch({
-			type: 'LOGIN',
-			payload: {
-				listerLogin: {
-					name: 'LISTER',
-					accountType: 'lister',
-					userId: LISTERUSERID,
-				},
-				tenantLogin: {
-					name: 'TENANT',
-					accountType: 'renter',
-					userId: TENANTUSERID,
-				},
-			},
+			type: 'TEST-LOGIN',
+			// payload: {
+			// 	listerLogin: {
+			// 		name: 'LISTER',
+			// 		accountType: 'lister',
+			// 		userId: LISTERUSERID,
+			// 	},
+			// 	tenantLogin: {
+			// 		name: 'TENANT',
+			// 		accountType: 'renter',
+			// 		userId: TENANTUSERID,
+			// 	},
+			// },
 		});
 	};
 	const logout = () => {
-		dispatch({ type: 'LOGOUT' });
+		e.preventDefault();
+		dispatch({ type: 'TEST-LOGOUT' });
 	};
 	return (
 		<div>
