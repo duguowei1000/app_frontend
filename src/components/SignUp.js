@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
 
+import Modal from './Modal';
 import { AuthContext } from '../components/Authentication/Provider';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const messages = {
 	signIn: 'Sign in to your account',
@@ -33,6 +33,23 @@ const messageSet = {
 const SignUp = () => {
 	const [isRegister, setIsRegister] = useState(false);
 	const [state, setState] = useState(messageSet.signIn);
+	const [modalContent, setModalContent] = useState(false);
+
+	const setDummyContent = () => {
+		setModalContent(
+			<div>
+				<h1>{state.mainMessage}</h1>
+				<p>{state.subMessage}</p>
+				<Link to={state.link}>{state.link}</Link>
+			</div>
+		);
+	};
+
+	const closeModal = () => {
+		setModalContent(null);
+	};
+
+	const navigate = useNavigate();
 
 	const switchType = (e) => {
 		e.preventDefault();
@@ -49,7 +66,6 @@ const SignUp = () => {
 	const formInput = TenantName;
 
 	const doTest = async (e) => {
-		e.preventDefault();
 		const jwt = sessionStorage.getItem('jwt');
 		// console.log('jwt', jwt);
 		const res = await fetch(urlcat(BACKEND, '/auth/test/'), {
@@ -78,6 +94,7 @@ const SignUp = () => {
 			: {
 					username: formRef.current.username.value,
 					password: formRef.current.password.value,
+					rememberMe: formRef.current.rememberMe.checked,
 			  };
 
 		const res = await fetch(urlcat(BACKEND, state.link), {
@@ -106,6 +123,24 @@ const SignUp = () => {
 					listings,
 				},
 			});
+			const nav = setTimeout(() => {
+				navigate('/listings/all');
+			}, 1200);
+			setModalContent(
+				<div>
+					<h1>Success!</h1>
+					<p>You have successfully logged in!</p>
+					<p>redirecting...</p>
+
+					<p>
+						or click{' '}
+						<Link onClick={() => clearTimeout(nav)} to='/listings/all'>
+							here
+						</Link>{' '}
+						to proceed
+					</p>
+				</div>
+			);
 		} else {
 			dispatch({
 				type: 'LOGIN_FAILURE',
@@ -257,10 +292,14 @@ const SignUp = () => {
 						</Link>{' '}
 					</div>
 				</form>
-				{/* 	<div>
+				<div>
 					<p>{JSON.stringify(loginState)}</p>
 					<button onClick={doTest}>test</button>
-				</div> */}
+					<button onClick={setDummyContent}>model</button>
+					{modalContent ? (
+						<Modal callback={closeModal}>{modalContent}</Modal>
+					) : null}
+				</div>
 			</div>
 		</div>
 	);

@@ -6,79 +6,38 @@ import Nav2 from '../components/Nav2';
 import { AuthContext } from '../components/Authentication/Provider';
 
 function Listings() {
-	// const [listings, setListings] = useState([]);
-	const [toggle, setToggle] = useState(false);
-	// const [userData, setUserData] = useState(null);
-
-	// const [userData, setUserData] = useState();
-	// const [userID, setUserID] = useState();
 	const [verifyStatus, setVerifyStatus] = useState(false);
 	const [loginState, dispatch] = useContext(AuthContext);
 
-	console.log('loginState', loginState);
+	const jwt = sessionStorage.getItem('jwt');
+	const { username, name } = loginState;
 
-	const { userId: userID, name, listings: userData } = loginState;
-	// listings ? setUserData(listings) : setUserData(null);
+	console.log('username,name', { username, name });
 
-	const fetchList = () => {
-		fetch(urlcat(BACKEND, '/api/listings/'))
-			.then((response) => response.json())
-			.then((data) => setListings(data));
-	};
+	const [listerListings, setListerListings] = useState([]);
 
-	const fetchVerify = async () => {
-		const url = urlcat(BACKEND, `/api/testusers/verify`);
-		await fetch(url, {
+	useEffect(() => {
+		// const fetchListerList = () => {
+		fetch(urlcat(BACKEND, '/api/listings/dash'), {
 			credentials: 'include',
-			method: 'POST',
+			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `jwt ${jwt}`,
 			},
 		})
 			.then((response) => response.json())
 			.then((data) => {
+				console.log('data', data);
 				//console.log('decode Userid>>>',data);
 				// setUserData(data);
-				setUserID(data.userObjectID);
-				setVerifyStatus(true);
-				if (data.error) {
-					console.log(data.error);
-				}
+				setListerListings(data);
+				// setVerifyStatus(true);
+			})
+			.catch((err) => {
+				console.log('error fetching listers listings', err);
 			});
-	};
-
-	useEffect(() => {
-		fetchVerify();
 	}, []);
-
-	useEffect(() => {
-		if (verifyStatus) {
-			fetchList();
-		}
-	}, [verifyStatus]);
-
-	console.log('userData', userData);
-	// const handleToggle = (deleteListing) => {
-	// 	setToggle(!toggle);
-	// 	feDeletelisting(deleteListing);
-	// };
-
-	// const feDeletelisting = (deletedlistId) => {
-	// 	// console.log(listings);
-	// 	console.log('deletelistid', deletedlistId);
-	// 	const updatedList = listings.filter((e) => {
-	// 		return e._id !== deletedlistId;
-	// 	});
-
-	// 	console.log('updated', updatedList);
-
-	// 	// console.log('>>>updatedTenantFavs', updatedTenantFavs);
-	// 	// const updatedFElist = listings.filter((e) => {
-	// 	// 	return updatedTenantFavs.includes(e._id);
-	// 	// });
-	// 	// console.log('felist', updatedFElist);
-	// 	setListings(updatedList);
-	// };
 
 	const handleDelete = (id) => () => {
 		// setUserData(listings.filter((e) => e._id !== id));
@@ -111,19 +70,16 @@ function Listings() {
 	return (
 		<div>
 			<Nav2 />
-			{userData ? <div className='userName'>Welcome {name}</div> : <div></div>}
-			{/* {console.log(status)} */}
-			{/* userID ? (
-				<div></div>
+			{loginState.isLoggedIn ? (
+				<div className='userName'>Welcome {name}</div>
 			) : (
-				<div className='tenantWatchlist'>
-					Please Login to Access Your Lister Dashboard
-				</div>
-			) */}
+				<div></div>
+			)}
+
 			<div className='listingList'>
 				<ul>
-					{userData &&
-						userData.map((listing) => (
+					{listerListings &&
+						listerListings.map((listing) => (
 							<li key={listing._id}>
 								<div className='dashboardListing'>
 									<div className='bg-indigo-300 ...'>

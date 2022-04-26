@@ -1,11 +1,8 @@
 import check from '../assets/images/checkmark.png';
 import userpng from '../assets/images/user.png';
 
-import { useSessionListener } from '../hooks/useSessionListener.jsx';
 import { isAuthenticated } from '../utils/auth';
 export default function AuthStatusIndicator() {
-	useSessionListener();
-
 	return (
 		<>
 			{isAuthenticated() ? (
