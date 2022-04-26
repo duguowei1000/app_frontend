@@ -107,7 +107,7 @@ const Nav2 = () => {
 									>
 										Logout
 										{/* <Link to='/'>Logout</Link> */}
-										<a href='http://localhost:3000/' class='btn btn-danger'></a>
+										{/* <a href="http://localhost:3000/" class="btn btn-danger"></a> */}
 									</button>
 								</div>
 							</div>

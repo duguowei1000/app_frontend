@@ -8,15 +8,46 @@ function Listings() {
 	const [listings, setListings] = useState([]);
 	const [toggle, setToggle] = useState(false);
 
+	const [userData, setUserData] = useState();
+	const [userID, setUserID] = useState();
+	const [verifyStatus, setVerifyStatus] = useState(false);
+
 	const fetchList = () => {
 		fetch(urlcat(BACKEND, '/api/listings/'))
 			.then((response) => response.json())
 			.then((data) => setListings(data));
 	};
 
+	const fetchVerify = async () => {
+		const url = urlcat(BACKEND, `/api/testusers/verify`);
+		await fetch(url, {
+			credentials: 'include',
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				//console.log('decode Userid>>>',data);
+				setUserData(data);
+				setUserID(data.userObjectID);
+				setVerifyStatus(true);
+				if (data.error) {
+					console.log(data.error);
+				}
+			});
+	};
+
 	useEffect(() => {
-		fetchList();
+		fetchVerify();
 	}, []);
+
+	useEffect(() => {
+		if (verifyStatus) {
+			fetchList();
+		}
+	}, [verifyStatus]);
 
 	const handleToggle = (deleteListing) => {
 		setToggle(!toggle);
@@ -66,6 +97,19 @@ function Listings() {
 	return (
 		<div>
 			<Nav2 />
+			{userData ? (
+				<div className='userName'>Welcome {userData.name}</div>
+			) : (
+				<div></div>
+			)}
+			{/* {console.log(status)} */}
+			{userID ? (
+				<div></div>
+			) : (
+				<div className='tenantWatchlist'>
+					Please Login to Access Your Lister Dashboard
+				</div>
+			)}
 			<div className='listingList'>
 				<ul>
 					{listings.map((listing) => (
