@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import { Link } from 'react-router-dom';
@@ -6,16 +6,19 @@ import Nav2 from '../components/Nav2';
 import { AuthContext } from '../components/Authentication/Provider';
 
 function Listings() {
-	const [listings, setListings] = useState([]);
+	// const [listings, setListings] = useState([]);
 	const [toggle, setToggle] = useState(false);
+	// const [userData, setUserData] = useState(null);
 
-	const [userData, setUserData] = useState();
+	// const [userData, setUserData] = useState();
 	// const [userID, setUserID] = useState();
 	const [verifyStatus, setVerifyStatus] = useState(false);
+	const [loginState, dispatch] = useContext(AuthContext);
 
-	const [loginState, _] = useContext(AuthContext);
+	console.log('loginState', loginState);
 
-	const { userId: userID } = loginState;
+	const { userId: userID, name, listings: userData } = loginState;
+	// listings ? setUserData(listings) : setUserData(null);
 
 	const fetchList = () => {
 		fetch(urlcat(BACKEND, '/api/listings/'))
@@ -35,7 +38,7 @@ function Listings() {
 			.then((response) => response.json())
 			.then((data) => {
 				//console.log('decode Userid>>>',data);
-				setUserData(data);
+				// setUserData(data);
 				setUserID(data.userObjectID);
 				setVerifyStatus(true);
 				if (data.error) {
@@ -53,31 +56,37 @@ function Listings() {
 			fetchList();
 		}
 	}, [verifyStatus]);
+
 	console.log('userData', userData);
-	const handleToggle = (deleteListing) => {
-		setToggle(!toggle);
-		feDeletelisting(deleteListing);
-	};
+	// const handleToggle = (deleteListing) => {
+	// 	setToggle(!toggle);
+	// 	feDeletelisting(deleteListing);
+	// };
 
-	const feDeletelisting = (deletedlistId) => {
-		console.log(listings);
-		console.log('deletelistid', deletedlistId);
-		const updatedList = listings.filter((e) => {
-			return e._id !== deletedlistId;
-		});
+	// const feDeletelisting = (deletedlistId) => {
+	// 	// console.log(listings);
+	// 	console.log('deletelistid', deletedlistId);
+	// 	const updatedList = listings.filter((e) => {
+	// 		return e._id !== deletedlistId;
+	// 	});
 
-		console.log('updated', updatedList);
+	// 	console.log('updated', updatedList);
 
-		// console.log('>>>updatedTenantFavs', updatedTenantFavs);
-		// const updatedFElist = listings.filter((e) => {
-		// 	return updatedTenantFavs.includes(e._id);
-		// });
-		// console.log('felist', updatedFElist);
-		setListings(updatedList);
-	};
+	// 	// console.log('>>>updatedTenantFavs', updatedTenantFavs);
+	// 	// const updatedFElist = listings.filter((e) => {
+	// 	// 	return updatedTenantFavs.includes(e._id);
+	// 	// });
+	// 	// console.log('felist', updatedFElist);
+	// 	setListings(updatedList);
+	// };
 
 	const handleDelete = (id) => () => {
-		console.log(id);
+		// setUserData(listings.filter((e) => e._id !== id));
+		// console.log(id);
+
+		dispatch(loginState, {
+			type: 'UPDATE',
+		});
 		const url = urlcat(BACKEND, `/api/listings/${id}`);
 		fetch(url, {
 			method: 'DELETE',
@@ -90,7 +99,7 @@ function Listings() {
 		// alert('listing deleted');
 		console.log('hey delete');
 
-		handleToggle(id);
+		// handleToggle(id);
 	};
 
 	const clickFn = (listingid) => {
@@ -102,80 +111,77 @@ function Listings() {
 	return (
 		<div>
 			<Nav2 />
-			{userData ? (
-				<div className='userName'>Welcome {userData.name}</div>
-			) : (
-				<div></div>
-			)}
+			{userData ? <div className='userName'>Welcome {name}</div> : <div></div>}
 			{/* {console.log(status)} */}
-			{userID ? (
+			{/* userID ? (
 				<div></div>
 			) : (
 				<div className='tenantWatchlist'>
 					Please Login to Access Your Lister Dashboard
 				</div>
-			)}
+			) */}
 			<div className='listingList'>
 				<ul>
-					{listings.map((listing) => (
-						<li key={listing._id}>
-							<div className='dashboardListing'>
-								<div className='bg-indigo-300 ...'>
-									{
-										<img
-											className='object-cover h-60 w-96 ...'
-											src={listing.image}
-										/>
-									}
-								</div>
-								<div className='listingInfo'>
-									<br />
-									<b>{listing.address}</b> <br />
-									District: {listing.district} <br />
-									{/* <span onClick={handleUpdate(listing)}>{listing.price}</span> */}
-									Size: {listing.size} sqft
-									<br />
-									Price: ${listing.price}
-									<br />
-									{listing.no_of_bedrooms}
-									{' Bedrooms'}
-									<br />
-									{listing.no_of_bathrooms}
-									{' Bathrooms'}
-									<br />
-									<div className='dashboardButtons'>
-										<Link
-											to={`/listings/${listing._id}`}
-											target='_blank'
-											rel='noopener noreferrer'
-										>
-											<button className='viewListing'>
-												<span>View Listing</span>
-											</button>
-										</Link>
-										<Link
-											to={`/listings/${listing._id}/edit`}
-											target='_blank'
-											rel='noopener noreferrer'
-										>
-											<button className='viewListing'>
-												<span>Edit Listing</span>
-											</button>
-										</Link>
+					{userData &&
+						userData.map((listing) => (
+							<li key={listing._id}>
+								<div className='dashboardListing'>
+									<div className='bg-indigo-300 ...'>
+										{
+											<img
+												className='object-cover h-60 w-96 ...'
+												src={listing.image}
+											/>
+										}
+									</div>
+									<div className='listingInfo'>
 										<br />
-										{/* <button className='deleteListing'> */}
-										<button
-											className='deleteListing'
-											onClick={handleDelete(listing._id)}
-										>
-											Delete
-										</button>
-										{/* </button> */}
+										<b>{listing.address}</b> <br />
+										District: {listing.district} <br />
+										{/* <span onClick={handleUpdate(listing)}>{listing.price}</span> */}
+										Size: {listing.size} sqft
+										<br />
+										Price: ${listing.price}
+										<br />
+										{listing.no_of_bedrooms}
+										{' Bedrooms'}
+										<br />
+										{listing.no_of_bathrooms}
+										{' Bathrooms'}
+										<br />
+										<div className='dashboardButtons'>
+											<Link
+												to={`/listings/${listing._id}`}
+												target='_blank'
+												rel='noopener noreferrer'
+											>
+												<button className='viewListing'>
+													<span>View Listing</span>
+												</button>
+											</Link>
+											<Link
+												to={`/listings/${listing._id}/edit`}
+												target='_blank'
+												rel='noopener noreferrer'
+											>
+												<button className='viewListing'>
+													<span>Edit Listing</span>
+												</button>
+											</Link>
+											<br />
+											{/* <button className='deleteListing'> */}
+											<button
+												className='deleteListing'
+												onClick={handleDelete(listing._id)}
+											>
+												Delete
+											</button>
+											{/* </button> */}
+										</div>
 									</div>
 								</div>
-							</div>
-						</li>
-					))}
+							</li>
+						))}
 				</ul>
 			</div>
 		</div>

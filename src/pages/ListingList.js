@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Search from '../components/Search';
 import Nav2 from '../components/Nav2';
+import { AuthContext } from '../components/Authentication/Provider';
 
 function ListingList() {
 	const [listings, setListings] = useState([]);
@@ -17,6 +18,8 @@ function ListingList() {
 	const [hdbOrPrivate_S, setHDBorPrivate_S] = useState('');
 	const [bedrooms_S, setBedRooms_S] = useState('');
 	const [bathRooms_S, setBathrooms_S] = useState('');
+
+	const [loginState, _] = useContext(AuthContext);
 
 	const fetchDetails = () => {
 		fetch(urlcat(BACKEND, '/api/listings/'), {

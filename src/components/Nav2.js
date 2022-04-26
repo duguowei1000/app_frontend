@@ -97,17 +97,20 @@ const Nav2 = () => {
 										</>
 									) : null}
 									{isLoggedIn ? (
-										<button
-											onClick={initiateLogout}
-											className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
-										>
-											Logout
-											{/* <Link to='/'>Logout</Link> */}
-											<a
-												href='http://localhost:3000/'
-												className='btn btn-danger'
-											></a>
-										</button>
+										<>
+											<button
+												onClick={initiateLogout}
+												className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+											>
+												Logout
+												{/* <Link to='/'>Logout</Link> */}
+												<a
+													href='http://localhost:3000/'
+													className='btn btn-danger'
+												></a>
+											</button>
+											<span>{loginState.username}</span>
+										</>
 									) : (
 										<button className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
 											<Link to='/'>Login</Link>

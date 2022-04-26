@@ -93,7 +93,7 @@ const SignUp = () => {
 			const {
 				token,
 				refreshToken,
-				userData: { username, accountType, userId },
+				userData: { username, accountType, userId, listings },
 			} = data;
 			dispatch({
 				type: 'LOGIN_SUCCESS',
@@ -103,6 +103,7 @@ const SignUp = () => {
 					username,
 					accountType,
 					userId,
+					listings,
 				},
 			});
 		} else {

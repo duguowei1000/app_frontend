@@ -25,6 +25,13 @@ function useSessionListener() {
 		};
 	}, []);
 }
+
+// const token = sessionStorage.getItem('jwt');
+// if (token) {
+// 	const decoded = window.btoa(token);
+// 	console.log('decoded', decoded);
+// }
+
 const initialState = {
 	// sessionStorage: {},
 	// localStorage: {},
