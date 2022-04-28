@@ -293,9 +293,9 @@ const SignUp = () => {
 					</div>
 				</form>
 				<div>
-					<p>{JSON.stringify(loginState)}</p>
+					{/* 				<p>{JSON.stringify(loginState)}</p>
 					<button onClick={doTest}>test</button>
-					<button onClick={setDummyContent}>model</button>
+					<button onClick={setDummyContent}>model</button> */}
 					{modalContent ? (
 						<Modal callback={closeModal}>{modalContent}</Modal>
 					) : null}
