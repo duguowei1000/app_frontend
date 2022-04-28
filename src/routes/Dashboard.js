@@ -48,9 +48,11 @@ function Listings() {
 		});
 		const url = urlcat(BACKEND, `/api/listings/${id}`);
 		fetch(url, {
+			credentials: 'include',
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `jwt ${jwt}`,
 			},
 		})
 			.then((response) => response.json())
@@ -59,12 +61,6 @@ function Listings() {
 		console.log('hey delete');
 
 		// handleToggle(id);
-	};
-
-	const clickFn = (listingid) => {
-		// handleToggle(listingid)
-		// handleDelete(listingid)
-		// handleToggle(listingid)
 	};
 
 	return (

@@ -4,17 +4,19 @@ import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Nav2 from '../components/Nav2';
 
-function Listing() {
+function Listing({ listingId = undefined }) {
 	const [selectedListing, setSelectedListing] = useState([]);
-
 	const { id } = useParams();
-
+	console.log('id', id);
+	console.log('listingId', listingId);
 	useEffect(() => {
 		fetch(urlcat(BACKEND, '/api/listings/'))
 			.then((response) => response.json())
 
 			.then((data) => {
-				const selectedListing = data.filter((listing) => listing._id === id);
+				const selectedListing = data.filter(
+					(listing) => listing._id === (listingId ?? id)
+				);
 				console.log('selectedListing', selectedListing);
 				setSelectedListing(selectedListing[0]);
 			});
@@ -22,7 +24,7 @@ function Listing() {
 
 	return (
 		<div>
-			<Nav2 />
+			{listingId ? undefined : <Nav2 />}
 			<div className='individualListing'>
 				<div className='individualImage'>
 					<img src={selectedListing.image} height='100%' width='100%' /> <br />

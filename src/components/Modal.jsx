@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
+import { root } from 'postcss';
 
 const centreSelf =
 	'position: fixed; top: 50%; left: 50%;transform: translate(-50%, -50%);';
@@ -30,12 +31,14 @@ const handler = (event, callback) => {
 export default function ModalPortal({ children, callback }) {
 	const rootEl = createRoot();
 	useEffect(() => {
+		document.body.setAttribute('style', 'overflow: hidden;');
 		const listener = (e) => handler(e, callback);
 		document.body.append(rootEl);
 		document.addEventListener('click', listener);
 		document.addEventListener('keydown', listener);
 		console.log('mounted!');
 		return () => {
+			document.body.removeAttribute('style');
 			document.body.removeChild(rootEl);
 			document.removeEventListener('click', listener);
 			document.removeEventListener('keydown', listener);
@@ -48,12 +51,13 @@ export default function ModalPortal({ children, callback }) {
 				backgroundColor: 'white',
 				padding: '1rem',
 				borderRadius: '0.5rem',
-				width: '30rem',
-				height: '20rem',
+				width: '80vw',
+				height: '95vw',
 				display: 'flex',
 				flexDirection: 'column',
 				justifyContent: 'space-between',
 				alignItems: 'center',
+				overflowY: 'auto',
 			}}
 		>
 			{children}
