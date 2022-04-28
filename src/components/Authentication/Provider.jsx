@@ -61,14 +61,15 @@ function useSessionListener() {
 // 	const decoded = window.btoa(token);
 // 	console.log('decoded', decoded);
 // }
-
+*/
 const initialState = {
 	// sessionStorage: {},
 	// localStorage: {},
 	user: undefined,
 	isLoggedIn: false,
 };
-// export const reducer<S,A>: React.Reducer<S,A>/* AuthReducer */ = (state, action) => {
+// export const reducer<S,A>: React.Reducer<S,A>/* AuthReducer */
+// = (state, action) => {
 // export const reducer/* AuthReducer */ = (state:AuthState, action) => { switch (action.type) { case "LOGIN": return { ...state, isLoggedIn: true, user: action.payload, }; case "LOGOUT": return { ...state, isLoggedIn: false, user: undefined, }; } };
 
 export const AuthContext = createContext([]);
