@@ -1,12 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import { Link } from 'react-router-dom';
 import Nav2 from '../components/Nav2';
 
+import { TENANTUSERID } from '../utils/loginDetails';
+
+import {
+	AuthContext,
+	AuthToggler,
+} from '../components/Authentication/Provider';
+
+///api/testusers
 //Grab Tenant's Id
 //Populate Tenant's Liked Listings based on id  //
 //Routing should be based on Id
+
+// const tenantloginID = TENANTUSERID;
+// console.log(tenantloginID);
 
 function TenantWatchList() {
 	const [tenantDetails, setTenantDetails] = useState([]);
@@ -19,8 +30,33 @@ function TenantWatchList() {
 	const [toggle, setToggle] = useState(false);
 	const [currentFavs, setCurrentFavs] = useState([]);
 
-	// const tenantID = '626392fcb50b3aadbfbbad8f'; //**** */
-	const tenantloginID = '626392fcb50b3aadbfbbad8f';
+	const [userData, setUserData] = useState();
+	const [userID, setUserID] = useState();
+	const [verifyStatus, setVerifyStatus] = useState(false);
+
+	const [loginState, r] = useContext(AuthContext);
+	// const testid = loginState.user;
+
+	const fetchVerify = async () => {
+		const url = urlcat(BACKEND, `/api/testusers/verify`);
+		await fetch(url, {
+			credentials: 'include',
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				//console.log('decode Userid>>>',data);
+				setUserData(data);
+				setUserID(data.userObjectID);
+				setVerifyStatus(true);
+				if (data.error) {
+					console.log(data.error);
+				}
+			});
+	};
 
 	const fetchFullList = () => {
 		fetch(urlcat(BACKEND, '/api/listings'))
@@ -35,7 +71,7 @@ function TenantWatchList() {
 			});
 	};
 	const fetchTenantDetails = () => {
-		fetch(urlcat(BACKEND, '/api/tenant/'))
+		fetch(urlcat(BACKEND, '/api/testusers/findList'))
 			.then((response) => response.json())
 			.then((data) => {
 				setTenantDetails(data);
@@ -48,70 +84,69 @@ function TenantWatchList() {
 	};
 
 	const handleToggle = (tenantListing) => {
-		// handleFullList();
-		// console.log(toggle)
-		// setTenantDetailStatus(false)
-		// fetchTenantDetails();
-		// setToggle(!toggle);
 		feDeletelisting(tenantListing);
 	};
 
 	const setupWatchList = () => {
-		// const tenantFavs = []
-		console.log(tenantDetails[0]);
-		console.log('tenantDetails1' + tenantDetails[0]);
-
-		const specificTenant = tenantDetails.filter((e) => {
-			if (e._id === tenantloginID) {
-				return true;
-			} else console.log('wrong tenant id');
-		});
-		const tenantFavs = specificTenant[0].favourites;
-		setCurrentFavs(tenantFavs);
-		//console.log(`tenantFavs,${tenantFavs}`)
-		//console.log('>>>>setupwatchlist',tenantDetails);
-		if (tenantFavs.length) {
-			let matchedListing = fullListings.filter((e) => {
-				return tenantFavs.includes(e._id);
+		// console.log(tenantDetails[0]);
+		// console.log('tenantDetails1' + tenantDetails[0]);
+		if (userID) {
+			const specificTenant = tenantDetails.filter((e) => {
+				if (e._id === userID) {
+					return true;
+				} else console.log('checked tenant id, cont.');
 			});
+			if (specificTenant.length) {
+				const tenantFavs = specificTenant[0].favourites;
+				setCurrentFavs(tenantFavs);
 
-			//console.log("matchedlist",matchedListing);
-			setWatchList(matchedListing);
+				if (tenantFavs.length) {
+					let matchedListing = fullListings.filter((e) => {
+						return tenantFavs.includes(e._id);
+					});
+
+					setWatchList(matchedListing);
+				}
+			} else setupWatchList([]);
 		}
 	};
 
 	const feDeletelisting = (deletedlistId) => {
-		console.log('currentFavs', currentFavs);
-		console.log('deletedId', deletedlistId);
 		const updatedTenantFavs = currentFavs.filter((e) => {
 			return e !== deletedlistId;
 		});
-
-		console.log('>>>updatedTenantFavs', updatedTenantFavs);
 		const updatedFElist = watchlist.filter((e) => {
 			return updatedTenantFavs.includes(e._id);
 		});
-		console.log('felist', updatedFElist);
+		//console.log('felist', updatedFElist);
 		setWatchList(updatedFElist);
 	};
 
 	useEffect(() => {
-		setCanList(false);
-		setStatus('loading');
-		fetchFullList();
-		fetchTenantDetails();
-		//console.log(`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`)
+		fetchVerify();
 	}, []);
 
 	useEffect(() => {
-		console.log(
-			`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
-		);
+		if (verifyStatus) {
+			setCanList(false);
+			setStatus('loading');
+			fetchFullList();
+			fetchTenantDetails();
+			//console.log(`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`)
+		}
+	}, [verifyStatus]);
+
+	useEffect(() => {
+		// console.log(
+		// 	`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
+		// );
 		if (ListStatus && TenantDetailStatus) {
-			console.log(
-				`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
-			);
+			// console.log(
+			// 	`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
+			// );
 			//console.log('tenant details', tenantDetails); //check tenant ID to be sure
+			console.log('userID>>>>', userID);
+			console.log('data>>', userData);
 			setupWatchList();
 			setStatus('success');
 			setCanList(true);
@@ -125,31 +160,18 @@ function TenantWatchList() {
 		return <div>No watchList</div>;
 	}
 
-	// const handleDelete = (id) => () => {
-	// 	const url = urlcat(BACKEND, `/api/listings/${id}`);
-	// 	fetch(url, { method: 'PUT' })
-	// 		.then((response) => response.json())
-	// 		.then((data) => console.log(data));
-	// 	alert('listing deleted');
-	// };
-
 	const handleDelete = (listID) => {
-		console.log('delete Click');
-		const url = urlcat(BACKEND, `/api/tenant/watchlist/${tenantloginID}`);
+		console.log('>>>', userID);
+		const url = urlcat(BACKEND, `/api/testusers/watchlist/${userID}`);
 		const deleteListing = { fav: `${listID}` };
-		console.log('FE-Deletelisting', deleteListing);
 		fetch(url, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(
-				deleteListing
-				// `deleteListing`
-			),
+			body: JSON.stringify(deleteListing),
 		})
 			.then((response) => response.json())
-
 			.then((data) => {
 				console.log(data);
 				if (data.error) {
@@ -161,24 +183,39 @@ function TenantWatchList() {
 	return (
 		<>
 			<Nav2 />
-			{/* {console.log(status)}
-			{status === "No Watchlist" ? <div>no watchList</div> :<div>watchlist</div> } */}
+			{userData ? (
+				<div className='userName'>Welcome {userData.name}</div>
+			) : (
+				<div></div>
+			)}
+			{/* {console.log(status)} */}
+			{userID ? (
+				<div></div>
+			) : (
+				<div className='tenantWatchlist'>
+					Please Login to Access Your WatchList
+				</div>
+			)}
+			{/* <p>{JSON.stringify(loginState)}</p> */}
+			{/* <AuthToggler /> */}
+
+			{/*  */}
 			{canList && (
 				<div className='listingList'>
 					<ul>
 						{watchlist.map((tenantListing) => (
 							<li key={tenantListing._id}>
-								<div className='listing'>
-									<div className='listingImage'>
+								<div className='tenantListing'>
+									<div class='bg-indigo-300 ...'>
 										{
 											<img
+												class='object-cover h-60 w-96 ...'
 												src={tenantListing.image}
-												height='300px'
-												width='400px'
 											/>
 										}
 									</div>
 									<div className='listingInfo'>
+										<br />
 										<b>{tenantListing.address}</b> <br />
 										District: {tenantListing.district} <br />
 										{/* <span onClick={handleUpdate(listing)}>{listing.price}</span> */}
@@ -186,19 +223,12 @@ function TenantWatchList() {
 										<br />
 										Price: ${tenantListing.price}
 										<br />
-										{tenantListing.no_of_bedrooms}{' '}
-										<img
-											src='http://cdn.onlinewebfonts.com/svg/img_391908.png'
-											height='20x'
-											width='20px'
-										/>
+										{tenantListing.no_of_bedrooms}
+										{' Bedrooms'}
 										<br />
-										{tenantListing.no_of_bathrooms}{' '}
-										<img
-											src='https://cdn-icons-png.flaticon.com/512/637/637270.png'
-											height='20x'
-											width='20px'
-										/>
+										{tenantListing.no_of_bathrooms}
+										{' Bathrooms'}
+										<br />
 										<br />
 										<Link
 											to={`/listings/${tenantListing._id}`}
@@ -225,7 +255,7 @@ function TenantWatchList() {
 				</div>
 			)}
 
-			<div>Suggested Listings</div>
+			{/* <div>Suggested Listings</div> */}
 		</>
 	);
 }

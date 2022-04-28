@@ -1,10 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Search from '../components/Search';
-import TenantEdit from './TenantEdit';
 import Nav2 from '../components/Nav2';
+import { TENANTUSERID } from '../utils/loginDetails';
+import { AuthContext } from '../components/Authentication/Provider';
+
+// const tenantloginID = TENANTUSERID;
+// console.log(tenantloginID);
+///api/testusers
 
 function TenantListingList() {
 	const [listings, setListings] = useState([]);
@@ -18,12 +23,36 @@ function TenantListingList() {
 	const [bedrooms_S, setBedRooms_S] = useState('');
 	const [bathRooms_S, setBathrooms_S] = useState('');
 
-	const url = urlcat(BACKEND, '/api/listings/');
+	const [loginState, _] = useContext(AuthContext);
+	// const [userID, setUserID] = useState();
+	console.log('loginState', loginState);
+	const userID = loginState.userId;
+	// if (loginState.isLoggedIn) setUserID(loginState.userId);
+	// const fetchVerify = async () => {
+	// 	const url = urlcat(BACKEND, `/api/testusers/verify`);
+	// 	await fetch(url, {
+	// 		credentials: 'include',
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 	})
+	// 		.then((response) => response.json())
+	// 		.then((data) => {
+	// 			//console.log('decode Userid>>>',data);
+	// 			//setUserData(data)
+	// 			setUserID(data.userObjectID);
+	// 			if (data.error) {
+	// 				console.log(data.error);
+	// 			}
+	// 		});
+	// };
+
 	const fetchDetails = () => {
 		fetch(urlcat(BACKEND, '/api/listings/'))
 			.then((response) => response.json())
 			.then((data) => {
-				setListings(data);
+				// setListings(data);
 				setFullListings(data);
 				// const reducedArray = data.slice(0, 29)
 				// setListings(reducedArray)
@@ -31,6 +60,7 @@ function TenantListingList() {
 	};
 
 	useEffect(() => {
+		// fetchVerify();
 		fetchDetails();
 	}, []);
 
@@ -169,9 +199,9 @@ function TenantListingList() {
 		setBathrooms_S(searchValue_Rooms);
 	};
 	////Handle add to Tenant dashboard
-	const tenantloginID = `626392fcb50b3aadbfbbad8f`;
 	const handleEditlist = async (AddtoList) => {
-		const url = urlcat(BACKEND, `/api/tenant/${tenantloginID}`);
+		console.log('userID>>>>', userID);
+		const url = urlcat(BACKEND, `/api/testusers/${userID}`);
 		const addListing = { fav: `${AddtoList}` };
 		console.log('addtolist', addListing);
 		await fetch(url, {
@@ -179,10 +209,7 @@ function TenantListingList() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(
-				addListing
-				//addtolist._id
-			),
+			body: JSON.stringify(addListing),
 		})
 			.then((response) => response.json())
 			.then((data) => {
@@ -192,15 +219,6 @@ function TenantListingList() {
 				}
 			});
 	};
-
-	// const handleUpdate = (event) => {
-	// 	event.preventDefault();
-	// 	const listing = {
-
-	// 	};
-	// 	handleEditlist(listing);
-	// 	alert('listing updated');
-	// };
 
 	return (
 		<>
@@ -249,20 +267,17 @@ function TenantListingList() {
 									{' Bathrooms'}
 									<br />
 									<br />
-									{/* <TenantEdit
-										url={url}
-										handleUpdate={handleEditlist}
-										id={listing._id}
-
-									/> */}
-									<button
-										className='addTolist'
-										onClick={() => handleEditlist(listing._id)}
-									>
-										<span>Add to list</span>
-									</button>
+									{userID ? (
+										<button
+											className='addTolist'
+											onClick={() => handleEditlist(listing._id)}
+										>
+											<span>Add to list</span>
+										</button>
+									) : (
+										<></>
+									)}
 									<Link to={`/listings/${listing._id}`}>
-
 										<button className='viewListing'>
 											<span>View Listing</span>
 										</button>

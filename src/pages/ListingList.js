@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Search from '../components/Search';
 import Nav2 from '../components/Nav2';
+import { AuthContext } from '../components/Authentication/Provider';
+import Listing from '../routes/Listing';
+import Modal from '../components/Modal';
 
 function ListingList() {
 	const [listings, setListings] = useState([]);
@@ -18,6 +21,12 @@ function ListingList() {
 	const [bedrooms_S, setBedRooms_S] = useState('');
 	const [bathRooms_S, setBathrooms_S] = useState('');
 
+	const [loginState, _] = useContext(AuthContext);
+	const [modalContent, setModalContent] = useState(false);
+
+	const closeModal = () => {
+		setModalContent(null);
+	};
 	const fetchDetails = () => {
 		fetch(urlcat(BACKEND, '/api/listings/'), {
 			credentials: 'include',
@@ -197,10 +206,10 @@ function ListingList() {
 					{listings.map((listing) => (
 						<li key={listing._id}>
 							<div className='listing'>
-								<div class='bg-indigo-300 ...'>
+								<div className='bg-indigo-300 ...'>
 									{
 										<img
-											class='object-cover h-60 w-96 ...'
+											className='object-cover h-60 w-96 ...'
 											src={listing.image}
 										/>
 									}
@@ -220,7 +229,7 @@ function ListingList() {
 									{listing.no_of_bathrooms}
 									{' Bathrooms'}
 									<br />
-									<Link
+									{/* <Link
 										to={`/listings/${listing._id}`}
 										target='_blank'
 										rel='noopener noreferrer'
@@ -228,7 +237,18 @@ function ListingList() {
 										<button className='viewListing'>
 											<span>View Listing</span>
 										</button>
-									</Link>
+									</Link> */}
+									<button
+										onClick={() =>
+											setModalContent(<Listing listingId={listing._id} />)
+										}
+										className='viewListing'
+									>
+										<span>View Listing</span>
+									</button>
+									{modalContent ? (
+										<Modal callback={closeModal}>{modalContent}</Modal>
+									) : null}
 								</div>
 							</div>
 						</li>

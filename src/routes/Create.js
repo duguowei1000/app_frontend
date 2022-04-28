@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND, FRONTEND } from '../utils/utils';
 import Nav2 from '../components/Nav2';
+import { AuthContext } from '../components/Authentication/Provider';
+import { updateData } from '../components/Authentication/authreducer';
 
 const url = urlcat(BACKEND, '/api/listings/');
 
@@ -17,6 +19,8 @@ function Create() {
 	const [no_of_bathrooms, setBathrooms] = useState(0);
 	const [description, setDescription] = useState('');
 
+	const [loginState, dispatch] = useContext(AuthContext);
+	console.log('loginState', loginState);
 	const [error, setError] = useState('');
 
 	const createListing = (listing) => {
@@ -25,7 +29,10 @@ function Create() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(listing),
+			body: JSON.stringify({
+				...listing,
+				lister: loginState.name,
+			}),
 		})
 			.then((response) => response.json())
 			.then((data) => {
@@ -37,7 +44,6 @@ function Create() {
 	};
 
 	const handleSubmit = (event) => {
-		event.preventDefault();
 		const listing = {
 			postal,
 			district,
@@ -51,13 +57,14 @@ function Create() {
 			description,
 		};
 		createListing(listing);
+		dispatch(loginState, { type: 'UPDATE' });
 		alert('listing created');
 	};
 
 	return (
 		<>
 			<Nav2 />
-			<form action={urlcat(FRONTEND, 'dashboard')} onSubmit={handleSubmit}>
+			<form action={urlcat(FRONTEND, 'listings/all')} onSubmit={handleSubmit}>
 				Postal:
 				<input
 					type='text'
