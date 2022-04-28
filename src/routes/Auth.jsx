@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { useState } from 'react';
+import urlcat from 'urlcat';
 import { login, saveTokens } from '../utils/auth';
 import { BACKEND } from '../utils/utils';
 import Nav2 from '../components/Nav2';
@@ -51,7 +52,7 @@ export default function Auth() {
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
-		const response = await fetch(`${backend}/auth/login`, {
+		const response = await fetch(urlcat(backend, '/auth/login'), {
 			credentials: 'include',
 			method: 'POST',
 			headers: {
@@ -59,15 +60,18 @@ export default function Auth() {
 			},
 			body: JSON.stringify(details),
 		});
-		if (!response.status === 200) return alert('Invalid username or password');
-		const data = await response.json();
-		saveTokens(data);
-		setIsAuthorised(true);
+		if (response.status === 200) {
+			const data = await response.json();
+			console.log('data', data);
+			saveTokens(data);
+			setIsAuthorised(true);
+		}
+		return alert('Invalid username or password');
 	};
 
 	const handleSignup = async (e) => {
 		e.preventDefault();
-		const response = await fetch(`${backend}/auth/signup`, {
+		const response = await fetch(urlcat(backend, '/auth/signup'), {
 			credentials: 'include',
 			method: 'POST',
 			headers: {
@@ -75,10 +79,26 @@ export default function Auth() {
 			},
 			body: JSON.stringify(details),
 		});
-		if (!response.status === 200) alert('Signup Failed');
+		if (response.status === 200) {
+			const data = await response.json();
+			console.log('data', data);
+			saveTokens(data);
+			setIsAuthorised(true);
+		}
+	};
+
+	const doTest = async (e) => {
+		e.preventDefault();
+		const response = await fetch(urlcat(backend, '/auth/test'), {
+			credentials: 'include',
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		if (!response.status === 200) return alert('Invalid username or password');
 		const data = await response.json();
-		saveTokens(data);
-		setIsAuthorised(true);
+		console.log(data);
 	};
 
 	return (
@@ -106,6 +126,7 @@ export default function Auth() {
 						<button onClick={handleSignup} className='btn btn-primary'>
 							Signup
 						</button>
+						<button onClick={doTest}>test</button>
 					</>
 				) : (
 					<p>Youre logged in</p>
