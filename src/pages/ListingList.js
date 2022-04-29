@@ -29,15 +29,11 @@ function ListingList() {
 			.then((response) => response.json())
 			.then((data) => {
 				setListings(data);
-				setFullListings(data);
+				// setFullListings(data);
 				// const reducedArray = data.slice(0, 29)
 				// setListings(reducedArray)
 			});
 	};
-
-	useEffect(() => {
-		fetchDetails();
-	}, []);
 
 	useEffect(() => {
 		// console.log('fullListings>>', fullListings);
@@ -144,34 +140,41 @@ function ListingList() {
 		// console.log('Listings>>', listings);
 	}, [toggle]);
 
+	// const search = (searchValue_min, searchValue_max) => {
+	// 	handleToggle();
+	// 	setPrice_Min_S(searchValue_min);
+	// 	setPrice_Max_S(searchValue_max); // || 9999); //to set upper limit
+	// };
+
+	// const propertyTypeSearch = (searchValue_HDBorPrivate) => {
+	// 	handleToggle();
+	// 	setHDBorPrivate_S(searchValue_HDBorPrivate);
+	// };
+	// const bedroomSearch = (searchValue_Rooms) => {
+	// 	handleToggle();
+	// 	setBedRooms_S(searchValue_Rooms);
+	// };
+
+	// const bathroomSearch = (searchValue_Rooms) => {
+	// 	handleToggle();
+	// 	setBathrooms_S(searchValue_Rooms);
+	// };
+
+	useEffect(() => {
+		fetchDetails();
+	}, [toggle]);
+	// const handleFullList = () => {
+	// 	setListings(fullListings);
+	// };
 	const handleToggle = () => {
-		handleFullList();
+		// handleFullList();
 		setToggle(!toggle);
 	};
 
-	const handleFullList = () => {
-		setListings(fullListings);
-		setShow(false);
-	};
-
-	const search = (searchValue_min, searchValue_max) => {
-		handleToggle();
-		setPrice_Min_S(searchValue_min);
-		setPrice_Max_S(searchValue_max); // || 9999); //to set upper limit
-	};
-
-	const propertyTypeSearch = (searchValue_HDBorPrivate) => {
-		handleToggle();
-		setHDBorPrivate_S(searchValue_HDBorPrivate);
-	};
-	const bedroomSearch = (searchValue_Rooms) => {
-		handleToggle();
-		setBedRooms_S(searchValue_Rooms);
-	};
-
-	const bathroomSearch = (searchValue_Rooms) => {
-		handleToggle();
-		setBathrooms_S(searchValue_Rooms);
+	const handleList = (retrievedList) => {
+		setListings(retrievedList);
+		console.log(retrievedList);
+		// setToggle(!toggle)
 	};
 
 	return (
@@ -179,14 +182,15 @@ function ListingList() {
 			<Nav2 />
 			<div className='searchBar'>
 				<Search
-					priceSearch={search}
-					propertyTypeSearch={propertyTypeSearch}
-					bedroomSearch={bedroomSearch}
-					bathroomSearch={bathroomSearch}
-					toggle={handleToggle}
+					// priceSearch={search}
+					// propertyTypeSearch={propertyTypeSearch}
+					// bedroomSearch={bedroomSearch}
+					// bathroomSearch={bathroomSearch}
+					handleList={handleList}
+					// toggle={handleToggle}
 				/>
 			</div>
-			<input onClick={handleFullList} type='submit' value='Clear All Filters' />
+			<input onClick={handleToggle} type='submit' value='Clear All Filters' />
 			<div>
 				Displaying a total of <b>{listings.length} listings</b> based on the
 				filter(s) you have selected.
