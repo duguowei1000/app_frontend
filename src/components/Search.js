@@ -13,32 +13,7 @@ const Search = (props) => {
 
 	const [listings, setListings] = useState([]);
 
-	const [error, setError] = useState('');
-
-	// const callSearchFunction = (e) => {
-	// 	e.preventDefault();
-	// 	propertyTypeSearch();
-	// 	priceSearch();
-	// 	bedroomSearch();
-	// 	bathroomSearch();
-	// };
-
-	const priceSearch = () => {
-		props.priceSearch(searchValue_min, searchValue_max); //passing back as props
-		// console.log(`min: ${searchValue_min} max: ${searchValue_max} `);
-	};
-	const propertyTypeSearch = () => {
-		props.propertyTypeSearch(searchValue_HDBorPrivate); //passing back as props
-		// console.log(`HDBorPrivate: ${searchValue_HDBorPrivate} `);
-	};
-	const bedroomSearch = () => {
-		props.bedroomSearch(searchValue_Rooms); //passing back as props
-		// console.log(`rooms: ${searchValue_Rooms} `);
-	};
-	const bathroomSearch = () => {
-		props.bathroomSearch(searchValue_Bathrooms); //passing back as props
-		// console.log(`rooms: ${searchValue_Rooms} `);
-	};
+	// const [error, setError] = useState('');
 
 	const createSearch = (search) => {
 		const url = urlcat(BACKEND, `/api/listings/search`);
