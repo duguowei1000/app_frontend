@@ -30,33 +30,37 @@ function TenantWatchList() {
 	const [toggle, setToggle] = useState(false);
 	const [currentFavs, setCurrentFavs] = useState([]);
 
-	const [userData, setUserData] = useState();
-	const [userID, setUserID] = useState();
-	const [verifyStatus, setVerifyStatus] = useState(false);
+	// const [userData, setUserData] = useState();
+	// const [loginState, setUserID] = useState();
+	// const [verifyStatus, setVerifyStatus] = useState(false);
 
-	const [loginState, r] = useContext(AuthContext);
-	// const testid = loginState.user;
+	const [loginState, _] = useContext(AuthContext);
+	const [modalContent, setModalContent] = useState(false);
 
-	const fetchVerify = async () => {
-		const url = urlcat(BACKEND, `/api/testusers/verify`);
-		await fetch(url, {
-			credentials: 'include',
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				//console.log('decode Userid>>>',data);
-				setUserData(data);
-				setUserID(data.userObjectID);
-				setVerifyStatus(true);
-				if (data.error) {
-					console.log(data.error);
-				}
-			});
+	const closeModal = () => {
+		setModalContent(null);
 	};
+
+	// const fetchVerify = async () => {
+	// 	const url = urlcat(BACKEND, `/api/testusers/verify`);
+	// 	await fetch(url, {
+	// 		credentials: 'include',
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 	})
+	// 		.then((response) => response.json())
+	// 		.then((data) => {
+	// 			//console.log('decode Userid>>>',data);
+	// 			setUserData(data);
+	// 			setUserID(data.userObjectID);
+	// 			setVerifyStatus(true);
+	// 			if (data.error) {
+	// 				console.log(data.error);
+	// 			}
+	// 		});
+	// };
 
 	const fetchFullList = () => {
 		fetch(urlcat(BACKEND, '/api/listings'))
@@ -71,7 +75,7 @@ function TenantWatchList() {
 			});
 	};
 	const fetchTenantDetails = () => {
-		fetch(urlcat(BACKEND, '/api/testusers/findList'))
+		fetch(urlcat(BACKEND, '/auth/findList'))
 			.then((response) => response.json())
 			.then((data) => {
 				setTenantDetails(data);
@@ -88,11 +92,11 @@ function TenantWatchList() {
 	};
 
 	const setupWatchList = () => {
-		// console.log(tenantDetails[0]);
-		// console.log('tenantDetails1' + tenantDetails[0]);
-		if (userID) {
+		console.log(tenantDetails[0]);
+		console.log('tenantDetails1' + tenantDetails[0]);
+		if (loginState.userId) {
 			const specificTenant = tenantDetails.filter((e) => {
-				if (e._id === userID) {
+				if (e._id === loginState.userId) {
 					return true;
 				} else console.log('checked tenant id, cont.');
 			});
@@ -122,19 +126,19 @@ function TenantWatchList() {
 		setWatchList(updatedFElist);
 	};
 
-	useEffect(() => {
-		fetchVerify();
-	}, []);
+	// useEffect(() => {
+	// 	fetchVerify();
+	// }, []);
 
 	useEffect(() => {
-		if (verifyStatus) {
+		if (loginState.isLoggedIn) {
 			setCanList(false);
 			setStatus('loading');
 			fetchFullList();
 			fetchTenantDetails();
 			//console.log(`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`)
 		}
-	}, [verifyStatus]);
+	}, [loginState.isLoggedIn]);
 
 	useEffect(() => {
 		// console.log(
@@ -145,8 +149,8 @@ function TenantWatchList() {
 			// 	`ListStatus${ListStatus} TenantDetailsStatus${TenantDetailStatus}`
 			// );
 			//console.log('tenant details', tenantDetails); //check tenant ID to be sure
-			console.log('userID>>>>', userID);
-			console.log('data>>', userData);
+			console.log('userID>>>>', loginState.userId);
+			console.log('data>>', loginState.name);
 			setupWatchList();
 			setStatus('success');
 			setCanList(true);
@@ -161,8 +165,8 @@ function TenantWatchList() {
 	}
 
 	const handleDelete = (listID) => {
-		console.log('>>>', userID);
-		const url = urlcat(BACKEND, `/api/testusers/watchlist/${userID}`);
+		console.log('>>>', loginState.userId);
+		const url = urlcat(BACKEND, `/auth/watchlist/${loginState.userId}`);
 		const deleteListing = { fav: `${listID}` };
 		fetch(url, {
 			method: 'PUT',
@@ -183,13 +187,13 @@ function TenantWatchList() {
 	return (
 		<>
 			<Nav2 />
-			{userData ? (
-				<div className='userName'>Welcome {userData.name}</div>
+			{loginState.name ? (
+				<div className='userName'>Welcome {loginState.name}</div>
 			) : (
 				<div></div>
 			)}
 			{/* {console.log(status)} */}
-			{userID ? (
+			{loginState.userId ? (
 				<div></div>
 			) : (
 				<div className='tenantWatchlist'>

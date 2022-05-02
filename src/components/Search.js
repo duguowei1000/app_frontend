@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { BACKEND } from '../utils/utils';
+import urlcat from 'urlcat';
 
 const Search = (props) => {
 	//   const [searchValue, setSearchValue] = useState("");
@@ -9,33 +11,57 @@ const Search = (props) => {
 	const [searchValue_Rooms, setSearchValue_Rooms] = useState('Any');
 	const [searchValue_Bathrooms, setSearchValue_Bathrooms] = useState('Any');
 
-	const callSearchFunction = (e) => {
-		e.preventDefault();
-		propertyTypeSearch();
-		priceSearch();
-		bedroomSearch();
-		bathroomSearch();
+	const [listings, setListings] = useState([]);
+
+	// const [error, setError] = useState('');
+
+	const createSearch = (search) => {
+		const url = urlcat(BACKEND, `/api/listings/search`);
+		console.log(search);
+		fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(search),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				setListings(data);
+
+				if (data.error) {
+					setError(data.error);
+				}
+			})
+			.catch((error) => console.log(error));
 	};
 
-	const priceSearch = () => {
-		props.priceSearch(searchValue_min, searchValue_max); //passing back as props
-		// console.log(`min: ${searchValue_min} max: ${searchValue_max} `);
-	};
-	const propertyTypeSearch = () => {
-		props.propertyTypeSearch(searchValue_HDBorPrivate); //passing back as props
-		// console.log(`HDBorPrivate: ${searchValue_HDBorPrivate} `);
-	};
-	const bedroomSearch = () => {
-		props.bedroomSearch(searchValue_Rooms); //passing back as props
-		// console.log(`rooms: ${searchValue_Rooms} `);
-	};
-	const bathroomSearch = () => {
-		props.bathroomSearch(searchValue_Bathrooms); //passing back as props
-		// console.log(`rooms: ${searchValue_Rooms} `);
+	useEffect(() => {
+		const passList = () => {
+			props.handleList(listings);
+		};
+		passList();
+	}, [listings]);
+
+	const callSearchFunction = (event) => {
+		event.preventDefault();
+		const searchParams = {
+			searchValue_min,
+			searchValue_max,
+			searchValue_HDBorPrivate,
+			searchValue_Rooms,
+			searchValue_Bathrooms,
+		};
+		createSearch(searchParams);
+		// alert('Search created');
 	};
 
 	return (
-		<form className='Searchbar'>
+		<form
+			action={urlcat(BACKEND, 'search')}
+			method='POST'
+			// onSubmit={handleSubmit}
+		>
 			<label>Price Range</label>
 			<input
 				//value={searchValue_min}
@@ -70,10 +96,10 @@ const Search = (props) => {
 				type='text'
 			>
 				<option value='Any'>Any</option>
-				<option value='1 room'>1 room</option>
-				<option value='2 room'>2 room</option>
-				<option value='3 room'>3 room</option>
-				<option value='4 room'>4 room</option>
+				<option value='1'>1 room</option>
+				<option value='2'>2 room</option>
+				<option value='3'>3 room</option>
+				<option value='4'>4 room</option>
 				<option value='More than 4 rooms'>More than 4 rooms</option>
 			</select>
 			<label>Bathrooms</label>
@@ -85,11 +111,11 @@ const Search = (props) => {
 				type='text'
 			>
 				<option value='Any'>Any</option>
-				<option value='1 Bathroom'>1 Bathroom</option>
-				<option value='2 Bathroom'>2 Bathroom</option>
-				<option value='3 Bathroom'>3 Bathroom</option>
-				<option value='4 Bathroom'>4 Bathroom</option>
-				<option value='More than 4 Bathroom'>More than 4 Bathroom</option>
+				<option value='1'>1 Bathroom</option>
+				<option value='2'>2 Bathroom</option>
+				<option value='3'>3 Bathroom</option>
+				<option value='4'>4 Bathroom</option>
+				<option value='More than 4 rooms'>More than 4 Bathroom</option>
 			</select>
 			<br />
 			<input

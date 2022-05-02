@@ -13,195 +13,54 @@ import { AuthContext } from '../components/Authentication/Provider';
 
 function TenantListingList() {
 	const [listings, setListings] = useState([]);
-	const [fullListings, setFullListings] = useState([]);
 	const [toggle, setToggle] = useState(false);
-	const [show, setShow] = useState(true);
-	//search
-	const [price_Min_S, setPrice_Min_S] = useState();
-	const [price_Max_S, setPrice_Max_S] = useState();
-	const [hdbOrPrivate_S, setHDBorPrivate_S] = useState('');
-	const [bedrooms_S, setBedRooms_S] = useState('');
-	const [bathRooms_S, setBathrooms_S] = useState('');
+	// const [fullListings, setFullListings] = useState([]);
+	// const [show, setShow] = useState(true);
+	// //search
+	// const [price_Min_S, setPrice_Min_S] = useState();
+	// const [price_Max_S, setPrice_Max_S] = useState();
+	// const [hdbOrPrivate_S, setHDBorPrivate_S] = useState('');
+	// const [bedrooms_S, setBedRooms_S] = useState('');
+	// const [bathRooms_S, setBathrooms_S] = useState('');
 
 	const [loginState, _] = useContext(AuthContext);
-	// const [userID, setUserID] = useState();
-	console.log('loginState', loginState);
-	const userID = loginState.userId;
-	// if (loginState.isLoggedIn) setUserID(loginState.userId);
-	// const fetchVerify = async () => {
-	// 	const url = urlcat(BACKEND, `/api/testusers/verify`);
-	// 	await fetch(url, {
-	// 		credentials: 'include',
-	// 		method: 'POST',
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 		},
-	// 	})
-	// 		.then((response) => response.json())
-	// 		.then((data) => {
-	// 			//console.log('decode Userid>>>',data);
-	// 			//setUserData(data)
-	// 			setUserID(data.userObjectID);
-	// 			if (data.error) {
-	// 				console.log(data.error);
-	// 			}
-	// 		});
-	// };
+	const [modalContent, setModalContent] = useState(false);
 
+	const closeModal = () => {
+		setModalContent(null);
+	};
 	const fetchDetails = () => {
-		fetch(urlcat(BACKEND, '/api/listings/'))
+		fetch(urlcat(BACKEND, '/api/listings/'), {
+			credentials: 'include',
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
 			.then((response) => response.json())
 			.then((data) => {
-				// setListings(data);
-				setFullListings(data);
-				// const reducedArray = data.slice(0, 29)
-				// setListings(reducedArray)
+				setListings(data);
 			});
 	};
 
 	useEffect(() => {
-		// fetchVerify();
 		fetchDetails();
-	}, []);
-
-	useEffect(() => {
-		// console.log('fullListings>>', fullListings);
-		// console.log('Listings>>', listings);
-
-		//propType Search
-		let hdbPrivateFiltered;
-		if (hdbOrPrivate_S === 'Any') {
-			hdbPrivateFiltered = listings;
-		} else {
-			hdbPrivateFiltered = listings.filter((element) => {
-				const propType = element.property_type;
-				if (hdbOrPrivate_S === 'HDB') {
-					return propType.includes('HDB');
-				} else if (hdbOrPrivate_S === 'Private') {
-					return propType.includes('Private');
-				}
-			});
-		}
-		//Bedroom Search
-		let bedroomsFiltered;
-		if (bedrooms_S === 'Any') {
-			bedroomsFiltered = listings;
-		} else {
-			bedroomsFiltered = listings.filter((element) => {
-				const bedRooms = element.no_of_bedrooms;
-				if (bedrooms_S === '1 room') {
-					return bedRooms === 1;
-				} else if (bedrooms_S === '2 room') {
-					return bedRooms === 2;
-				} else if (bedrooms_S === '3 room') {
-					return bedRooms === 3;
-				} else if (bedrooms_S === '4 room') {
-					return bedRooms === 4;
-				} else if (bedrooms_S === 'More than 4 rooms') {
-					return bedRooms > 4;
-				}
-			});
-		}
-		//Bathroom Search
-		let bathroomsFiltered;
-		if (bathRooms_S === 'Any') {
-			bathroomsFiltered = listings;
-		} else {
-			bathroomsFiltered = listings.filter((element) => {
-				const bathRooms = element.no_of_bathrooms;
-				if (bathRooms_S === '1 Bathroom') {
-					return bathRooms === 1;
-				} else if (bathRooms_S === '2 Bathroom') {
-					console.log(bathRooms_S);
-					return bathRooms === 2;
-				} else if (bathRooms_S === '3 Bathroom') {
-					return bathRooms === 3;
-				} else if (bathRooms_S === '4 Bathroom') {
-					return bathRooms === 4;
-				} else if (bathRooms_S === 'More than 4 Bathroom') {
-					return bathRooms > 4;
-				}
-			});
-		}
-		//Price Search
-		let priceFiltered = listings.filter((element) => {
-			if (
-				element.price > (price_Min_S || 0) &&
-				element.price < (price_Max_S || 9999)
-			) {
-				return true;
-			}
-		});
-
-		let firstFiltered = hdbPrivateFiltered.filter((e) =>
-			priceFiltered.includes(e)
-		);
-		let secondFiltered = bathroomsFiltered.filter((e) =>
-			bedroomsFiltered.includes(e)
-		);
-		let thirdFiltered = secondFiltered.filter((e) => firstFiltered.includes(e));
-		// console.log('bathroomfilterd:', bathroomsFiltered);
-		// console.log('roomfilterd:', bedroomsFiltered);
-		// console.log('firstfilterd:', firstFiltered);
-		// console.log('secondfilterd:', secondFiltered);
-		// console.log('thirdfilterd:', thirdFiltered);
-		// console.log('min', price_Min_S);
-		// console.log('max', price_Max_S);
-
-		//set filter
-		if (thirdFiltered.length) {
-			setListings(thirdFiltered);
-			firstFiltered = [];
-			secondFiltered = []; //initialise to 0
-			thirdFiltered = [];
-			hdbPrivateFiltered = [];
-			bedroomsFiltered = [];
-			bathroomsFiltered = [];
-			// setPrice_Min_S(0);
-			// setPrice_Max_S(9999);
-			setShow(false);
-		} else {
-			setListings([]);
-			setShow(true);
-		} //no entries
-		// console.log('roomsfiltered', bedroomsFiltered);
-		// console.log('fullListings>>', fullListings);
-		// console.log('Listings>>', listings);
 	}, [toggle]);
 
 	const handleToggle = () => {
-		handleFullList();
 		setToggle(!toggle);
 	};
 
-	const handleFullList = () => {
-		setListings(fullListings);
-		setShow(false);
-	};
+	const handleList = (retrievedList) => {
+		setListings(retrievedList);
+		console.log(retrievedList);
 
-	const search = (searchValue_min, searchValue_max) => {
-		handleToggle();
-		setPrice_Min_S(searchValue_min);
-		setPrice_Max_S(searchValue_max); // || 9999); //to set upper limit
-	};
-
-	const propertyTypeSearch = (searchValue_HDBorPrivate) => {
-		handleToggle();
-		setHDBorPrivate_S(searchValue_HDBorPrivate);
-	};
-	const bedroomSearch = (searchValue_Rooms) => {
-		handleToggle();
-		setBedRooms_S(searchValue_Rooms);
-	};
-
-	const bathroomSearch = (searchValue_Rooms) => {
-		handleToggle();
-		setBathrooms_S(searchValue_Rooms);
+		console.log(loginState);
 	};
 	////Handle add to Tenant dashboard
 	const handleEditlist = async (AddtoList) => {
-		console.log('userID>>>>', userID);
-		const url = urlcat(BACKEND, `/api/testusers/${userID}`);
+		console.log('userID>>>>', loginState.userId);
+		const url = urlcat(BACKEND, `/auth/${loginState.userId}`);
 		const addListing = { fav: `${AddtoList}` };
 		console.log('addtolist', addListing);
 		await fetch(url, {
@@ -225,15 +84,9 @@ function TenantListingList() {
 			<Nav2 />
 
 			<div>
-				<Search
-					priceSearch={search}
-					propertyTypeSearch={propertyTypeSearch}
-					bedroomSearch={bedroomSearch}
-					bathroomSearch={bathroomSearch}
-					toggle={handleToggle}
-				/>
+				<Search handleList={handleList} />
 			</div>
-			<input onClick={handleFullList} type='submit' value='Clear All Filters' />
+			<input onClick={handleToggle} type='submit' value='Clear All Filters' />
 			<div>
 				Displaying a total of <b>{listings.length} listings</b> based on the
 				filter(s) you have selected.
@@ -267,7 +120,7 @@ function TenantListingList() {
 									{' Bathrooms'}
 									<br />
 									<br />
-									{userID ? (
+									{loginState.userId ? (
 										<button
 											className='addTolist'
 											onClick={() => handleEditlist(listing._id)}
