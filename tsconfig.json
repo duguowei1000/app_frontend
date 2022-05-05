@@ -1,23 +1,29 @@
 {
 	"compilerOptions": {
-		"esModuleInterop": true,
+		"esModuleInterop": false,
 		"isolatedModules": true,
 		"moduleResolution": "node",
 		"allowSyntheticDefaultImports": true,
-		"jsx": "preserve",
 		"module": "ESNext",
 		"lib": ["DOM", "ESNext"],
 		"target": "ESNext",
+		"types": ["vite/client", "vite-plugin-svgr/client"],
 		"rootDir": "src",
-		"noEmit": false,
+		"allowUmdGlobalAccess": true,
 		"skipDefaultLibCheck": true,
 		"skipLibCheck": true,
-		"watch": true
+		"allowJs": false,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noFallthroughCasesInSwitch": true,
+		"resolveJsonModule": true,
+		"noEmit": true,
+		"jsx": "react-jsx"
 	},
 	"typeAcquisition": {
 		"enable": true,
 		"enableAutoDiscovery": true
 	},
-	"include": ["src", "src/**/*.ts", "src/**/*.tsx"],
+	"include": ["src", "types.d.ts"],
 	"exclude": ["node_modules", "**/node_modules"]
 }

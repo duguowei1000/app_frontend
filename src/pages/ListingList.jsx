@@ -1,17 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 import Search from '../components/Search';
 import Nav2 from '../components/Nav2';
-import { TENANTUSERID } from '../utils/loginDetails';
 import { AuthContext } from '../components/Authentication/Provider';
+import Listing from '../routes/Listing';
+import Modal from '../components/Modal';
+import useModal from '../hooks/useModal';
 
-// const tenantloginID = TENANTUSERID;
-// console.log(tenantloginID);
-///api/testusers
-
-function TenantListingList() {
+function ListingList() {
 	const [listings, setListings] = useState([]);
 	const [fullListings, setFullListings] = useState([]);
 	const [toggle, setToggle] = useState(false);
@@ -24,35 +21,24 @@ function TenantListingList() {
 	const [bathRooms_S, setBathrooms_S] = useState('');
 
 	const [loginState, _] = useContext(AuthContext);
-	// const [userID, setUserID] = useState();
-	console.log('loginState', loginState);
-	const userID = loginState.userId;
-	// if (loginState.isLoggedIn) setUserID(loginState.userId);
-	// const fetchVerify = async () => {
-	// 	const url = urlcat(BACKEND, `/api/testusers/verify`);
-	// 	await fetch(url, {
-	// 		credentials: 'include',
-	// 		method: 'POST',
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 		},
-	// 	})
-	// 		.then((response) => response.json())
-	// 		.then((data) => {
-	// 			//console.log('decode Userid>>>',data);
-	// 			//setUserData(data)
-	// 			setUserID(data.userObjectID);
-	// 			if (data.error) {
-	// 				console.log(data.error);
-	// 			}
-	// 		});
-	// };
+	const [modalContent, setModalContent] = useState(false);
 
+	console.log('loginState', loginState);
+
+	const closeModal = () => {
+		setModalContent(null);
+	};
 	const fetchDetails = () => {
-		fetch(urlcat(BACKEND, '/api/listings/'))
+		fetch(urlcat(BACKEND, '/api/listings/'), {
+			credentials: 'include',
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
 			.then((response) => response.json())
 			.then((data) => {
-				// setListings(data);
+				setListings(data);
 				setFullListings(data);
 				// const reducedArray = data.slice(0, 29)
 				// setListings(reducedArray)
@@ -60,7 +46,6 @@ function TenantListingList() {
 	};
 
 	useEffect(() => {
-		// fetchVerify();
 		fetchDetails();
 	}, []);
 
@@ -198,33 +183,11 @@ function TenantListingList() {
 		handleToggle();
 		setBathrooms_S(searchValue_Rooms);
 	};
-	////Handle add to Tenant dashboard
-	const handleEditlist = async (AddtoList) => {
-		console.log('userID>>>>', userID);
-		const url = urlcat(BACKEND, `/api/testusers/${userID}`);
-		const addListing = { fav: `${AddtoList}` };
-		console.log('addtolist', addListing);
-		await fetch(url, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(addListing),
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				console.log(data);
-				if (data.error) {
-					console.log(data.error);
-				}
-			});
-	};
 
 	return (
 		<>
 			<Nav2 />
-
-			<div>
+			<div className='searchBar'>
 				<Search
 					priceSearch={search}
 					propertyTypeSearch={propertyTypeSearch}
@@ -238,15 +201,16 @@ function TenantListingList() {
 				Displaying a total of <b>{listings.length} listings</b> based on the
 				filter(s) you have selected.
 			</div>
+
 			<div className='listingList'>
 				<ul>
 					{listings.map((listing) => (
 						<li key={listing._id}>
-							<div className='tenantListing'>
-								<div class='bg-indigo-300 ...'>
+							<div className='listing'>
+								<div className='bg-indigo-300 ...'>
 									{
 										<img
-											class='object-cover h-60 w-96 ...'
+											className='object-cover h-60 w-96 ...'
 											src={listing.image}
 										/>
 									}
@@ -266,30 +230,34 @@ function TenantListingList() {
 									{listing.no_of_bathrooms}
 									{' Bathrooms'}
 									<br />
-									<br />
-									{userID ? (
-										<button
-											className='addTolist'
-											onClick={() => handleEditlist(listing._id)}
-										>
-											<span>Add to list</span>
-										</button>
-									) : (
-										<></>
-									)}
-									<Link to={`/listings/${listing._id}`}>
+									{/* <Link
+										to={`/listings/${listing._id}`}
+										target='_blank'
+										rel='noopener noreferrer'
+									>
 										<button className='viewListing'>
 											<span>View Listing</span>
 										</button>
-									</Link>
+									</Link> */}
+									<button
+										onClick={() =>
+											setModalContent(<Listing listingId={listing._id} />)
+										}
+										className='viewListing'
+									>
+										<span>View Listing</span>
+									</button>
 								</div>
 							</div>
 						</li>
 					))}
 				</ul>
+				{modalContent ? (
+					<Modal callback={closeModal}>{modalContent}</Modal>
+				) : undefined}
 			</div>
 		</>
 	);
 }
 
-export default TenantListingList;
+export default ListingList;

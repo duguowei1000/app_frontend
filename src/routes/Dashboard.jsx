@@ -1,18 +1,19 @@
 import { useContext, useEffect, useState } from 'react';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Nav2 from '../components/Nav2';
 import { AuthContext } from '../components/Authentication/Provider';
 
 function Listings() {
 	const [verifyStatus, setVerifyStatus] = useState(false);
 	const [loginState, dispatch] = useContext(AuthContext);
+	const navigate = useNavigate();
 
 	const jwt = sessionStorage.getItem('jwt');
-	const { username, name } = loginState;
+	const { name, isLoggedIn } = loginState;
 
-	console.log('username,name', { username, name });
+	console.log('username,name', { name });
 
 	const [listerListings, setListerListings] = useState([]);
 
@@ -39,13 +40,14 @@ function Listings() {
 			});
 	}, []);
 
-	const handleDelete = (id) => () => {
+	const handleDelete = (e, id) => {
 		// setUserData(listings.filter((e) => e._id !== id));
 		// console.log(id);
+		e.preventDefault();
 
-		dispatch(loginState, {
-			type: 'UPDATE',
-		});
+		// dispatch(loginState, {
+		// 	type: 'UPDATE',
+		// });
 		const url = urlcat(BACKEND, `/api/listings/${id}`);
 		fetch(url, {
 			credentials: 'include',
@@ -56,7 +58,9 @@ function Listings() {
 			},
 		})
 			.then((response) => response.json())
-			.then((data) => console.log(data));
+			.then((data) => {
+				navigate('/dashboard');
+			});
 		// alert('listing deleted');
 		console.log('hey delete');
 
@@ -64,9 +68,9 @@ function Listings() {
 	};
 
 	return (
-		<div>
+		<>
 			<Nav2 />
-			{loginState.isLoggedIn ? (
+			{isLoggedIn ? (
 				<div className='userName'>Welcome {name}</div>
 			) : (
 				<div></div>
@@ -124,7 +128,7 @@ function Listings() {
 											{/* <button className='deleteListing'> */}
 											<button
 												className='deleteListing'
-												onClick={handleDelete(listing._id)}
+												onClick={(e) => handleDelete(e, listing._id)}
 											>
 												Delete
 											</button>
@@ -136,7 +140,7 @@ function Listings() {
 						))}
 				</ul>
 			</div>
-		</div>
+		</>
 	);
 }
 

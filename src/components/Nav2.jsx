@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from './Authentication/Provider';
-import AuthStatusIndicator from './AuthStatusIndicator';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
 /*
@@ -14,8 +13,10 @@ import { BACKEND } from '../utils/utils';
 const Nav2 = () => {
 	const [loginState, dispatch] = useContext(AuthContext);
 	const { isLoggedIn, accountType } = loginState;
+	const navigate = useNavigate();
 
 	const initiateLogout = async () => {
+		navigate('/');
 		dispatch({ type: 'LOGOUT_REQUEST' });
 	};
 
@@ -104,12 +105,15 @@ const Nav2 = () => {
 											>
 												Logout
 												{/* <Link to='/'>Logout</Link> */}
-												<a
+												{/* <a
 													href='http://localhost:3000/'
 													className='btn btn-danger'
-												></a>
+												></a> */}
 											</button>
-											<span>{loginState.username}</span>
+											<div>
+												<p>logged in as</p>
+												<p>{loginState.name}</p>
+											</div>
 										</>
 									) : (
 										<button className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>

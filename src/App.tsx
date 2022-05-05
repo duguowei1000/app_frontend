@@ -1,18 +1,8 @@
-import Seed from './pages/Seed';
 import ListingList from './pages/ListingList';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Provider from './components/Authentication/Provider';
 
-import Nav from './components/Nav';
-import {
-	Listings,
-	Dashboard,
-	Listing,
-	Create,
-	Auth,
-	Edit,
-	Home,
-} from './routes';
+import { Listings, Dashboard, Listing, Create, Edit, Home } from './routes';
 
 import TenantListingList from './tenant/TenantListingList';
 import TenantWatchList from './tenant/TenantWatchList';

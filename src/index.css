@@ -1,4 +1,13 @@
-@import url('https://unpkg.com/mvp.css');
+/* @import url('https://unpkg.com/mvp.css'); */
+/* pico css
+"https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
+Centered viewport
+"https://unpkg.com/@picocss/pico@latest/css/pico.classless.min.css"
+Fluid viewport
+"https://unpkg.com/@picocss/pico@latest/css/pico.fluid.classless.min.css"
+*/
+@import url('https://unpkg.com/@picocss/pico@latest/css/pico.classless.min.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

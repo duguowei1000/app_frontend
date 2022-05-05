@@ -1,0 +1,11 @@
+root: true
+extends: morks
+settings:
+  import/resolver:
+    node:
+      extensions: [.ts, .tsx, .js, .jsx, .cjs, .mjs]
+      moduleDirectory:
+        - node_modules
+        - src/
+env:
+  browser: true

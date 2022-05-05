@@ -1,13 +1,13 @@
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = import.meta.env.NODE_ENV === 'production';
 
 const BACKEND = isProduction
-	? process.env.REACT_APP_BACKEND
-	: process.env.REACT_APP_isStaging
-	? process.env.REACT_APP_STAGING_BACKEND
+	? import.meta.env.VITE_BACKEND
+	: import.meta.env.VITE_isStaging
+	? import.meta.env.VITE_STAGING_BACKEND
 	: 'http://localhost:2000';
 
 const FRONTEND = isProduction
-	? process.env.REACT_APP_BACKEND
+	? import.meta.env.VITE_BACKEND
 	: 'http://localhost:3000';
 
 export { BACKEND, FRONTEND };

@@ -39,11 +39,13 @@ function Create() {
 				if (data.error) {
 					setError(data.error);
 				}
+				return data;
 			})
 			.catch((error) => console.log(error));
 	};
 
 	const handleSubmit = (event) => {
+		event.preventDefault();
 		const listing = {
 			postal,
 			district,

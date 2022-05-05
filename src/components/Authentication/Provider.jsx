@@ -1,8 +1,8 @@
-import { useEffect, useReducer, createContext, useContext } from 'react';
-import urlcat from 'urlcat';
-import { LISTERUSERID, TENANTUSERID } from '../../utils/loginDetails';
+import { useReducer, createContext, useContext } from 'react';
+// import urlcat from 'urlcat';
+// import { LISTERUSERID, TENANTUSERID } from '../../utils/loginDetails';
 import { reducer } from './authreducer';
-import useSessionListener from './useSessionListener';
+import useSessionListener from '../../hooks/useSessionListener';
 // import  from '../utils/loginDetails';
 const colorReset = 'color: inherit; font-weight: normal';
 /* const storageListener = (event) => {

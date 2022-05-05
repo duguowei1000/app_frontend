@@ -1,11 +1,11 @@
-import React, { useRef, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { useRef, useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Modal from './Modal';
 import { AuthContext } from '../components/Authentication/Provider';
 import urlcat from 'urlcat';
 import { BACKEND } from '../utils/utils';
-import { useNavigate } from 'react-router-dom';
+import useModal from '../hooks/useModal';
 
 const messages = {
 	signIn: 'Sign in to your account',
@@ -30,40 +30,28 @@ const messageSet = {
 	},
 };
 
+const inputClasses =
+	'appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ';
+
 const SignUp = () => {
+	const [loginState, dispatch] = useContext(AuthContext);
 	const [isRegister, setIsRegister] = useState(false);
 	const [state, setState] = useState(messageSet.signIn);
 	const [modalContent, setModalContent] = useState(false);
-
-	const setDummyContent = () => {
-		setModalContent(
-			<div>
-				<h1>{state.mainMessage}</h1>
-				<p>{state.subMessage}</p>
-				<Link to={state.link}>{state.link}</Link>
-			</div>
-		);
-	};
+	const navigate = useNavigate();
 
 	const closeModal = () => {
-		setModalContent(null);
+		setModalContent();
 	};
-
-	const navigate = useNavigate();
 
 	const switchType = (e) => {
 		e.preventDefault();
-		setIsRegister(!isRegister);
-		setState(isRegister ? messageSet.signIn : messageSet.register);
+		const newIsRegister = !isRegister;
+		setIsRegister(newIsRegister);
+		setState(newIsRegister ? messageSet.signIn : messageSet.register);
 	};
 
 	//TODO - add sign up switch form
-	const [loginState, dispatch] = useContext(AuthContext);
-	const formRef = useRef();
-	console.log('loginState', loginState);
-	const ListerName = 'LISTER';
-	const TenantName = 'TENANT';
-	const formInput = TenantName;
 
 	const doTest = async (e) => {
 		const jwt = sessionStorage.getItem('jwt');
@@ -80,22 +68,18 @@ const SignUp = () => {
 		console.log('data', data);
 	};
 
-	const clickHandler = async (e) => {
+	const submitHandler = async (e) => {
 		e.preventDefault();
 
-		// const { username, password, rememberMe, accountType } = formRef.current;
-		const postBody = isRegister
-			? {
-					username: formRef.current.username.value,
-					password: formRef.current.password.value,
-					rememberMe: formRef.current.rememberMe.checked,
-					accountType: formRef.current.accountType.value,
-			  }
-			: {
-					username: formRef.current.username.value,
-					password: formRef.current.password.value,
-					rememberMe: formRef.current.rememberMe.checked,
-			  };
+		const { username, password, rememberMe, accountType } =
+			e.target.form.elements;
+
+		const postBody = {
+			username: username.value,
+			password: password.value,
+			rememberMe: rememberMe.checked,
+			accountType: accountType.value,
+		};
 
 		const res = await fetch(urlcat(BACKEND, state.link), {
 			credentials: 'include',
@@ -146,7 +130,7 @@ const SignUp = () => {
 				type: 'LOGIN_FAILURE',
 				payload: data.message,
 			});
-			alert(data.message);
+			setModalContent(data.message);
 		}
 	};
 
@@ -169,12 +153,12 @@ const SignUp = () => {
 				</div>
 
 				<form
-					ref={formRef}
 					className='mt-8 space-y-6'
+					id='signup-form'
 					action='http://localhost:2000/api/testusers/login'
 					method='POST'
 				>
-					<input type='hidden' name='remember' value='true' />
+					{/* <input type='hidden' name='remember' value='true' /> */}
 					<div className='rounded-md shadow-sm -space-y-px'>
 						<div>
 							<label htmlFor='username' className='sr-only'>
@@ -186,7 +170,7 @@ const SignUp = () => {
 								type='username'
 								autoComplete='username'
 								required
-								className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
+								className={inputClasses + 'rounded-t-md'}
 								placeholder='Username'
 							/>
 						</div>
@@ -198,35 +182,29 @@ const SignUp = () => {
 								id='password'
 								name='password'
 								type='password'
-								autoComplete='current-password'
+								autoComplete={(isRegister ? 'new' : 'current') + '-password'}
 								required
-								className={
-									isRegister
-										? 'appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
-										: 'appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm rounded-b-md'
-								}
+								className={inputClasses + (!isRegister ? '' : 'rounded-b-md')}
 								placeholder='Password'
 							/>
 						</div>
-						{isRegister ? (
-							<div>
-								<label htmlFor='accountType' className='sr-only'>
-									Account Type
-								</label>
-								<select
-									id='accountType'
-									name='accountType'
-									type='accountType'
-									autoComplete='current-password'
-									required
-									className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
-									placeholder='Password'
-								>
-									<option value='tenant'>tenant</option>
-									<option value='lister'>lister</option>
-								</select>
-							</div>
-						) : null}
+
+						<div style={isRegister ? { display: 'none' } : {}}>
+							<label htmlFor='accountType' className='sr-only'>
+								Account Type
+							</label>
+							<select
+								id='accountType'
+								name='accountType'
+								autoComplete='current-password'
+								required
+								className={inputClasses + 'rounded-b-md'}
+								placeholder='Password'
+							>
+								<option value='tenant'>tenant</option>
+								<option value='lister'>lister</option>
+							</select>
+						</div>
 					</div>
 
 					<div className='flex items-center justify-between'>
@@ -247,21 +225,25 @@ const SignUp = () => {
 						</div>
 						{
 							<div className='text-sm'>
-								<a
-									href='#'
-									className='font-medium text-indigo-600 hover:text-indigo-500'
-								>
-									{' '}
-									{!isRegister ? 'Forgot your password? ' : ''}
-								</a>
+								{!isRegister ? (
+									/* eslint-disable-next-line jsx-a11y/anchor-is-valid */
+									<a
+										href='#'
+										className='font-medium text-indigo-600 hover:text-indigo-500'
+									>
+										{' '}
+										Forgot your password?
+									</a>
+								) : undefined}
 							</div>
 						}
 					</div>
 
 					<div>
 						<button
-							type='button'
-							onClick={clickHandler}
+							type='submit'
+							form='signup-form'
+							onClick={submitHandler}
 							className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
 						>
 							<span className='absolute left-0 inset-y-0 flex items-center pl-3'>
@@ -279,7 +261,7 @@ const SignUp = () => {
 									/>
 								</svg>
 							</span>
-							{isRegister ? 'Register' : 'Sign in'}
+							{!isRegister ? 'Register' : 'Sign in'}
 						</button>
 					</div>
 
@@ -293,12 +275,9 @@ const SignUp = () => {
 					</div>
 				</form>
 				<div>
-					{/* 				<p>{JSON.stringify(loginState)}</p>
-					<button onClick={doTest}>test</button>
-					<button onClick={setDummyContent}>model</button> */}
 					{modalContent ? (
 						<Modal callback={closeModal}>{modalContent}</Modal>
-					) : null}
+					) : undefined}
 				</div>
 			</div>
 		</div>
