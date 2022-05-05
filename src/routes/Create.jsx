@@ -4,6 +4,7 @@ import { BACKEND, FRONTEND } from '../utils/utils';
 import Nav2 from '../components/Nav2';
 import { AuthContext } from '../components/Authentication/Provider';
 import { updateData } from '../components/Authentication/authreducer';
+import { useNavigate } from 'react-router-dom';
 
 const url = urlcat(BACKEND, '/api/listings/');
 
@@ -19,6 +20,7 @@ function Create() {
 	const [no_of_bathrooms, setBathrooms] = useState(0);
 	const [description, setDescription] = useState('');
 
+	const navigate = useNavigate();
 	const [loginState, dispatch] = useContext(AuthContext);
 	console.log('loginState', loginState);
 	const [error, setError] = useState('');
@@ -39,6 +41,7 @@ function Create() {
 				if (data.error) {
 					setError(data.error);
 				}
+				navigate('/dashboard');
 				return data;
 			})
 			.catch((error) => console.log(error));
@@ -59,7 +62,7 @@ function Create() {
 			description,
 		};
 		createListing(listing);
-		dispatch(loginState, { type: 'UPDATE' });
+		// dispatch(loginState, { type: 'UPDATE' });
 		alert('listing created');
 	};
 

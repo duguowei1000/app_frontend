@@ -6,6 +6,8 @@ import { Listings, Dashboard, Listing, Create, Edit, Home } from './routes';
 
 import TenantListingList from './tenant/TenantListingList';
 import TenantWatchList from './tenant/TenantWatchList';
+import Forbidden from './pages/Forbidden';
+import Protected from './components/Protected';
 
 function App() {
 	return (
@@ -16,15 +18,36 @@ function App() {
 					<Route path='all' element={<ListingList />} />
 					<Route path=':id' element={<Listing />} />
 				</Route>
-
-				<Route path='dashboard' element={<Dashboard />} />
-				<Route path='create' element={<Create />} />
-				<Route path='listings/:id/edit' element={<Edit />} />
+				<Route
+					path='dashboard'
+					element={
+						<Protected credType='lister'>
+							<Dashboard />
+						</Protected>
+					}
+				/>
+				<Route
+					path='create'
+					element={
+						<Protected credType='lister'>
+							<Create />
+						</Protected>
+					}
+				/>
+				<Route
+					path='listings/:id/edit'
+					element={
+						<Protected credType='lister'>
+							<Edit />
+						</Protected>
+					}
+				/>
 
 				<Route path='' element={<Home />} />
 
 				<Route path='tenantlistings/all' element={<TenantListingList />} />
 				<Route path='tenantwatchlist' element={<TenantWatchList />} />
+				<Route path='fourohthree' element={<Forbidden />} />
 			</Routes>
 		</Provider>
 	);

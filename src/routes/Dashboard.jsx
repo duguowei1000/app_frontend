@@ -59,6 +59,7 @@ function Listings() {
 		})
 			.then((response) => response.json())
 			.then((data) => {
+				setListerListings((list) => list.filter((e) => e._id !== id));
 				navigate('/dashboard');
 			});
 		// alert('listing deleted');
