@@ -10,7 +10,7 @@ function Listings() {
 	const [toggle, setToggle] = useState(false);
 
 	const [userData, setUserData] = useState();
-	// const [userID, setUserID] = useState();
+
 	const [verifyStatus, setVerifyStatus] = useState(false);
 
 	const [loginState, _] = useContext(AuthContext);
