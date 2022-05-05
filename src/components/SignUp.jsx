@@ -43,6 +43,9 @@ const SignUp = () => {
 	const closeModal = () => {
 		setModalContent();
 	};
+	console.log('NODE_ENV', import.meta.env.NODE_ENV);
+	console.log('VITE_BACKEND', import.meta.env.VITE_BACKEND);
+	console.log('BACKEND', BACKEND);
 
 	const switchType = (e) => {
 		e.preventDefault();
@@ -155,8 +158,8 @@ const SignUp = () => {
 				<form
 					className='mt-8 space-y-6'
 					id='signup-form'
-					action='http://localhost:2000/api/testusers/login'
-					method='POST'
+					// // action='http://localhost:2000/api/testusers/login'
+					// method='POST'
 				>
 					{/* <input type='hidden' name='remember' value='true' /> */}
 					<div className='rounded-md shadow-sm -space-y-px'>
